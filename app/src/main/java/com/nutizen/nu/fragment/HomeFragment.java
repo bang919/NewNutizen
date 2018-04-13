@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.nutizen.nu.R;
 import com.nutizen.nu.adapter.MainBannerAdapter;
+import com.nutizen.nu.adapter.MainListAdapterd;
 import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.bean.response.LiveResponseBean;
 import com.nutizen.nu.common.BaseFragment;
@@ -25,6 +26,8 @@ public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements
 
     private LinearLayout mBannerDotLayout;
     private RecyclerView mBannerView;
+    private RecyclerView mEditorRv, mNewlyRv, mLiveRv;
+    private MainListAdapterd mEditorAdapter, mNewlyAdapter, mLiveAdapter;
     private MyScrollView mScrollView;
     private MainBannerAdapter mMainBannerAdapter;
     private int totalScroll;
@@ -37,6 +40,24 @@ public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements
     @Override
     protected HomeFragmentPresenter initPresenter() {
         return new HomeFragmentPresenter(getContext(), this);
+    }
+
+    @Override
+    protected void onViewPagerFragmentResume() {
+        super.onViewPagerFragmentResume();
+        setRefreshEnable(true);
+    }
+
+    /**
+     * HomeFragment嵌套了ScrollView，所以设置RefreshEnable前要看看是否是在ScrollView的最上面
+     */
+    @Override
+    public void setRefreshEnable(boolean enable) {
+        if (enable && mScrollView != null && mScrollView.getScrollY() != 0) {
+            super.setRefreshEnable(false);
+            return;
+        }
+        super.setRefreshEnable(enable);
     }
 
     @Override
@@ -56,11 +77,28 @@ public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements
         newsLayout.findViewById(R.id.more_iv).setOnClickListener(this);
         liveLayout.findViewById(R.id.more_iv).setOnClickListener(this);
 
+        mEditorRv = vidLayout.findViewById(R.id.recyclerView);
+        mNewlyRv = newsLayout.findViewById(R.id.recyclerView);
+        mLiveRv = liveLayout.findViewById(R.id.recyclerView);
+
         mBannerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         mMainBannerAdapter = new MainBannerAdapter();
         mBannerView.setAdapter(mMainBannerAdapter);
         PagerSnapHelper pagerSnapHelper = new PagerSnapHelper();
         pagerSnapHelper.attachToRecyclerView(mBannerView);
+
+        mEditorAdapter = createAndBindAdapter(mEditorRv);
+        mNewlyAdapter = createAndBindAdapter(mNewlyRv);
+        mLiveAdapter = createAndBindAdapter(mLiveRv);
+    }
+
+    public MainListAdapterd createAndBindAdapter(RecyclerView recyclerView) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        MainListAdapterd adapter = new MainListAdapterd();
+        recyclerView.setAdapter(adapter);
+        PagerSnapHelper helper = new PagerSnapHelper();
+        helper.attachToRecyclerView(recyclerView);
+        return adapter;
     }
 
     @Override
@@ -163,12 +201,12 @@ public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements
 
     @Override
     public void onEditorsData(ContentResponseBean contentResponseBean) {
-
+        mEditorAdapter.setDatas(contentResponseBean.getSearch());
     }
 
     @Override
     public void onNewlyData(ContentResponseBean contentResponseBean) {
-
+        mNewlyAdapter.setDatas(contentResponseBean.getSearch());
     }
 
     @Override

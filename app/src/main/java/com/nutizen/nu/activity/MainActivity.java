@@ -71,11 +71,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onPageScrollStateChanged(int state) {
                 //Proof SwipeRefreshLayout's function when ViewPager dragging
+                BaseFragment fragment = mViewpagerAdapter.getItem(mViewPager.getCurrentItem());
                 if (state == ViewPager.SCROLL_STATE_DRAGGING) {
                     mSwipeRefreshLayout.setRefreshing(false);
-                    mSwipeRefreshLayout.setRefreshEnable(false);
+                    //这里要走Fragment的setRefreshEnable，看看有没有条件需要判断，不能直接走SwipeRefreshLayout.setRefreshEnable
+                    fragment.setRefreshEnable(false);
                 } else {
-                    mSwipeRefreshLayout.setRefreshEnable(true);
+                    fragment.setRefreshEnable(true);
                 }
             }
         });

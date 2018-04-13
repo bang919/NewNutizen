@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.load.resource.bitmap.FitCenter;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.nutizen.nu.R;
 import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.utils.GlideUtils;
@@ -41,7 +41,7 @@ public class MainBannerAdapter extends RecyclerView.Adapter<MainBannerAdapter.Ba
     @Override
     public void onBindViewHolder(MainBannerAdapter.BannerHolder holder, int position) {
         final int _position = position % datas.size();
-        GlideUtils.loadImage(holder.mImageView, -1, datas.get(_position).getThumbnail(), new FitCenter());
+        GlideUtils.loadImage(holder.mImageView, -1, datas.get(_position).getThumbnail(), new CenterCrop());
         if (mBannerClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

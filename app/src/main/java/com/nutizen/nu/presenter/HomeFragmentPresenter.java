@@ -9,6 +9,8 @@ import com.nutizen.nu.model.HomeFragmentModel;
 import com.nutizen.nu.view.HomeFragmentView;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
+import java.util.regex.Pattern;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -41,6 +43,25 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
         Observable<ContentResponseBean> source2 = mHomeFragmentModel.requestEditors().map(new Function<ContentResponseBean, ContentResponseBean>() {
             @Override
             public ContentResponseBean apply(ContentResponseBean contentResponseBean) throws Exception {
+                ArrayList<ContentResponseBean.SearchBean> searchs = contentResponseBean.getSearch();
+
+                Pattern pattern = Pattern.compile("editors[0-9]");
+                TreeMap<Integer, ContentResponseBean.SearchBean> map = new TreeMap<>();
+
+                for (ContentResponseBean.SearchBean searchBean : searchs) {
+                    String[] genres = searchBean.getGenres().split(",");
+                    for (String genre : genres) {
+                        if (pattern.matcher(genre).matches()) {
+                            map.put(Integer.valueOf(genre.replace("editors","")), searchBean);
+                            break;
+                        }
+                    }
+                }
+
+                if (map.size() > 0) {
+                    contentResponseBean.setSearch(new ArrayList(map.values()));
+                }
+
                 mView.onEditorsData(contentResponseBean);
                 return contentResponseBean;
             }

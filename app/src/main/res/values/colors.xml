@@ -18,6 +18,7 @@
     <color name="colorTintViolet">#A14FFF</color>
     <color name="colorTranslucent">#00FFFFFF</color>
 
-    <color name="textcolor_selected">#FF84BD00</color>
+    <color name="textcolorSelected">#FF84BD00</color>
+    <color name="defaultPicBg">#151515</color>
 
 </resources>

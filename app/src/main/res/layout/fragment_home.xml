@@ -13,7 +13,7 @@
             android:id="@+id/banner_recyclerview"
             android:layout_width="0dp"
             android:layout_height="204dp"
-            android:background="#151515"
+            android:background="@color/defaultPicBg"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 

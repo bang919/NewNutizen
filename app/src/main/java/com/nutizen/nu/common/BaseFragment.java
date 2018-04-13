@@ -25,6 +25,12 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
     private Activity mActivity;
     private boolean hadRequestData;//第一次进来，请求数据
 
+    protected void onViewPagerFragmentResume() {
+    }
+
+    protected void onViewPagerFragmentPause() {
+    }
+
     /**
      * 获取xml布局
      */
@@ -94,10 +100,16 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
      */
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        if (!isVisibleToUser && mPresenter != null) {
-            mPresenter.cancelAllRequest();
-        } else if (!hadRequestData && isVisibleToUser) {
-            initRequestData();
+        if (!isVisibleToUser) {
+            if (mPresenter != null) {
+                mPresenter.cancelAllRequest();
+            }
+            onViewPagerFragmentPause();
+        } else {
+            onViewPagerFragmentResume();
+            if (!hadRequestData) {
+                initRequestData();
+            }
         }
         super.setUserVisibleHint(isVisibleToUser);
     }
