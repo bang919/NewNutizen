@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="310dp"
+    android:layout_height="match_parent"
+    android:paddingTop="24dp">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/bg_left_menu" />
+
+    <View
+        android:id="@+id/bg_leftmenu_green"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:background="#85BA27" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="18dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/left_menu_logo"
+        app:layout_constraintLeft_toLeftOf="@+id/bg_leftmenu_green"
+        app:layout_constraintTop_toTopOf="@+id/bg_leftmenu_green" />
+
+    <com.nutizen.nu.widget.LeftMenuItemView
+        android:id="@+id/leftitem_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:background="@drawable/bg_main_leftmenu_item_profile"
+        app:layout_constraintTop_toBottomOf="@+id/bg_leftmenu_green"
+        app:layout_height="55dp"
+        app:title="@string/profile" />
+
+    <com.nutizen.nu.widget.LeftMenuItemView
+        android:id="@+id/leftitem_favourit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        app:background="@drawable/bg_main_leftmenu_item_favourit"
+        app:layout_constraintTop_toBottomOf="@+id/leftitem_profile"
+        app:layout_height="55dp"
+        app:title="@string/favourites" />
+
+    <com.nutizen.nu.widget.LeftMenuItemView
+        android:id="@+id/leftitem_download"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        app:background="@drawable/bg_main_leftmenu_item_download"
+        app:layout_constraintTop_toBottomOf="@+id/leftitem_favourit"
+        app:layout_height="55dp"
+        app:title="@string/download" />
+
+    <com.nutizen.nu.widget.LeftMenuItemView
+        android:id="@+id/leftitem_help_faq"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        app:background="@drawable/bg_main_leftmenu_item_help_faq"
+        app:layout_constraintTop_toBottomOf="@+id/leftitem_download"
+        app:layout_height="55dp"
+        app:title="@string/help_amp_faq" />
+
+    <com.nutizen.nu.widget.LeftMenuItemView
+        android:id="@+id/leftitem_notification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        app:background="@drawable/bg_main_leftmenu_item_help_faq"
+        app:layout_constraintTop_toBottomOf="@+id/leftitem_help_faq"
+        app:layout_height="55dp"
+        app:title="@string/notification" />
+
+    <TextView
+        android:id="@+id/tv_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="10dp"
+        android:text="@string/version"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_log_out"
+        android:layout_width="50dp"
+        android:layout_marginRight="10dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/bg_logout_selector"
+        app:layout_constraintBottom_toBottomOf="@id/tv_version"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_version" />
+
+</android.support.constraint.ConstraintLayout>

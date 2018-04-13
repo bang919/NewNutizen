@@ -1,0 +1,106 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.mob.sdk'
+
+MobSDK {
+    appKey "24f4235ce28c5"
+    appSecret "6f65ba92cafd8c4dcbe3b96b81273fa6"
+
+    ShareSDK {
+        //平台配置信息
+        devInfo {
+            Facebook {
+                appKey "922868707874265"
+                appSecret "56ed91d224d9dd4607f926057b9c5e44"
+                callbackUri "http://www.nutizen.com"
+            }
+        }
+    }
+
+}
+
+def releaseTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
+}
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "com.nutizen.nu"
+        minSdkVersion 19
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    //重命名apk
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "app_" + buildType.name + "_v" + defaultConfig.versionName + "_${releaseTime()}.apk"
+        }
+    }
+
+    //签名
+    signingConfigs {
+        mysigning {
+            storeFile file("${rootProject.rootDir}/onwardsmg.keystore")
+            storePassword "onwards123"
+            keyAlias "onwardsmg"
+            keyPassword "onwards123"
+        }
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField "String", "data_hostname", "\"https://vmse.nutizen.asia/\""
+            buildConfigField "String", "playurl_hostname", "\"https://publicapi.nutizen.asia/\""
+            buildConfigField "String", "login_hostname", "\"https://vmseapi.nutizen.asia/\""
+            buildConfigField "String", "comment_url", "\"https://comment.nutizen.asia/\""
+            buildConfigField "String", "server_key", "\"58acb7acccce58ffa8b953b12b5a7702bd42dae441c1ad85057fa70b\""
+            buildConfigField "String", "tourist_token", "\"a9add46441c2213e7a9b167dc75fbf346cd4e7b23bcf2ee010d840aa8fe4057f\""
+            buildConfigField "String", "google_analytics", "\"UA-76194624-11\""
+
+            signingConfig signingConfigs.mysigning
+        }
+        release {
+            buildConfigField "String", "data_hostname", "\"https://vmse.nutizen.asia/\""
+            buildConfigField "String", "playurl_hostname", "\"https://publicapi.nutizen.asia/\""
+            buildConfigField "String", "login_hostname", "\"https://vmseapi.nutizen.asia/\""
+            buildConfigField "String", "comment_url", "\"https://comment.nutizen.asia/\""
+            buildConfigField "String", "server_key", "\"58acb7acccce58ffa8b953b12b5a7702bd42dae441c1ad85057fa70b\""
+            buildConfigField "String", "tourist_token", "\"a9add46441c2213e7a9b167dc75fbf346cd4e7b23bcf2ee010d840aa8fe4057f\""
+            buildConfigField "String", "google_analytics", "\"UA-76194624-11\""
+
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.mysigning
+        }
+    }
+}
+
+ext {
+    supportVersion = "27.0.2"
+}
+
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation "com.android.support:appcompat-v7:${supportVersion}"
+    //for TabLayout/RecyclerView
+    implementation "com.android.support:design:${supportVersion}"
+    //Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+    //RxJava
+    compile 'io.reactivex.rxjava2:rxjava:2.1.6'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.4.0'
+}

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/login_bg"
+    tools:context=".activity.LoginActivity">
+
+    <ImageView
+        android:id="@+id/ic_login_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/login_ic_logo"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ic_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="45dp"
+        android:src="@mipmap/ic_username"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ic_login_logo" />
+
+    <EditText
+        android:id="@+id/et_email"
+        android:layout_width="0dp"
+        android:layout_height="36dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="35dp"
+        android:background="@null"
+        android:hint="@string/username"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textColor="#fff"
+        android:textColorHint="#AFFFFFFF"
+        android:textCursorDrawable="@null"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/ic_username"
+        app:layout_constraintLeft_toRightOf="@id/ic_username"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ic_username" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="2dp"
+        android:background="@color/colorGray2"
+        app:layout_constraintLeft_toLeftOf="@id/ic_username"
+        app:layout_constraintRight_toRightOf="@id/et_email"
+        app:layout_constraintTop_toBottomOf="@id/et_email" />
+
+    <ImageView
+        android:id="@+id/ic_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:src="@mipmap/ic_password"
+        app:layout_constraintLeft_toLeftOf="@id/ic_username"
+        app:layout_constraintTop_toBottomOf="@id/ic_username" />
+
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_width="0dp"
+        android:layout_height="36dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="30dp"
+        android:background="@null"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:textColor="#fff"
+        android:textColorHint="#AFFFFFFF"
+        android:textCursorDrawable="@null"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/ic_password"
+        app:layout_constraintLeft_toRightOf="@id/ic_password"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ic_password" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="2dp"
+        android:background="@color/colorGray2"
+        app:layout_constraintLeft_toLeftOf="@id/ic_password"
+        app:layout_constraintRight_toRightOf="@id/et_password"
+        app:layout_constraintTop_toBottomOf="@id/et_password" />
+
+    <ImageView
+        android:id="@+id/bt_sign_up"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/bg_btn_login"
+        android:clickable="true"
+        app:layout_constraintLeft_toLeftOf="@id/ic_password"
+        app:layout_constraintRight_toRightOf="@id/et_password"
+        app:layout_constraintTop_toBottomOf="@id/ic_password" />
+
+    <TextView
+        android:id="@+id/or"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:text="@string/or"
+        android:textColor="#AFFFFFFF"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bt_sign_up" />
+
+    <ImageView
+        android:id="@+id/bt_facebook"
+        android:layout_width="0dp"
+        android:layout_height="36dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_login_facebook"
+        app:layout_constraintLeft_toLeftOf="@id/bt_sign_up"
+        app:layout_constraintRight_toLeftOf="@+id/bt_guest"
+        app:layout_constraintTop_toBottomOf="@id/or" />
+
+    <ImageView
+        android:id="@+id/bt_guest"
+        android:layout_width="0dp"
+        android:layout_height="36dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/bg_login_guest"
+        app:layout_constraintLeft_toRightOf="@+id/bt_facebook"
+        app:layout_constraintRight_toRightOf="@id/bt_sign_up"
+        app:layout_constraintTop_toTopOf="@id/bt_facebook" />
+
+    <TextView
+        android:id="@+id/bt_forgetpassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/forget"
+        android:textColor="#AFFFFFFF"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bt_guest" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="70dp"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bt_forgetpassword">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_account"
+            android:textColor="#AFFFFFFF"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/bt_register_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="@string/sign_up"
+            android:textColor="#86B738"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>
