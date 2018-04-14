@@ -1,63 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
-    android:background="#000"
-    android:orientation="vertical">
+    android:layout_height="113dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="162dp"
+        android:layout_height="91dp"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="156dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="16dp"
+        android:ellipsize="end"
+        android:lines="2"
+        android:text=""
+        android:textColor="#FFF"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toRightOf="@id/iv"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/rb_video"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginTop="8dp"
+        android:text=""
+        android:textColor="#AFFFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
-        <ImageView
-            android:id="@+id/iv"
-            android:layout_width="162dp"
-            android:layout_height="91dp"
-            android:background="@color/defaultPicBg" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="156dp"
-                android:layout_height="40dp"
-                android:ellipsize="end"
-                android:lines="2"
-                android:text=""
-                android:textColor="#FFF"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/rb_video"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text=""
-                android:textColor="#AFFFFFFF"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/follow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text=""
-                android:textColor="#AFFFFFFF"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-    </LinearLayout>
+    <TextView
+        android:id="@+id/follow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text=""
+        android:textColor="#AFFFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/rb_video" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginTop="12dp"
-        android:background="#19FFFFFF" />
+        android:layout_marginBottom="10dp"
+        android:background="#19FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

@@ -7,8 +7,7 @@
     <ImageView
         android:id="@+id/item_home_iv"
         android:layout_width="224dp"
-        android:layout_height="126dp"
-        android:background="@color/defaultPicBg" />
+        android:layout_height="126dp"/>
 
     <TextView
         android:id="@+id/item__home_tv"

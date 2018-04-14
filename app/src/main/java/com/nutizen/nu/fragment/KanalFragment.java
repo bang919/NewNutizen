@@ -48,7 +48,6 @@ public class KanalFragment extends BaseFragment<KanalPresenter> implements Kanal
     @Override
     public void refreshData() {
         mPresenter.requestKanals("");
-        mShowMoreBtn.setVisibility(View.GONE);
     }
 
     @Override

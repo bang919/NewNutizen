@@ -179,6 +179,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements
         int middle = MainBannerAdapter.BANNER_MAX / 2;
         mBannerView.scrollToPosition(middle - middle % search.size());
         initBannerDotLayout(search.size());
+        mBannerView.setBackground(null);
     }
 
 

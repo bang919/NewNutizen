@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.request.RequestOptions;
+import com.nutizen.nu.R;
 
 /**
  * Created by Administrator on 2017/12/16.
@@ -28,6 +29,8 @@ public class GlideUtils {
             }
             if (imgDefaultSource != 0 && imgDefaultSource != -1) {
                 requestOptions.placeholder(imgDefaultSource);
+            } else {
+                requestOptions.placeholder(R.drawable.glide_default_bg);
             }
             requestBuilder.apply(requestOptions);
             requestBuilder.into(imageView);
@@ -43,6 +46,8 @@ public class GlideUtils {
             }
             if (imgDefaultSource != 0 && imgDefaultSource != -1) {
                 requestOptions.placeholder(imgDefaultSource);
+            } else {
+                requestOptions.placeholder(R.drawable.glide_default_bg);
             }
             requestBuilder.apply(requestOptions);
             requestBuilder.into(imageView);
