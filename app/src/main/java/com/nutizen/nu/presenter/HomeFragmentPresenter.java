@@ -52,7 +52,7 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
                     String[] genres = searchBean.getGenres().split(",");
                     for (String genre : genres) {
                         if (pattern.matcher(genre).matches()) {
-                            map.put(Integer.valueOf(genre.replace("editors","")), searchBean);
+                            map.put(Integer.valueOf(genre.replace("editors", "")), searchBean);
                             break;
                         }
                     }
@@ -76,8 +76,14 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
         Observable<ArrayList<LiveResponseBean>> source4 = mHomeFragmentModel.requestLive().map(new Function<ArrayList<LiveResponseBean>, ArrayList<LiveResponseBean>>() {
             @Override
             public ArrayList<LiveResponseBean> apply(ArrayList<LiveResponseBean> liveResponseBeans) throws Exception {
-                mView.onLiveData(liveResponseBeans);
-                return liveResponseBeans;
+                ArrayList<LiveResponseBean> result = new ArrayList<>();
+                for (LiveResponseBean bean : liveResponseBeans) {
+                    if (bean.getSynopsis().contains(";")) {
+                        result.add(bean);
+                    }
+                }
+                mView.onLiveData(result);
+                return result;
             }
         });
 

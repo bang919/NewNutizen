@@ -10,7 +10,8 @@ import android.widget.TextView;
 
 import com.nutizen.nu.R;
 import com.nutizen.nu.adapter.MainBannerAdapter;
-import com.nutizen.nu.adapter.MainListAdapterd;
+import com.nutizen.nu.adapter.MainContentAdapterd;
+import com.nutizen.nu.adapter.MainLiveAdapter;
 import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.bean.response.LiveResponseBean;
 import com.nutizen.nu.common.BaseFragment;
@@ -24,10 +25,12 @@ import java.util.ArrayList;
 
 public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements View.OnClickListener, HomeFragmentView, MainBannerAdapter.OnBannerClickListener {
 
+    private View mLiveLayout;
     private LinearLayout mBannerDotLayout;
     private RecyclerView mBannerView;
     private RecyclerView mEditorRv, mNewlyRv, mLiveRv;
-    private MainListAdapterd mEditorAdapter, mNewlyAdapter, mLiveAdapter;
+    private MainContentAdapterd mEditorAdapter, mNewlyAdapter;
+    private MainLiveAdapter mLiveAdapter;
     private MyScrollView mScrollView;
     private MainBannerAdapter mMainBannerAdapter;
     private int totalScroll;
@@ -67,19 +70,19 @@ public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements
         mScrollView = rootView.findViewById(R.id.scrollview_home);
         View vidLayout = rootView.findViewById(R.id.vid_layout);
         View newsLayout = rootView.findViewById(R.id.news_layout);
-        View liveLayout = rootView.findViewById(R.id.live_layout);
+        mLiveLayout = rootView.findViewById(R.id.live_layout);
 
         ((TextView) vidLayout.findViewById(R.id.title_tv)).setText(getString(R.string.editor));
         ((TextView) newsLayout.findViewById(R.id.title_tv)).setText(getString(R.string.newly));
-        ((TextView) liveLayout.findViewById(R.id.title_tv)).setText(getString(R.string.livenow));
+        ((TextView) mLiveLayout.findViewById(R.id.title_tv)).setText(getString(R.string.livenow));
 
         vidLayout.findViewById(R.id.more_iv).setOnClickListener(this);
         newsLayout.findViewById(R.id.more_iv).setOnClickListener(this);
-        liveLayout.findViewById(R.id.more_iv).setOnClickListener(this);
+        mLiveLayout.findViewById(R.id.more_iv).setOnClickListener(this);
 
         mEditorRv = vidLayout.findViewById(R.id.recyclerView);
         mNewlyRv = newsLayout.findViewById(R.id.recyclerView);
-        mLiveRv = liveLayout.findViewById(R.id.recyclerView);
+        mLiveRv = mLiveLayout.findViewById(R.id.recyclerView);
 
         mBannerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         mMainBannerAdapter = new MainBannerAdapter();
@@ -87,14 +90,19 @@ public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements
         PagerSnapHelper pagerSnapHelper = new PagerSnapHelper();
         pagerSnapHelper.attachToRecyclerView(mBannerView);
 
-        mEditorAdapter = createAndBindAdapter(mEditorRv);
-        mNewlyAdapter = createAndBindAdapter(mNewlyRv);
-        mLiveAdapter = createAndBindAdapter(mLiveRv);
+        mEditorAdapter = createAndBindAdapter(mEditorRv, MainContentAdapterd.class);
+        mNewlyAdapter = createAndBindAdapter(mNewlyRv, MainContentAdapterd.class);
+        mLiveAdapter = createAndBindAdapter(mLiveRv, MainLiveAdapter.class);
     }
 
-    public MainListAdapterd createAndBindAdapter(RecyclerView recyclerView) {
+    public <T extends RecyclerView.Adapter> T createAndBindAdapter(RecyclerView recyclerView, Class<T> tClass) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        MainListAdapterd adapter = new MainListAdapterd();
+        T adapter = null;
+        if (tClass.equals(MainContentAdapterd.class)) {
+            adapter = (T) new MainContentAdapterd();
+        } else if (tClass.equals(MainLiveAdapter.class)) {
+            adapter = (T) new MainLiveAdapter();
+        }
         recyclerView.setAdapter(adapter);
         PagerSnapHelper helper = new PagerSnapHelper();
         helper.attachToRecyclerView(recyclerView);
@@ -211,7 +219,12 @@ public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements
 
     @Override
     public void onLiveData(ArrayList<LiveResponseBean> liveResponseBeans) {
-
+        if (liveResponseBeans != null && liveResponseBeans.size() > 0) {
+            mLiveLayout.setVisibility(View.VISIBLE);
+            mLiveAdapter.setDatas(liveResponseBeans);
+        } else {
+            mLiveLayout.setVisibility(View.GONE);
+        }
     }
 
     @Override

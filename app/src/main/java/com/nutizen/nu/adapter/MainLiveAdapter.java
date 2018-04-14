@@ -9,37 +9,37 @@ import android.widget.TextView;
 
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.nutizen.nu.R;
-import com.nutizen.nu.bean.response.ContentResponseBean;
+import com.nutizen.nu.bean.response.LiveResponseBean;
 import com.nutizen.nu.utils.GlideUtils;
 
 import java.util.ArrayList;
 
-public class MainListAdapterd extends RecyclerView.Adapter<MainListAdapterd.ListHolder> {
+public class MainLiveAdapter extends RecyclerView.Adapter<MainLiveAdapter.LiveHolder> {
 
-    private ArrayList<ContentResponseBean.SearchBean> datas;
-    private OnAdapterClickListener mAdapterClickListener;
+    private ArrayList<LiveResponseBean> datas;
+    private MainLiveAdapter.OnAdapterClickListener mAdapterClickListener;
 
-    public MainListAdapterd() {
+    public MainLiveAdapter() {
         this.datas = new ArrayList<>();
     }
 
-    public void setDatas(ArrayList<ContentResponseBean.SearchBean> datas) {
+    public void setDatas(ArrayList<LiveResponseBean> datas) {
         this.datas = datas;
         notifyDataSetChanged();
     }
 
-    public void setOnAdapterClickListener(OnAdapterClickListener listener) {
+    public void setOnAdapterClickListener(MainLiveAdapter.OnAdapterClickListener listener) {
         mAdapterClickListener = listener;
     }
 
     @Override
-    public ListHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ListHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main_list, parent, false));
+    public LiveHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new LiveHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main_list, parent, false));
     }
 
 
     @Override
-    public void onBindViewHolder(ListHolder holder, int position) {
+    public void onBindViewHolder(LiveHolder holder, int position) {
         final int _position = position % datas.size();
         GlideUtils.loadImage(holder.mImageView, -1, datas.get(_position).getThumbnail(), new CenterCrop());
         holder.mTextView.setText(datas.get(_position).getTitle());
@@ -58,12 +58,12 @@ public class MainListAdapterd extends RecyclerView.Adapter<MainListAdapterd.List
         return datas == null ? 0 : datas.size();
     }
 
-    class ListHolder extends RecyclerView.ViewHolder {
+    class LiveHolder extends RecyclerView.ViewHolder {
 
         ImageView mImageView;
         TextView mTextView;
 
-        public ListHolder(View itemView) {
+        public LiveHolder(View itemView) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.item_home_iv);
             mTextView = itemView.findViewById(R.id.item__home_tv);
@@ -71,7 +71,7 @@ public class MainListAdapterd extends RecyclerView.Adapter<MainListAdapterd.List
     }
 
     public interface OnAdapterClickListener {
-        void onItemClick(ContentResponseBean.SearchBean searchBean, int position);
+        void onItemClick(LiveResponseBean liveBean, int position);
     }
 
 }
