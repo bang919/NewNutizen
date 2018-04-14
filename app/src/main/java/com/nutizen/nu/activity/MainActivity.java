@@ -149,9 +149,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
-    public void resetRefreshing() {
+    public void setRefreshing(boolean refreshing) {
         if (mSwipeRefreshLayout != null)
-            mSwipeRefreshLayout.setRefreshing(false);
+            mSwipeRefreshLayout.setRefreshing(refreshing);
     }
 
     public void setRefreshEnable(boolean enable) {

@@ -6,6 +6,7 @@ import com.nutizen.nu.bean.request.LoginRequestBean;
 import com.nutizen.nu.bean.response.AdvertisementBean;
 import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.bean.response.ForgetPasswordResponse;
+import com.nutizen.nu.bean.response.KanalRspBean;
 import com.nutizen.nu.bean.response.LiveResponseBean;
 import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.bean.response.RegisterResponse;
@@ -71,4 +72,8 @@ public interface ApiInterface {
     @Headers("Authorization:Bearer " + BuildConfig.server_key)
     @GET("live?status=1")
     Observable<ArrayList<LiveResponseBean>> requestLive();
+
+    @Headers("Authorization:Bearer " + BuildConfig.server_key)
+    @GET("contributors?limit=99999999")
+    Observable<KanalRspBean> getKanal(@Query("filename") String filename);
 }

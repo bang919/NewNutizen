@@ -59,10 +59,11 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
     /**
      * 数据请求完成
      */
-    public void onDataRefreshFinish() {
-        if (mActivity instanceof MainActivity) {
-            ((MainActivity) mActivity).resetRefreshing();
+    public void onDataRefreshFinish(boolean success) {
+        if (!hadRequestData && success) {
+            hadRequestData = true;
         }
+        setRefreshing(false);
     }
 
     /**
@@ -73,6 +74,12 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
     public void setRefreshEnable(boolean enable) {
         if (mActivity instanceof MainActivity) {
             ((MainActivity) mActivity).setRefreshEnable(enable);
+        }
+    }
+
+    public void setRefreshing(boolean refreshing) {
+        if (mActivity instanceof MainActivity) {
+            ((MainActivity) mActivity).setRefreshing(refreshing);
         }
     }
 
@@ -115,9 +122,9 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
     }
 
     private void initRequestData() {
+        setRefreshing(true);
         mPresenter = initPresenter();
         refreshData();
-        hadRequestData = true;
     }
 
     @Nullable

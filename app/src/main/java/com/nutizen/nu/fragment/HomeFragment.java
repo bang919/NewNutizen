@@ -229,13 +229,13 @@ public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements
 
     @Override
     public void onDataRequestSuccess() {
-        onDataRefreshFinish();
+        onDataRefreshFinish(true);
     }
 
     @Override
     public void onDataRequestFailure(String error) {
         ToastUtils.showShort(error);
-        onDataRefreshFinish();
+        onDataRefreshFinish(false);
     }
 
 }
