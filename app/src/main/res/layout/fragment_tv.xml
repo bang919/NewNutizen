@@ -7,7 +7,9 @@
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/exo_top_play"
         android:layout_width="0dp"
+        app:default_artwork="@mipmap/bg_player"
         android:layout_height="0dp"
+        app:hide_on_touch="false"
         app:controller_layout_id="@layout/exo_control_tvfragment"
         app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintLeft_toLeftOf="parent"

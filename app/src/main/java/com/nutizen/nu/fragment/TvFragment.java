@@ -94,6 +94,7 @@ public class TvFragment extends BaseFragment<TvPresetner> implements View.OnClic
     @Override
     public void refreshData() {
         mPresenter.requestTvs();
+        preparePlayer();
     }
 
     @Override
