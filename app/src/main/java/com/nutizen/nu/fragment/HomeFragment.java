@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.nutizen.nu.R;
 import com.nutizen.nu.adapter.MainBannerAdapter;
-import com.nutizen.nu.adapter.MainContentAdapterd;
-import com.nutizen.nu.adapter.MainLiveAdapter;
+import com.nutizen.nu.adapter.HomeContentAdapterd;
+import com.nutizen.nu.adapter.HomeLiveAdapter;
 import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.bean.response.LiveResponseBean;
 import com.nutizen.nu.common.BaseFragment;
@@ -29,8 +29,8 @@ public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements
     private LinearLayout mBannerDotLayout;
     private RecyclerView mBannerView;
     private RecyclerView mEditorRv, mNewlyRv, mLiveRv;
-    private MainContentAdapterd mEditorAdapter, mNewlyAdapter;
-    private MainLiveAdapter mLiveAdapter;
+    private HomeContentAdapterd mEditorAdapter, mNewlyAdapter;
+    private HomeLiveAdapter mLiveAdapter;
     private MyScrollView mScrollView;
     private MainBannerAdapter mMainBannerAdapter;
     private int totalScroll;
@@ -90,18 +90,18 @@ public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements
         PagerSnapHelper pagerSnapHelper = new PagerSnapHelper();
         pagerSnapHelper.attachToRecyclerView(mBannerView);
 
-        mEditorAdapter = createAndBindAdapter(mEditorRv, MainContentAdapterd.class);
-        mNewlyAdapter = createAndBindAdapter(mNewlyRv, MainContentAdapterd.class);
-        mLiveAdapter = createAndBindAdapter(mLiveRv, MainLiveAdapter.class);
+        mEditorAdapter = createAndBindAdapter(mEditorRv, HomeContentAdapterd.class);
+        mNewlyAdapter = createAndBindAdapter(mNewlyRv, HomeContentAdapterd.class);
+        mLiveAdapter = createAndBindAdapter(mLiveRv, HomeLiveAdapter.class);
     }
 
     public <T extends RecyclerView.Adapter> T createAndBindAdapter(RecyclerView recyclerView, Class<T> tClass) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         T adapter = null;
-        if (tClass.equals(MainContentAdapterd.class)) {
-            adapter = (T) new MainContentAdapterd();
-        } else if (tClass.equals(MainLiveAdapter.class)) {
-            adapter = (T) new MainLiveAdapter();
+        if (tClass.equals(HomeContentAdapterd.class)) {
+            adapter = (T) new HomeContentAdapterd();
+        } else if (tClass.equals(HomeLiveAdapter.class)) {
+            adapter = (T) new HomeLiveAdapter();
         }
         recyclerView.setAdapter(adapter);
         PagerSnapHelper helper = new PagerSnapHelper();

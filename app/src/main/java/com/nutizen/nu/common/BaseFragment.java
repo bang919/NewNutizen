@@ -52,7 +52,9 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
     protected abstract void initEvent();
 
     /**
-     * 请求数据，MainActivity的SwipeRefreshLayout变为refreshing
+     * 请求数据，有两种情况跳用：
+     * 1。第一次进这个BaseFragment
+     * 2。下拉刷新
      */
     public abstract void refreshData();
 

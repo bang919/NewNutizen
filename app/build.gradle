@@ -103,4 +103,6 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.4.0'
+    //Exoplayer
+    compile 'com.google.android.exoplayer:exoplayer:r2.5.4'
 }

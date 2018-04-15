@@ -70,8 +70,12 @@ public interface ApiInterface {
     Observable<ContentResponseBean> requestNewly(@Query("limit") int limit, @Query("offset") int offset);
 
     @Headers("Authorization:Bearer " + BuildConfig.server_key)
-    @GET("live?status=1")
+    @GET("live?type=rtsp")
     Observable<ArrayList<LiveResponseBean>> requestLive();
+
+    @Headers("Authorization:Bearer " + BuildConfig.server_key)
+    @GET("live?status=1")
+    Observable<ArrayList<LiveResponseBean>> requestTvs();
 
     @Headers("Authorization:Bearer " + BuildConfig.server_key)
     @GET("contributors?limit=99999999")
