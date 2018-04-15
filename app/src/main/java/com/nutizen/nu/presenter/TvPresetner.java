@@ -3,13 +3,12 @@ package com.nutizen.nu.presenter;
 import android.content.Context;
 
 import com.nutizen.nu.bean.response.LiveResponseBean;
-import com.nutizen.nu.common.BasePresenter;
 import com.nutizen.nu.model.TvModel;
 import com.nutizen.nu.view.TvView;
 
 import java.util.ArrayList;
 
-public class TvPresetner extends BasePresenter<TvView> {
+public class TvPresetner extends BasePlayerPresenter<TvView> {
 
     private TvModel mTvModel;
 

@@ -109,6 +109,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
      */
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
         if (!isVisibleToUser) {
             if (mPresenter != null) {
                 mPresenter.cancelAllRequest();
@@ -120,7 +121,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
                 initRequestData();
             }
         }
-        super.setUserVisibleHint(isVisibleToUser);
     }
 
     private void initRequestData() {
@@ -139,6 +139,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
     public void onDetach() {
         mActivity = null;
         super.onDetach();
+        setUserVisibleHint(false);
     }
 
     /**

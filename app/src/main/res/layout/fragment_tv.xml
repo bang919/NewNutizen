@@ -8,18 +8,25 @@
         android:id="@+id/exo_top_play"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:controller_layout_id="@layout/exo_control_tvfragment"
         app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorGray2"
+        app:layout_constraintTop_toBottomOf="@id/exo_top_play" />
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="14dp"
         android:maxLines="2"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/colorGreen"
         android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/exo_top_play" />
