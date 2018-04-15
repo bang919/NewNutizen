@@ -16,13 +16,13 @@ import com.nutizen.nu.utils.GlideUtils;
 import java.util.ArrayList;
 
 
-public class TvListAdapter extends RecyclerView.Adapter<TvListAdapter.MyViewHolder> {
+public class BaseLiveListAdapter extends RecyclerView.Adapter<BaseLiveListAdapter.MyViewHolder> {
 
     private Context mContext;
     private ArrayList<LiveResponseBean> mLiveResponseBeans;
     private ItemOnClickListener itemOnClickListener;
 
-    public TvListAdapter(Context context) {
+    public BaseLiveListAdapter(Context context) {
         mContext = context;
         mLiveResponseBeans = new ArrayList<>();
     }

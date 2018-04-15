@@ -9,6 +9,7 @@
         android:id="@+id/exo_play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/colorHalfBlack"
         android:src="@mipmap/play_common_ic_play"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -7,10 +7,10 @@
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/exo_top_play"
         android:layout_width="0dp"
-        app:default_artwork="@mipmap/bg_player"
         android:layout_height="0dp"
+        app:controller_layout_id="@layout/exo_control_live_fragment"
+        app:default_artwork="@mipmap/bg_player"
         app:hide_on_touch="false"
-        app:controller_layout_id="@layout/exo_control_tvfragment"
         app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
@@ -22,7 +22,7 @@
         app:layout_constraintTop_toBottomOf="@id/exo_top_play" />
 
     <TextView
-        android:id="@+id/tv_title"
+        android:id="@+id/live_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -40,20 +40,20 @@
         android:layout_marginRight="16dp"
         android:scaleType="center"
         android:src="@mipmap/ic_arrow_down"
-        app:layout_constraintBottom_toBottomOf="@id/tv_title"
+        app:layout_constraintBottom_toBottomOf="@id/live_title"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_title" />
+        app:layout_constraintTop_toTopOf="@id/live_title" />
 
     <TextView
-        android:id="@+id/tv_content"
+        android:id="@+id/live_content"
         android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical"
         android:textColor="@color/colorTintWhite"
         android:textSize="13sp"
-        app:layout_constraintLeft_toLeftOf="@+id/tv_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+        app:layout_constraintLeft_toLeftOf="@+id/live_title"
+        app:layout_constraintTop_toBottomOf="@+id/live_title" />
 
     <View
         android:id="@+id/line"
@@ -61,10 +61,10 @@
         android:layout_height="1dp"
         android:layout_marginTop="11dp"
         android:background="@color/colorTintWhite"
-        app:layout_constraintTop_toBottomOf="@id/tv_content" />
+        app:layout_constraintTop_toBottomOf="@id/live_content" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerv_list_tvs"
+        android:id="@+id/recyclerv_list_lives"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="5dp"

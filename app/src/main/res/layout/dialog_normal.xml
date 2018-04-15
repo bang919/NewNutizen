@@ -8,7 +8,7 @@
 
 
     <TextView
-        android:id="@+id/tv_content"
+        android:id="@+id/live_content"
         android:layout_width="219dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -25,7 +25,7 @@
         android:layout_height="1dp"
         android:layout_marginTop="22dp"
         android:background="#000"
-        app:layout_constraintTop_toBottomOf="@id/tv_content" />
+        app:layout_constraintTop_toBottomOf="@id/live_content" />
 
     <TextView
         android:id="@+id/tv_no"

@@ -88,7 +88,7 @@ public class NormalDialog extends Dialog {
     }
 
     private void initView() {
-        mTvDesc = findViewById(R.id.tv_content);
+        mTvDesc = findViewById(R.id.live_content);
         mTvYes = findViewById(R.id.tv_yes);
         mTvNo = findViewById(R.id.tv_no);
     }
