@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
@@ -51,12 +52,13 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         String diskCacheDir = FileUtils.getDiskCacheDir(MyApplication.getMyApplicationContext());
         File splashImagePath = new File(diskCacheDir + "/splashImage");
         downloadBackgroundPic(splashImagePath);
-        Glide.with(imageView).load(splashImagePath).apply(new RequestOptions().transforms(new CenterCrop()))
+        Glide.with(imageView).load(splashImagePath)
+                .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE).transforms(new CenterCrop()))
                 .transition(new DrawableTransitionOptions().crossFade()).into(imageView);
     }
 
     private void downloadBackgroundPic(final File splashImagePath) throws IOException {
-        Log.d(TAG, "start downloadBackgroundPic");
+        Log.d(TAG, "start downloadBackgroundPic  -- " + splashImagePath.getAbsolutePath());
         final String splashPicSharedPreferencesUrl = (String) SPUtils.get(MyApplication.getMyApplicationContext(), Constants.SPLASH_PIC_URL, "");
         //如果splashImagePath还没有初始化，复制splash_default到目标文件
         if (TextUtils.isEmpty(splashPicSharedPreferencesUrl)) {
