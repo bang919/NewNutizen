@@ -123,7 +123,7 @@ public abstract class BaseLiveFragment extends BaseFragment<BaseLivePresetner> i
 
     @Override
     public void onLivesFailure(String errorMsg) {
-        onDataRefreshFinish(false);
+        onDataRefreshFinish();
         ToastUtils.showShort(errorMsg);
     }
 
@@ -140,6 +140,10 @@ public abstract class BaseLiveFragment extends BaseFragment<BaseLivePresetner> i
     }
 
     protected void preparePlayer() {
+        preparePlayer(false);
+    }
+
+    protected void preparePlayer(boolean fromRetry) {
         String url = mInitLiveBean == null ? null : mInitLiveBean.getUrl();
         if (!getUserVisibleHint() || TextUtils.isEmpty(url)) {
             return;
@@ -154,7 +158,7 @@ public abstract class BaseLiveFragment extends BaseFragment<BaseLivePresetner> i
         mExoPlayerView.setPlayer(mSimpleExoPlayer);
         MediaSource mediaSource = new HlsMediaSource(Uri.parse(url), mediaDataSourceFactory, null, null);
         mSimpleExoPlayer.prepare(mediaSource, true, false);
-        mSimpleExoPlayer.setPlayWhenReady(false);
+        mSimpleExoPlayer.setPlayWhenReady(fromRetry);
         mSimpleExoPlayer.seekTo(0);
     }
 
@@ -235,7 +239,7 @@ public abstract class BaseLiveFragment extends BaseFragment<BaseLivePresetner> i
             }
             switch (msg.what) {
                 case RETRY_PLAYER:
-                    BaseLiveFragment.preparePlayer();
+                    BaseLiveFragment.preparePlayer(true);
                     break;
             }
         }

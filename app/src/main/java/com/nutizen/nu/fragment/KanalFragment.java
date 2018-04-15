@@ -62,7 +62,7 @@ public class KanalFragment extends BaseFragment<KanalPresenter> implements Kanal
 
     @Override
     public void onFailure(String error) {
-        onDataRefreshFinish(false);
+        onDataRefreshFinish();
         ToastUtils.showShort(error);
     }
 

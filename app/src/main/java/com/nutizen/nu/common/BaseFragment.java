@@ -61,6 +61,16 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
     /**
      * 数据请求完成
      */
+
+    public void onDataRefreshFinish() {
+        onDataRefreshFinish(false);
+    }
+
+    /**
+     * 数据请求完成
+     *
+     * @param success 是否请求成功。若请求成功，设置hadRequestData为true，下一次进来Fragment就不会自动请求了
+     */
     public void onDataRefreshFinish(boolean success) {
         if (!hadRequestData && success) {
             hadRequestData = true;

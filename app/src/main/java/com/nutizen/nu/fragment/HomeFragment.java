@@ -236,7 +236,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements
     @Override
     public void onDataRequestFailure(String error) {
         ToastUtils.showShort(error);
-        onDataRefreshFinish(false);
+        onDataRefreshFinish();
     }
 
 }
