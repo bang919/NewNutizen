@@ -1,5 +1,6 @@
 package com.nutizen.nu.fragment;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
@@ -69,8 +70,14 @@ public abstract class BaseLiveFragment extends BaseFragment<BaseLivePresetner> i
         mTitleView = rootView.findViewById(R.id.live_title);
         mContentView = rootView.findViewById(R.id.live_content);
         mExoPlayerView = rootView.findViewById(R.id.exo_top_play);
+        Bitmap bitmap = setArtwork();
+        if (bitmap != null) {
+            mExoPlayerView.setDefaultArtwork(bitmap);
+        }
         mRecyclerView = rootView.findViewById(R.id.recyclerv_list_lives);
     }
+
+    protected abstract Bitmap setArtwork();
 
     @Override
     protected void initEvent() {
