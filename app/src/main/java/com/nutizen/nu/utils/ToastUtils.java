@@ -7,7 +7,7 @@ import com.nutizen.nu.common.MyApplication;
 
 
 /**
- * Created by Leo on 2017/5/19.
+ * Created by bigbang on 2017/5/19.
  * Toast提示工具类
  */
 

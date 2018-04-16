@@ -26,7 +26,7 @@ import com.nutizen.nu.presenter.LoginPresenter;
 import java.util.Map;
 
 /**
- * Created by Leo on 2017/5/2.
+ * Created by bigbang on 2017/5/2.
  * activity 基类
  */
 

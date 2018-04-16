@@ -1,6 +1,7 @@
 package com.nutizen.nu.fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -104,8 +105,18 @@ public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements
             adapter = (T) new HomeLiveAdapter();
         }
         recyclerView.setAdapter(adapter);
-        PagerSnapHelper helper = new PagerSnapHelper();
+        LinearSnapHelper helper = new LinearSnapHelper();
         helper.attachToRecyclerView(recyclerView);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    setRefreshEnable(false);
+                } else {
+                    setRefreshEnable(true);
+                }
+            }
+        });
         return adapter;
     }
 

@@ -14,7 +14,7 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 /**
- * Created by Leo on 2017/5/18.
+ * Created by bigbang on 2017/5/18.
  * presenter 基类
  */
 
