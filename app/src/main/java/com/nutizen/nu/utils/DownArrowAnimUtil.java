@@ -1,17 +1,24 @@
 package com.nutizen.nu.utils;
 
 import android.animation.ValueAnimator;
-import android.support.constraint.ConstraintLayout;
+import android.graphics.Paint;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 
 import com.nutizen.nu.R;
 
 public class DownArrowAnimUtil {
-    public static void switchDownArrow(final View downArrowIv, final View changeHeighView) {
-        final int heigh = (int) ScreenUtils.dip2px(downArrowIv.getContext(), 22f);
-        final int downArrowMove = heigh + (int) ScreenUtils.dip2px(downArrowIv.getContext(), 45f);
+    public static void switchDownArrow(final View downArrowIv, final TextView changeHeighView) {
+
+        Paint textViewPaint = changeHeighView.getPaint();
+        float textWidth = (textViewPaint.measureText(changeHeighView.getText().toString()));
+        int viewWidth = changeHeighView.getWidth();
+        float textSize = changeHeighView.getTextSize();
+        int s = (int) (textWidth / viewWidth);
+
+        final int heigh = (int) ScreenUtils.dip2px(downArrowIv.getContext(), 38f) + (int) textSize * s;
         ValueAnimator valueAnimator;
         if (!downArrowIv.isSelected()) {
             Animation downArrowAnim = AnimationUtils.loadAnimation(downArrowIv.getContext(), R.anim.anim_arrow_down2up);
@@ -29,10 +36,6 @@ public class DownArrowAnimUtil {
             public void onAnimationUpdate(ValueAnimator animation) {
                 int h = (int) animation.getAnimatedValue();
                 changeHeighView.getLayoutParams().height = h;
-
-                ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) downArrowIv.getLayoutParams();
-                layoutParams.topMargin = (int) (h / (float) heigh * downArrowMove);
-
                 changeHeighView.requestLayout();
             }
         });

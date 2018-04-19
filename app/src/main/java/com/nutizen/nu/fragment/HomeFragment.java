@@ -1,5 +1,6 @@
 package com.nutizen.nu.fragment;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.PagerSnapHelper;
@@ -10,12 +11,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nutizen.nu.R;
-import com.nutizen.nu.adapter.MainBannerAdapter;
+import com.nutizen.nu.activity.ContentPlayerActivity;
 import com.nutizen.nu.adapter.HomeContentAdapterd;
 import com.nutizen.nu.adapter.HomeLiveAdapter;
+import com.nutizen.nu.adapter.MainBannerAdapter;
 import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.bean.response.LiveResponseBean;
 import com.nutizen.nu.common.BaseFragment;
+import com.nutizen.nu.listener.ContentItemClickListener;
 import com.nutizen.nu.presenter.HomeFragmentPresenter;
 import com.nutizen.nu.utils.ScreenUtils;
 import com.nutizen.nu.utils.ToastUtils;
@@ -24,7 +27,7 @@ import com.nutizen.nu.widget.MyScrollView;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements View.OnClickListener, HomeFragmentView, MainBannerAdapter.OnBannerClickListener {
+public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements View.OnClickListener, HomeFragmentView, ContentItemClickListener, HomeLiveAdapter.OnLiveClickListener {
 
     private View mLiveLayout;
     private LinearLayout mBannerDotLayout;
@@ -101,8 +104,10 @@ public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements
         T adapter = null;
         if (tClass.equals(HomeContentAdapterd.class)) {
             adapter = (T) new HomeContentAdapterd();
+            ((HomeContentAdapterd) adapter).setOnContentItemClickListener(this);
         } else if (tClass.equals(HomeLiveAdapter.class)) {
             adapter = (T) new HomeLiveAdapter();
+            ((HomeLiveAdapter) adapter).setOnLiveClickListener(this);
         }
         recyclerView.setAdapter(adapter);
         LinearSnapHelper helper = new LinearSnapHelper();
@@ -163,7 +168,15 @@ public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements
 
 
     @Override
-    public void onBannerClick(ContentResponseBean.SearchBean searchBean, int position) {
+    public void onContentItemClick(ContentResponseBean.SearchBean searchBean) {
+        Intent intent = new Intent(getContext(), ContentPlayerActivity.class);
+        intent.putExtra(ContentPlayerActivity.CONTENT_BEAN, searchBean);
+        startActivity(intent);
+    }
+
+
+    @Override
+    public void onLiveItemClick(LiveResponseBean liveBean, int position) {
 
     }
 

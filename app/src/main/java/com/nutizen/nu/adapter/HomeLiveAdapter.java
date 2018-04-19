@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class HomeLiveAdapter extends RecyclerView.Adapter<HomeLiveAdapter.LiveHolder> {
 
     private ArrayList<LiveResponseBean> datas;
-    private HomeLiveAdapter.OnAdapterClickListener mAdapterClickListener;
+    private OnLiveClickListener mAdapterClickListener;
 
     public HomeLiveAdapter() {
         this.datas = new ArrayList<>();
@@ -28,7 +28,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter<HomeLiveAdapter.LiveHo
         notifyDataSetChanged();
     }
 
-    public void setOnAdapterClickListener(HomeLiveAdapter.OnAdapterClickListener listener) {
+    public void setOnLiveClickListener(OnLiveClickListener listener) {
         mAdapterClickListener = listener;
     }
 
@@ -47,7 +47,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter<HomeLiveAdapter.LiveHo
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mAdapterClickListener.onItemClick(datas.get(_position), _position);
+                    mAdapterClickListener.onLiveItemClick(datas.get(_position), _position);
                 }
             });
         }
@@ -70,8 +70,8 @@ public class HomeLiveAdapter extends RecyclerView.Adapter<HomeLiveAdapter.LiveHo
         }
     }
 
-    public interface OnAdapterClickListener {
-        void onItemClick(LiveResponseBean liveBean, int position);
+    public interface OnLiveClickListener {
+        void onLiveItemClick(LiveResponseBean liveBean, int position);
     }
 
 }

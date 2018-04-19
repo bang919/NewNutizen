@@ -30,10 +30,11 @@
             android:theme="@style/TranslucentActivity" />
         <activity
             android:name=".activity.LoginActivity"
-            android:theme="@style/TranslucentActivity"></activity>
-        <activity android:name=".activity.ForgetEmailActivity"></activity>
-        <activity android:name=".activity.ForgetPasswordActivity"></activity>
-        <activity android:name=".activity.RegisterActivity"></activity>
+            android:theme="@style/TranslucentActivity" />
+        <activity android:name=".activity.ForgetEmailActivity" />
+        <activity android:name=".activity.ForgetPasswordActivity" />
+        <activity android:name=".activity.RegisterActivity" />
+        <activity android:name=".activity.ContentPlayerActivity"></activity>
     </application>
 
 </manifest>

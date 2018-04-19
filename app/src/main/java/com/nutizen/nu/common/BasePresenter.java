@@ -28,7 +28,7 @@ public class BasePresenter<V> {
         mContext = context;
     }
 
-    public <T> void subscribeNetworkTask(String observerTag, Observable<T> observable, MyObserver<T> myObserver) {
+    protected  <T> void subscribeNetworkTask(String observerTag, Observable<T> observable, MyObserver<T> myObserver) {
         Observer observer = createObserver(observerTag, myObserver);
         observable.subscribe(observer);
     }

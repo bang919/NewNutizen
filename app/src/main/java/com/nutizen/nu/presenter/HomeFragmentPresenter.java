@@ -5,7 +5,8 @@ import android.content.Context;
 import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.bean.response.LiveResponseBean;
 import com.nutizen.nu.common.BasePresenter;
-import com.nutizen.nu.model.HomeFragmentModel;
+import com.nutizen.nu.model.ContentModel;
+import com.nutizen.nu.model.LiveModel;
 import com.nutizen.nu.view.HomeFragmentView;
 
 import java.util.ArrayList;
@@ -25,22 +26,24 @@ import io.reactivex.schedulers.Schedulers;
 public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
 
     public final String TAG = "HomeFragmentPresenter";
-    private HomeFragmentModel mHomeFragmentModel;
+    private ContentModel mContentModel;
+    private LiveModel mLiveModel;
 
     public HomeFragmentPresenter(Context context, HomeFragmentView view) {
         super(context, view);
-        mHomeFragmentModel = new HomeFragmentModel();
+        mContentModel = new ContentModel();
+        mLiveModel = new LiveModel();
     }
 
     public void requestDatas() {
-        Observable<ContentResponseBean> source1 = mHomeFragmentModel.requestHomeBanner().map(new Function<ContentResponseBean, ContentResponseBean>() {
+        Observable<ContentResponseBean> source1 = mContentModel.requestHomeBanner().map(new Function<ContentResponseBean, ContentResponseBean>() {
             @Override
             public ContentResponseBean apply(ContentResponseBean contentResponseBean) throws Exception {
                 mView.onBannerData(contentResponseBean);
                 return contentResponseBean;
             }
         });
-        Observable<ContentResponseBean> source2 = mHomeFragmentModel.requestEditors().map(new Function<ContentResponseBean, ContentResponseBean>() {
+        Observable<ContentResponseBean> source2 = mContentModel.requestEditors().map(new Function<ContentResponseBean, ContentResponseBean>() {
             @Override
             public ContentResponseBean apply(ContentResponseBean contentResponseBean) throws Exception {
                 ArrayList<ContentResponseBean.SearchBean> searchs = contentResponseBean.getSearch();
@@ -66,14 +69,14 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
                 return contentResponseBean;
             }
         });
-        Observable<ContentResponseBean> source3 = mHomeFragmentModel.requestNewly(9, 0).map(new Function<ContentResponseBean, ContentResponseBean>() {
+        Observable<ContentResponseBean> source3 = mContentModel.requestNewly(9, 0).map(new Function<ContentResponseBean, ContentResponseBean>() {
             @Override
             public ContentResponseBean apply(ContentResponseBean contentResponseBean) throws Exception {
                 mView.onNewlyData(contentResponseBean);
                 return contentResponseBean;
             }
         });
-        Observable<ArrayList<LiveResponseBean>> source4 = mHomeFragmentModel.requestLive().map(new Function<ArrayList<LiveResponseBean>, ArrayList<LiveResponseBean>>() {
+        Observable<ArrayList<LiveResponseBean>> source4 = mLiveModel.requestLive().map(new Function<ArrayList<LiveResponseBean>, ArrayList<LiveResponseBean>>() {
             @Override
             public ArrayList<LiveResponseBean> apply(ArrayList<LiveResponseBean> liveResponseBeans) throws Exception {
                 ArrayList<LiveResponseBean> result = new ArrayList<>();

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.nutizen.nu.R;
 import com.nutizen.nu.bean.response.ContentResponseBean;
+import com.nutizen.nu.listener.ContentItemClickListener;
 import com.nutizen.nu.utils.GlideUtils;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 public class HomeContentAdapterd extends RecyclerView.Adapter<HomeContentAdapterd.ContentHolder> {
 
     private ArrayList<ContentResponseBean.SearchBean> datas;
-    private OnAdapterClickListener mAdapterClickListener;
+    private ContentItemClickListener mAdapterClickListener;
 
     public HomeContentAdapterd() {
         this.datas = new ArrayList<>();
@@ -28,7 +29,7 @@ public class HomeContentAdapterd extends RecyclerView.Adapter<HomeContentAdapter
         notifyDataSetChanged();
     }
 
-    public void setOnAdapterClickListener(OnAdapterClickListener listener) {
+    public void setOnContentItemClickListener(ContentItemClickListener listener) {
         mAdapterClickListener = listener;
     }
 
@@ -47,7 +48,7 @@ public class HomeContentAdapterd extends RecyclerView.Adapter<HomeContentAdapter
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mAdapterClickListener.onItemClick(datas.get(_position), _position);
+                    mAdapterClickListener.onContentItemClick(datas.get(_position));
                 }
             });
         }
@@ -69,9 +70,4 @@ public class HomeContentAdapterd extends RecyclerView.Adapter<HomeContentAdapter
             mTextView = itemView.findViewById(R.id.item__home_tv);
         }
     }
-
-    public interface OnAdapterClickListener {
-        void onItemClick(ContentResponseBean.SearchBean searchBean, int position);
-    }
-
 }

@@ -2,8 +2,11 @@ package com.nutizen.nu.http;
 
 
 import com.nutizen.nu.BuildConfig;
+import com.nutizen.nu.bean.request.CommentBean;
 import com.nutizen.nu.bean.request.LoginRequestBean;
 import com.nutizen.nu.bean.response.AdvertisementBean;
+import com.nutizen.nu.bean.response.CommentResult;
+import com.nutizen.nu.bean.response.ContentPlaybackBean;
 import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.bean.response.ForgetPasswordResponse;
 import com.nutizen.nu.bean.response.KanalRspBean;
@@ -11,6 +14,7 @@ import com.nutizen.nu.bean.response.LiveResponseBean;
 import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.bean.response.RegisterResponse;
 import com.nutizen.nu.bean.response.ResetPasswordResonseBean;
+import com.nutizen.nu.bean.response.WatchHistoryCountRes;
 import com.nutizen.nu.bean.third.FacebookSdkBean;
 import com.nutizen.nu.bean.third.LoginFacebookRspBean;
 import com.nutizen.nu.bean.third.RegisterFacebookRspBean;
@@ -22,8 +26,11 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
@@ -75,9 +82,31 @@ public interface ApiInterface {
 
     @Headers("Authorization:Bearer " + BuildConfig.server_key)
     @GET("live?type=rtsp")
-    Observable<ArrayList<LiveResponseBean>> requestTvs();
+    Observable<ArrayList<LiveResponseBean>> requestTvAndRadio();
 
     @Headers("Authorization:Bearer " + BuildConfig.server_key)
     @GET("contributors?limit=99999999")
     Observable<KanalRspBean> getKanal(@Query("filename") String filename);
+
+    // 获取content对应video id
+    @GET(BuildConfig.data_hostname + "devapi/?apikey=" + BuildConfig.server_key + "&type=movie")
+    Observable<ContentResponseBean> getVideoIdByContentId(@Query("id") int id);
+
+    // 获取video播放地址
+    @GET(BuildConfig.playurl_hostname + "videos/{vid}")
+    Observable<ContentPlaybackBean> getPlaybackInfoByVideoId(@Path("vid") int id);
+
+    // 用contentid获取历史播放数量
+    @Headers("Authorization:Bearer " + BuildConfig.server_key)
+    @GET("watchhistories/count")
+    Observable<WatchHistoryCountRes> getWatchHistoryCount(@Query("type") String type, @Query("id") int cid, @Query("from") String startTime, @Query("to") String endTime);
+
+    @GET(BuildConfig.comment_url)
+    Observable<ArrayList<CommentResult>> getCommentList(@Query("ctype") String ctype, @Query("cid") int cid, @Query("page") int page, @Query("limit") int limit, @Query("sort") int sort);
+
+    @POST(BuildConfig.comment_url)
+    Observable<CommentResult> sendComment(@Header("Authorization") String token, @Body CommentBean commentBean);
+
+    @HTTP(method = "DELETE", path = BuildConfig.comment_url, hasBody = true)
+    Observable<CommentResult> deleteComment(@Header("Authorization") String token, @Body RequestBody commentId);
 }

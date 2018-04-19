@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_head"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp">
+
+    <TextView
+        android:id="@+id/vod_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif"
+        android:maxLines="2"
+        android:textColor="#FFF"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_writter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="writter"
+        android:textColor="@color/colorGreen"
+        app:layout_constraintTop_toBottomOf="@id/vod_title" />
+
+    <TextView
+        android:id="@+id/tv_views"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:fontFamily="sans-serif-light"
+        android:textColor="#6F6F6F"
+        app:layout_constraintBottom_toBottomOf="@id/tv_writter"
+        app:layout_constraintLeft_toRightOf="@+id/tv_writter" />
+
+    <ImageView
+        android:id="@+id/iv_show_detail"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="center"
+        android:src="@mipmap/ic_arrow_down"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_writter"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_writter" />
+
+    <TextView
+        android:id="@+id/tv_detail"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:gravity="bottom"
+        android:text=""
+        android:textColor="#FFF"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/tv_writter" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#3D3D3D"
+        android:focusable="true"
+        android:layout_marginTop="8dp"
+        android:focusableInTouchMode="true"
+        android:paddingLeft="-8dp"
+        android:paddingRight="-8dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_detail" />
+
+    <TextView
+        android:id="@+id/text_comments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="sans-serif-light"
+        android:text="Comments"
+        android:textColor="#AFFFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/line" />
+
+    <EditText
+        android:id="@+id/comment_et"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/bg_et_comment"
+        android:fontFamily="sans-serif"
+        android:hint="Please input comment"
+        android:paddingBottom="10dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="10dp"
+        android:textColor="#D9D9D9"
+        android:textColorHint="@color/colorGray"
+        android:textCursorDrawable="@drawable/edittext_cursor"
+        android:textSelectHandle="@drawable/search_select_handler"
+        android:textSelectHandleLeft="@drawable/search_select_handler"
+        android:textSelectHandleRight="@drawable/search_select_handler"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/comment_send_iv"
+        app:layout_constraintTop_toBottomOf="@id/text_comments" />
+
+    <ImageView
+        android:id="@+id/comment_send_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btnsent_selector"
+        app:layout_constraintLeft_toRightOf="@id/comment_et"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/comment_et" />
+
+
+</android.support.constraint.ConstraintLayout>

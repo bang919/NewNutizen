@@ -3,23 +3,23 @@ package com.nutizen.nu.presenter;
 import android.content.Context;
 
 import com.nutizen.nu.bean.response.LiveResponseBean;
-import com.nutizen.nu.model.TvModel;
+import com.nutizen.nu.model.LiveModel;
 import com.nutizen.nu.view.BaseLiveView;
 
 import java.util.ArrayList;
 
 public class BaseLivePresetner extends BasePlayerPresenter<BaseLiveView> {
 
-    private TvModel mTvModel;
+    private LiveModel mLiveModel;
 
     public BaseLivePresetner(Context context, BaseLiveView view) {
         super(context, view);
-        mTvModel = new TvModel();
+        mLiveModel = new LiveModel();
     }
 
     public void requestTvs() {
-        String observerTag = getClass().getName() + "requestTvs";
-        subscribeNetworkTask(observerTag, mTvModel.requestTvs(), new MyObserver<ArrayList<LiveResponseBean>>() {
+        String observerTag = getClass().getName() + "requestTvAndRadio";
+        subscribeNetworkTask(observerTag, mLiveModel.requestTvAndRadio(), new MyObserver<ArrayList<LiveResponseBean>>() {
             @Override
             public void onMyNext(ArrayList<LiveResponseBean> liveResponseBeans) {
                 ArrayList<LiveResponseBean> datas = new ArrayList<>();
@@ -40,7 +40,7 @@ public class BaseLivePresetner extends BasePlayerPresenter<BaseLiveView> {
 
     public void requestRadios() {
         String observerTag = getClass().getName() + "requestRadios";
-        subscribeNetworkTask(observerTag, mTvModel.requestTvs(), new MyObserver<ArrayList<LiveResponseBean>>() {
+        subscribeNetworkTask(observerTag, mLiveModel.requestTvAndRadio(), new MyObserver<ArrayList<LiveResponseBean>>() {
             @Override
             public void onMyNext(ArrayList<LiveResponseBean> liveResponseBeans) {
                 ArrayList<LiveResponseBean> datas = new ArrayList<>();

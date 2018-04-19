@@ -30,4 +30,11 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
             mWakeLock = null;
         }
     }
+
+    /**
+     * Comments ==============================================
+     */
+    public void requestCommentList(String type, int cid, int page, int limit, int sort) {
+
+    }
 }

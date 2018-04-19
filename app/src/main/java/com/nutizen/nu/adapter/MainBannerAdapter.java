@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.nutizen.nu.R;
 import com.nutizen.nu.bean.response.ContentResponseBean;
+import com.nutizen.nu.listener.ContentItemClickListener;
 import com.nutizen.nu.utils.GlideUtils;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class MainBannerAdapter extends RecyclerView.Adapter<MainBannerAdapter.Ba
 
     public static final int BANNER_MAX = 1000;
     private ArrayList<ContentResponseBean.SearchBean> datas;
-    private OnBannerClickListener mBannerClickListener;
+    private ContentItemClickListener mBannerClickListener;
 
     public MainBannerAdapter() {
         this.datas = new ArrayList<>();
@@ -28,7 +29,7 @@ public class MainBannerAdapter extends RecyclerView.Adapter<MainBannerAdapter.Ba
         notifyDataSetChanged();
     }
 
-    public void setOnBannerClickListener(OnBannerClickListener listener) {
+    public void setOnBannerClickListener(ContentItemClickListener listener) {
         mBannerClickListener = listener;
     }
 
@@ -46,7 +47,7 @@ public class MainBannerAdapter extends RecyclerView.Adapter<MainBannerAdapter.Ba
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mBannerClickListener.onBannerClick(datas.get(_position), _position);
+                    mBannerClickListener.onContentItemClick(datas.get(_position));
                 }
             });
         }
@@ -66,9 +67,4 @@ public class MainBannerAdapter extends RecyclerView.Adapter<MainBannerAdapter.Ba
             mImageView = itemView.findViewById(R.id.iv_banner);
         }
     }
-
-    public interface OnBannerClickListener {
-        void onBannerClick(ContentResponseBean.SearchBean searchBean, int position);
-    }
-
 }
