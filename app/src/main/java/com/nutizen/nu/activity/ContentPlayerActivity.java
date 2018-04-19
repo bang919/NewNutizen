@@ -3,7 +3,6 @@ package com.nutizen.nu.activity;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
@@ -43,6 +42,7 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
     @Override
     protected void initView() {
         mSimpleExoPlayerView = findViewById(R.id.simple_player_contentplayer);
+        mPresenter.setSimpleExoPlayerView(mSimpleExoPlayerView);
         mMessageAndCommentRv = findViewById(R.id.rv_message_and_comment);
     }
 
@@ -62,11 +62,28 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
         mSimpleExoPlayerView.findViewById(R.id.exo_fullscreen).setOnClickListener(this);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mPresenter!=null){
+            mPresenter.preparePlayer();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        if(mPresenter!=null){
+            mPresenter.releasePlayer();
+        }
+        super.onPause();
+    }
+
     @Override
     public void onContentPlaybackResponse(String writter, ContentResponseBean.SearchBean contentResponseBean, ContentPlaybackBean contentPlaybackBean) {
         mVodRecyclerViewAdapter.setWritter(writter);
-        Log.d("bigbang", "url ---- " + contentPlaybackBean.getVideo_profile().get(0).getUrl_http());
-
+        mPresenter.setUrl(contentPlaybackBean.getVideo_profile().get(0).getUrl_http());
+        mPresenter.preparePlayer();
     }
 
     @Override

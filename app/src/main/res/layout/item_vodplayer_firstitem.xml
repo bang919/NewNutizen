@@ -23,7 +23,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
-        android:text="writter"
         android:textColor="@color/colorGreen"
         app:layout_constraintTop_toBottomOf="@id/vod_title" />
 

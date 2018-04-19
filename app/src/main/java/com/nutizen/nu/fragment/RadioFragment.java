@@ -36,8 +36,8 @@ public class RadioFragment extends BaseLiveFragment {
         if (liveResponseBeans != null && liveResponseBeans.size() > 0) {
             int random = (int) (Math.random() * liveResponseBeans.size());
             LiveResponseBean liveResponseBean = liveResponseBeans.get(random);
-            initPlayerMessage(liveResponseBean);
-            preparePlayer();
+            initPlayerMessage(liveResponseBean);//这里presenter设置了url
+            mPresenter.preparePlayer();
             Glide.with(getContext()).load(liveResponseBean.getThumbnail()).apply(new RequestOptions().transforms(new CenterCrop()))
                     .transition(new DrawableTransitionOptions().crossFade()).into(new SimpleTarget<Drawable>() {
                 @Override
