@@ -23,6 +23,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
 
     protected P mPresenter;
     private Activity mActivity;
+    private boolean hadGoneFragmentCreate;
     private boolean hadRequestData;//第一次进来，请求数据
 
     protected void onViewPagerFragmentResume() {
@@ -99,8 +100,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(getLayout(), container, false);
-        initView(rootView);
-        initEvent();
+        onViewPagerFragmentCreate(rootView);
         return rootView;
     }
 
@@ -126,6 +126,9 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
             }
             onViewPagerFragmentPause();
         } else {
+            if (!hadGoneFragmentCreate) {
+                return;
+            }
             onViewPagerFragmentResume();
             if (!hadRequestData) {
                 initRequestData();
@@ -133,9 +136,19 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
         }
     }
 
+    protected void onViewPagerFragmentCreate(View rootView) {
+        hadGoneFragmentCreate = true;
+        mPresenter = initPresenter();
+        initView(rootView);
+        initEvent();
+        if (getUserVisibleHint()) {
+            onViewPagerFragmentResume();
+            initRequestData();
+        }
+    }
+
     private void initRequestData() {
         setRefreshing(true);
-        mPresenter = initPresenter();
         refreshData();
     }
 

@@ -42,12 +42,13 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
     @Override
     protected void initView() {
         mSimpleExoPlayerView = findViewById(R.id.simple_player_contentplayer);
-        mPresenter.setSimpleExoPlayerView(mSimpleExoPlayerView);
         mMessageAndCommentRv = findViewById(R.id.rv_message_and_comment);
     }
 
     @Override
     protected void initData() {
+        mPresenter.setSimpleExoPlayerView(mSimpleExoPlayerView);
+
         Intent intent = getIntent();
         ContentResponseBean.SearchBean contentBean = (ContentResponseBean.SearchBean) intent.getSerializableExtra(CONTENT_BEAN);
         mPresenter.getDatas(contentBean);

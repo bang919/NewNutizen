@@ -37,10 +37,6 @@ public abstract class BaseLiveFragment extends BaseFragment<BaseLivePresetner> i
     @Override
     protected BaseLivePresetner initPresenter() {
         BaseLivePresetner baseLivePresetner = new BaseLivePresetner(getContext(), this);
-        baseLivePresetner.setSimpleExoPlayerView(mExoPlayerView);
-        if (mInitLiveBean != null) {
-            baseLivePresetner.setUrl(mInitLiveBean.getUrl());
-        }
         return baseLivePresetner;
     }
 
@@ -66,6 +62,7 @@ public abstract class BaseLiveFragment extends BaseFragment<BaseLivePresetner> i
         mBaseLiveListAdapter.setItemOnClickListener(this);
         mRecyclerView.setAdapter(mBaseLiveListAdapter);
 
+        mPresenter.setSimpleExoPlayerView(mExoPlayerView);
         mInitLiveBean = initLiveBean();
         initPlayerMessage(mInitLiveBean);
     }
@@ -81,9 +78,7 @@ public abstract class BaseLiveFragment extends BaseFragment<BaseLivePresetner> i
         mTitleView.setText(mInitLiveBean.getTitle());
         String synopsis = TextUtils.isEmpty(mInitLiveBean.getSynopsis()) ? getString(R.string.there_is_no_description) : mInitLiveBean.getSynopsis();
         mContentView.setText(synopsis);
-        if (mPresenter != null) {
-            mPresenter.setUrl(mInitLiveBean.getUrl());
-        }
+        mPresenter.setUrl(mInitLiveBean.getUrl());
     }
 
     protected LiveResponseBean initLiveBean() {
