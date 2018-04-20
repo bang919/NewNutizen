@@ -13,10 +13,12 @@ import android.widget.TextView;
 
 import com.nutizen.nu.R;
 import com.nutizen.nu.adapter.MainViewPagerAdapter;
+import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.common.BaseActivity;
 import com.nutizen.nu.common.BaseFragment;
 import com.nutizen.nu.common.BasePresenter;
 import com.nutizen.nu.dialog.NormalDialog;
+import com.nutizen.nu.presenter.LoginPresenter;
 import com.nutizen.nu.utils.ScreenUtils;
 import com.nutizen.nu.widget.MySwipeRefreshLayout;
 
@@ -100,6 +102,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         TextView versionTv = findViewById(R.id.tv_version);
         versionTv.setText(getString(R.string.version, getVersion()));
         mSwipeRefreshLayout.setRefreshing(true);
+        LoginResponseBean accountMessage = LoginPresenter.getAccountMessage();
+        if (accountMessage != null) {
+            ((TextView) findViewById(R.id.tv_left_menu_name)).setText(accountMessage.getDetail().getViewer_username());
+        }
     }
 
     private String getVersion() {

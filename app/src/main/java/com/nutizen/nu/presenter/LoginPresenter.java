@@ -147,6 +147,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 }
 
                 loginResponseBean.setDetail(detailBean);
+                SPUtils.putObject(MyApplication.getMyApplicationContext(), Constants.LOGIN_BEAN, loginResponseBean);
                 mView.loginSuccess(loginResponseBean);
             }
 

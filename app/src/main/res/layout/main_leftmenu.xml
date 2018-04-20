@@ -17,6 +17,7 @@
         android:background="#85BA27" />
 
     <ImageView
+        android:id="@+id/left_menu_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -25,6 +26,16 @@
         android:src="@mipmap/left_menu_logo"
         app:layout_constraintLeft_toLeftOf="@+id/bg_leftmenu_green"
         app:layout_constraintTop_toTopOf="@+id/bg_leftmenu_green" />
+
+    <TextView
+        android:id="@+id/tv_left_menu_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/bg_leftmenu_green"
+        app:layout_constraintLeft_toLeftOf="@+id/left_menu_logo" />
 
     <com.nutizen.nu.widget.LeftMenuItemView
         android:id="@+id/leftitem_profile"
@@ -90,10 +101,10 @@
     <ImageView
         android:id="@+id/iv_log_out"
         android:layout_width="50dp"
-        android:layout_marginRight="10dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginRight="10dp"
         android:background="@drawable/bg_logout_selector"
         app:layout_constraintBottom_toBottomOf="@id/tv_version"
         app:layout_constraintRight_toRightOf="parent"
