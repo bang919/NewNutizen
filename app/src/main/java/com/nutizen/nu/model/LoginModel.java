@@ -5,7 +5,6 @@ import com.nutizen.nu.bean.response.ForgetPasswordResponse;
 import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.bean.response.ResetPasswordResonseBean;
 import com.nutizen.nu.bean.third.FacebookSdkBean;
-import com.nutizen.nu.bean.third.LoginFacebookRspBean;
 import com.nutizen.nu.bean.third.RegisterFacebookRspBean;
 import com.nutizen.nu.http.HttpClient;
 
@@ -23,6 +22,13 @@ public class LoginModel {
     public Observable<LoginResponseBean> login(LoginRequestBean loginRequestBean) {
         return HttpClient.getApiInterface()
                 .login(loginRequestBean)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<LoginResponseBean.DetailBean> getViewerDetail(String token) {
+        return HttpClient.getApiInterface()
+                .getViewerDetail("bearer " + token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -45,14 +51,14 @@ public class LoginModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<RegisterFacebookRspBean> registerByFacebook(FacebookSdkBean facebookReqBean){
+    public Observable<RegisterFacebookRspBean> registerByFacebook(FacebookSdkBean facebookReqBean) {
         return HttpClient.getApiInterface()
                 .registerByFacebook(facebookReqBean)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<LoginFacebookRspBean> loginByFacebook(FacebookSdkBean facebookReqBean){
+    public Observable<LoginResponseBean> loginByFacebook(FacebookSdkBean facebookReqBean) {
         return HttpClient.getApiInterface()
                 .loginByFacebook(facebookReqBean)
                 .subscribeOn(Schedulers.io())

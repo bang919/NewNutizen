@@ -34,7 +34,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     @Override
-    protected int getBarColor() {
+    public int getBarColor() {
         return R.color.colorBlack;
     }
 

@@ -1,13 +1,16 @@
 package com.nutizen.nu.presenter;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.support.constraint.ConstraintLayout;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -26,6 +29,7 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.nutizen.nu.common.BaseActivity;
 import com.nutizen.nu.common.BasePresenter;
 
 import java.lang.ref.WeakReference;
@@ -179,6 +183,38 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
                     basePlayerPresenter.preparePlayer(true);
                     break;
             }
+        }
+    }
+
+    private boolean isFullScreen;
+
+    public boolean isFullScreen() {
+        return isFullScreen;
+    }
+
+    public void switchPlayerSize(BaseActivity baseActivity, View topBarView) {
+        if (isFullScreen) {//变成小窗口
+            isFullScreen = false;
+            topBarView.setVisibility(View.VISIBLE);
+            baseActivity.setSystemBarTransparent();
+            baseActivity.setSystemBarColor(baseActivity.getBarColor());
+            baseActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) mSimpleExoPlayerView.getLayoutParams();
+            layoutParams.dimensionRatio = "16:9";
+            layoutParams.height = 0;
+            mSimpleExoPlayerView.setLayoutParams(layoutParams);
+            mSimpleExoPlayerView.requestLayout();
+        } else {//变成全屏
+            isFullScreen = true;
+            int width = mSimpleExoPlayerView.getWidth();
+            topBarView.setVisibility(View.GONE);
+            baseActivity.getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
+            baseActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);//切换成左侧横屏
+            ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) mSimpleExoPlayerView.getLayoutParams();
+            layoutParams.dimensionRatio = null;
+            layoutParams.height = width;
+            mSimpleExoPlayerView.setLayoutParams(layoutParams);
+            mSimpleExoPlayerView.requestLayout();
         }
     }
 }

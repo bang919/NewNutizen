@@ -56,7 +56,7 @@ public class RegisterActivity extends BaseActivity<RegisterPresenter> implements
     }
 
     @Override
-    protected int getBarColor() {
+    public int getBarColor() {
         return R.color.colorBlack;
     }
 

@@ -30,7 +30,7 @@ public class ForgetEmailActivity extends BaseActivity<ForgetPasswordPresenter> i
     }
 
     @Override
-    protected int getBarColor() {
+    public int getBarColor() {
         return R.color.colorBlack;
     }
 

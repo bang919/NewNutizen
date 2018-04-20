@@ -7,6 +7,11 @@
     android:background="@color/colorBlack"
     tools:context=".activity.ContentPlayerActivity">
 
+    <View
+        android:id="@+id/top_view"
+        android:layout_width="0dp"
+        android:layout_height="24dp" />
+
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/simple_player_contentplayer"
         android:layout_width="0dp"
@@ -15,7 +20,8 @@
         app:default_artwork="@mipmap/bg_tv_player"
         app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_view" />
 
     <View
         android:layout_width="match_parent"
@@ -29,5 +35,24 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/simple_player_contentplayer" />
+
+    <RelativeLayout
+        android:id="@+id/progress_bar_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorHalfBlack"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminateDrawable="@drawable/bg_pb_white" />
+    </RelativeLayout>
+
 
 </android.support.constraint.ConstraintLayout>

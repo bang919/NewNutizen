@@ -34,7 +34,9 @@
         <activity android:name=".activity.ForgetEmailActivity" />
         <activity android:name=".activity.ForgetPasswordActivity" />
         <activity android:name=".activity.RegisterActivity" />
-        <activity android:name=".activity.ContentPlayerActivity"></activity>
+        <activity
+            android:name=".activity.ContentPlayerActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"/>
     </application>
 
 </manifest>

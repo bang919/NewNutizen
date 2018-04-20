@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Function4;
 import io.reactivex.schedulers.Schedulers;
@@ -36,13 +37,13 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
     }
 
     public void requestDatas() {
-        Observable<ContentResponseBean> source1 = mContentModel.requestHomeBanner().map(new Function<ContentResponseBean, ContentResponseBean>() {
-            @Override
-            public ContentResponseBean apply(ContentResponseBean contentResponseBean) throws Exception {
-                mView.onBannerData(contentResponseBean);
-                return contentResponseBean;
-            }
-        });
+        Observable<ContentResponseBean> source1 = mContentModel.requestHomeBanner()
+                .doOnNext(new Consumer<ContentResponseBean>() {
+                    @Override
+                    public void accept(ContentResponseBean contentResponseBean) throws Exception {
+                        mView.onBannerData(contentResponseBean);
+                    }
+                });
         Observable<ContentResponseBean> source2 = mContentModel.requestEditors().map(new Function<ContentResponseBean, ContentResponseBean>() {
             @Override
             public ContentResponseBean apply(ContentResponseBean contentResponseBean) throws Exception {
@@ -69,13 +70,13 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
                 return contentResponseBean;
             }
         });
-        Observable<ContentResponseBean> source3 = mContentModel.requestNewly(9, 0).map(new Function<ContentResponseBean, ContentResponseBean>() {
-            @Override
-            public ContentResponseBean apply(ContentResponseBean contentResponseBean) throws Exception {
-                mView.onNewlyData(contentResponseBean);
-                return contentResponseBean;
-            }
-        });
+        Observable<ContentResponseBean> source3 = mContentModel.requestNewly(9, 0)
+                .doOnNext(new Consumer<ContentResponseBean>() {
+                    @Override
+                    public void accept(ContentResponseBean contentResponseBean) throws Exception {
+                        mView.onNewlyData(contentResponseBean);
+                    }
+                });
         Observable<ArrayList<LiveResponseBean>> source4 = mLiveModel.requestLive().map(new Function<ArrayList<LiveResponseBean>, ArrayList<LiveResponseBean>>() {
             @Override
             public ArrayList<LiveResponseBean> apply(ArrayList<LiveResponseBean> liveResponseBeans) throws Exception {

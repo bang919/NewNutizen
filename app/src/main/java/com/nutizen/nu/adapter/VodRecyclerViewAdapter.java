@@ -1,6 +1,5 @@
 package com.nutizen.nu.adapter;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -55,13 +54,12 @@ public class VodRecyclerViewAdapter extends RecyclerView.Adapter implements View
     private TreeMap<Integer, Integer> unwindMap = new TreeMap<>();
     private int mAvailableWidth;
     private Typeface mHeavyTypeface, mBookTypeface;
-    private Dialog mDailog;
     public int showDeletePosition = -1;
 
     public VodRecyclerViewAdapter(Context context, ContentResponseBean.SearchBean videoInfo) {
         LoginResponseBean accountMessage = LoginPresenter.getAccountMessage();
         if (accountMessage != null) {
-            userVid = Integer.valueOf(accountMessage.get_id());
+            userVid = Integer.valueOf(accountMessage.getViewer_id());
         }
         mVideoInfo = videoInfo;
     }
@@ -171,16 +169,14 @@ public class VodRecyclerViewAdapter extends RecyclerView.Adapter implements View
     }
 
     private void showDailog(final int position) {
-        mDailog = new NormalDialog(mContext, mContext.getString(R.string.yes), mContext.getString(R.string.cancel), "Confirm Delete ?", new View.OnClickListener() {
+        new NormalDialog(mContext, mContext.getString(R.string.yes), mContext.getString(R.string.cancel), "Confirm Delete ?", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDailog.dismiss();
                 if (mCommentAdapterCallback != null) {
                     mCommentAdapterCallback.longClickToDelete(mCommentResultList.get(position - 1));
                 }
             }
-        }, null);
-        mDailog.show();
+        }, null).show();
     }
 
     private void initUnwindText(final TextView content, final ImageView unwind, final int position) {
@@ -316,6 +312,7 @@ public class VodRecyclerViewAdapter extends RecyclerView.Adapter implements View
      */
     public void setCommentData(List<CommentResult> commentResultList) {
         mCommentResultList = (ArrayList<CommentResult>) commentResultList;
+        resetEditText();
         notifyDataSetChanged();
     }
 
@@ -358,7 +355,7 @@ public class VodRecyclerViewAdapter extends RecyclerView.Adapter implements View
     /**
      * 外部数据发生变化调用的方法
      */
-    public void resetEditText() {
+    private void resetEditText() {
         if (commentEditText != null) {
             unwindMap.clear();
             commentEditText.setText("");

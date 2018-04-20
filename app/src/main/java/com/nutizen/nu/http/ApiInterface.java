@@ -16,7 +16,6 @@ import com.nutizen.nu.bean.response.RegisterResponse;
 import com.nutizen.nu.bean.response.ResetPasswordResonseBean;
 import com.nutizen.nu.bean.response.WatchHistoryCountRes;
 import com.nutizen.nu.bean.third.FacebookSdkBean;
-import com.nutizen.nu.bean.third.LoginFacebookRspBean;
 import com.nutizen.nu.bean.third.RegisterFacebookRspBean;
 
 import java.util.ArrayList;
@@ -52,6 +51,9 @@ public interface ApiInterface {
     @POST("viewers/login")
     Observable<LoginResponseBean> login(@Body LoginRequestBean loginRequestBean);
 
+    @GET("viewers")
+    Observable<LoginResponseBean.DetailBean> getViewerDetail(@Header("Authorization") String contentRange);
+
     @POST("viewers/reset")
     Observable<ResetPasswordResonseBean> searchEmailToRestPassword(@Body RequestBody body);
 
@@ -65,7 +67,7 @@ public interface ApiInterface {
     Observable<RegisterFacebookRspBean> registerByFacebook(@Body FacebookSdkBean body);
 
     @POST("viewers/login/third")
-    Observable<LoginFacebookRspBean> loginByFacebook(@Body FacebookSdkBean body);
+    Observable<LoginResponseBean> loginByFacebook(@Body FacebookSdkBean body);
 
     @GET(BuildConfig.data_hostname + "devapi/?apikey=" + BuildConfig.server_key + "&c=channels&type=movie")
     Observable<ContentResponseBean> requestHomeBanner();

@@ -2,6 +2,7 @@ package com.nutizen.nu.presenter;
 
 import android.content.Context;
 
+import com.nutizen.nu.bean.request.CommentBean;
 import com.nutizen.nu.bean.response.CommentResult;
 import com.nutizen.nu.bean.response.ContentPlaybackBean;
 import com.nutizen.nu.bean.response.ContentResponseBean;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Function3;
 
@@ -21,6 +23,7 @@ public class ContentPlayerPresenter extends BasePlayerPresenter<ContentPlayerVie
 
     private ContentModel mContentModel;
     private CommentModel mCommentModel;
+    private final int intPageLimit = 9999;
 
     public ContentPlayerPresenter(Context context, ContentPlayerView view) {
         super(context, view);
@@ -38,22 +41,11 @@ public class ContentPlayerPresenter extends BasePlayerPresenter<ContentPlayerVie
                         if (search == null || search.size() == 0 || search.get(0).getVideo_id() == 0) {
                             throw new Exception("Can't find video for " + contentBean.getTitle() + " (content_id: " + contentBean.getId() + ")");
                         }
-
-//                        Observable<ContentPlaybackBean> playbackInfoByVideoId = mContentModel.getPlaybackInfoByVideoId(search.get(0).getVideo_id());
-//                        Observable<WatchHistoryCountRes> watchHistoryCountResObservable = mContentModel.getWatchHistoryCount(search.get(0).getVideo_id())
-//                                .map(new Function<WatchHistoryCountRes, WatchHistoryCountRes>() {
-//                                    @Override
-//                                    public WatchHistoryCountRes apply(WatchHistoryCountRes watchHistoryCountRes) throws Exception {
-//                                        mView.onWatchHistoryCount(watchHistoryCountRes.getOffline());
-//                                        return watchHistoryCountRes;
-//                                    }
-//                                });
-
                         return mContentModel.getPlaybackInfoByVideoId(search.get(0).getVideo_id());
                     }
-                }).map(new Function<ContentPlaybackBean, ContentPlaybackBean>() {
+                }).doOnNext(new Consumer<ContentPlaybackBean>() {
                     @Override
-                    public ContentPlaybackBean apply(ContentPlaybackBean contentPlaybackBean) throws Exception {
+                    public void accept(ContentPlaybackBean contentPlaybackBean) throws Exception {
                         String[] genres = contentBean.getGenres().split(",");
                         String writter = "";
                         for (int i = 0; i < genres.length; i++) {
@@ -64,26 +56,23 @@ public class ContentPlayerPresenter extends BasePlayerPresenter<ContentPlayerVie
                             }
                         }
                         mView.onContentPlaybackResponse(writter, contentBean, contentPlaybackBean);
-                        return contentPlaybackBean;
                     }
                 });
 
         Observable<WatchHistoryCountRes> watchHistoryObservable = mContentModel.getWatchHistoryCount(contentBean.getId())
-                .map(new Function<WatchHistoryCountRes, WatchHistoryCountRes>() {
+                .doOnNext(new Consumer<WatchHistoryCountRes>() {
                     @Override
-                    public WatchHistoryCountRes apply(WatchHistoryCountRes watchHistoryCountRes) throws Exception {
+                    public void accept(WatchHistoryCountRes watchHistoryCountRes) throws Exception {
                         mView.onWatchHistoryCount(watchHistoryCountRes.getOffline());
-                        return watchHistoryCountRes;
                     }
                 });
 
         Observable<ArrayList<CommentResult>> commentListObs = mCommentModel
-                .getCommentList(contentBean.getType(), contentBean.getId(), 1, 3, -1)
-                .map(new Function<ArrayList<CommentResult>, ArrayList<CommentResult>>() {
+                .getCommentList(contentBean.getType(), contentBean.getId(), 1, intPageLimit, -1)
+                .doOnNext(new Consumer<ArrayList<CommentResult>>() {
                     @Override
-                    public ArrayList<CommentResult> apply(ArrayList<CommentResult> commentResults) throws Exception {
+                    public void accept(ArrayList<CommentResult> commentResults) throws Exception {
                         mView.onCommentListResponse(commentResults);
-                        return commentResults;
                     }
                 });
 
@@ -98,6 +87,53 @@ public class ContentPlayerPresenter extends BasePlayerPresenter<ContentPlayerVie
         subscribeNetworkTask(observerTag, zip, new MyObserver<String>() {
             @Override
             public void onMyNext(String s) {
+                mView.onSuccess();
+            }
+
+            @Override
+            public void onMyError(String errorMessage) {
+                mView.onFailure(errorMessage);
+            }
+        });
+    }
+
+    public void commitComment(final ContentResponseBean.SearchBean contentBean, String comment) {
+        String obserableTag = getClass().getName() + "sendComment";
+        Observable<ArrayList<CommentResult>> commentsObservable = mCommentModel.sendComment(new CommentBean("movie", contentBean.getId(), comment))
+                .retry(2)
+                .flatMap(new Function<CommentResult, ObservableSource<ArrayList<CommentResult>>>() {
+                    @Override
+                    public ObservableSource<ArrayList<CommentResult>> apply(CommentResult commentResult) throws Exception {
+                        return mCommentModel.getCommentList("movie", contentBean.getId(), 1, intPageLimit, -1).retry(2);
+                    }
+                });
+        subscribeNetworkTask(obserableTag, commentsObservable, new MyObserver<ArrayList<CommentResult>>() {
+            @Override
+            public void onMyNext(ArrayList<CommentResult> commentResults) {
+                mView.onCommentListResponse(commentResults);
+                mView.onSuccess();
+            }
+
+            @Override
+            public void onMyError(String errorMessage) {
+                mView.onFailure(errorMessage);
+            }
+        });
+    }
+
+    public void deleteComment(final ContentResponseBean.SearchBean contentBean, CommentResult commentResult) {
+        String obserableTag = getClass().getName() + "deleteComment";
+        subscribeNetworkTask(obserableTag, mCommentModel.deleteComment(commentResult)
+                .retry(2)
+                .flatMap(new Function<CommentResult, ObservableSource<ArrayList<CommentResult>>>() {
+                    @Override
+                    public ObservableSource<ArrayList<CommentResult>> apply(CommentResult commentResult) throws Exception {
+                        return mCommentModel.getCommentList("movie", contentBean.getId(), 1, intPageLimit, -1).retry(2);
+                    }
+                }), new MyObserver<ArrayList<CommentResult>>() {
+            @Override
+            public void onMyNext(ArrayList<CommentResult> commentResults) {
+                mView.onCommentListResponse(commentResults);
                 mView.onSuccess();
             }
 

@@ -32,7 +32,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     }
 
     @Override
-    protected int getBarColor() {
+    public int getBarColor() {
         return Constants.NULL_COLOR;
     }
 

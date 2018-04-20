@@ -37,7 +37,7 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
     }
 
     @Override
-    protected int getBarColor() {
+    public int getBarColor() {
         return Constants.NULL_COLOR;
     }
 

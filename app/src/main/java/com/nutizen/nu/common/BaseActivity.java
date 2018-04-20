@@ -44,7 +44,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
      * 状态条颜色,如果不需要状态条，重写这个方法，并
      * return Constants.NULL_COLOR
      */
-    protected int getBarColor() {
+    public int getBarColor() {
         return R.color.colorPrimary;
     }
 
@@ -84,7 +84,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     /**
      * （全屏模式）沉浸式状态栏
      */
-    private void setSystemBarTransparent() {
+    public void setSystemBarTransparent() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { // LOLLIPOP解决方案
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
@@ -98,7 +98,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     /**
      * 着色模式（改变状态栏颜色）
      */
-    protected void setSystemBarColor(int colorResource) {
+    public void setSystemBarColor(int colorResource) {
         if (colorResource == Constants.NULL_COLOR) {
             return;
         }
@@ -232,7 +232,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             mPresenter.destroy();
     }
 
-    protected void logout() {
+    public void logout() {
         LoginPresenter.logout();
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -260,4 +260,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="there_is_no_description">There is no description.</string>
+    <string name="do_you_want_to_login">No logged in yet. Do you want to login ?</string>
 </resources>

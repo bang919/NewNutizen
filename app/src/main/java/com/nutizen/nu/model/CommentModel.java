@@ -23,7 +23,7 @@ public class CommentModel {
     }
 
     public Observable<CommentResult> sendComment(CommentBean commentBean) {
-        String token = LoginPresenter.getAccountMessage().getToken();
+        String token = LoginPresenter.getAccountMessage().getViewer_token();
         return HttpClient.getApiInterface()
                 .sendComment("bearer " + token, commentBean)
                 .subscribeOn(Schedulers.io())
@@ -31,7 +31,7 @@ public class CommentModel {
     }
 
     public Observable<CommentResult> deleteComment(CommentResult commentResult) {
-        String token = LoginPresenter.getAccountMessage().getToken();
+        String token = LoginPresenter.getAccountMessage().getViewer_token();
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), "{\"comment_id\":\"" + commentResult.get_id() + "\"}");
         return HttpClient.getApiInterface()
                 .deleteComment("bearer " + token, body)
