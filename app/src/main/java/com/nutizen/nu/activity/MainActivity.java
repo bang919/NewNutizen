@@ -8,6 +8,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -29,6 +31,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private TabLayout mTabLayout;
     private MainViewPagerAdapter mViewpagerAdapter;
     private MySwipeRefreshLayout mSwipeRefreshLayout;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected int getLayout() {
@@ -51,9 +54,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mTabLayout = findViewById(R.id.main_tablayout);
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh);
         mSwipeRefreshLayout.setProgressViewOffset(true, 0, (int) ScreenUtils.dip2px(this, 36f));
-        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);//Toggle DrawerLayout and Toolbar
+        new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.open, R.string.close);//Toggle DrawerLayout and Toolbar
 
         mViewpagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mViewpagerAdapter);
@@ -163,5 +166,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void setRefreshEnable(boolean enable) {
         if (mSwipeRefreshLayout != null)
             mSwipeRefreshLayout.setRefreshEnable(enable);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((event.getKeyCode() == KeyEvent.KEYCODE_ESCAPE || event.getKeyCode() == KeyEvent.KEYCODE_BACK)) {
+            if(mDrawerLayout.isDrawerOpen(Gravity.START)){
+                mDrawerLayout.closeDrawer(Gravity.START);
+            }else {
+                new NormalDialog(this, getString(R.string.ye), getString(R.string.no), getString(R.string.do_you_want_to_exit), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                }, null).show();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

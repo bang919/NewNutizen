@@ -36,6 +36,7 @@
     <string name="indonesia">Indonesia</string>
     <string name="not_video_info">No video playback address found</string>
     <string name="exit_2_close_app">Press the Return key to exit</string>
+    <string name="do_you_want_to_exit">Do you want to exit ?</string>
     <string name="facebook_app_id">369562483423309</string>
     <string name="cancel_the_authorization">Cancel the authorization</string>
     <string name="fail">Login fail</string>

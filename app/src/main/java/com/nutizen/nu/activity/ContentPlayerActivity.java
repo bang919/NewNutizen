@@ -191,11 +191,12 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
             case R.id.iv_share:
                 break;
             case R.id.iv_favourite:
-                if (mPresenter.isFullScreen()) {
-                    mPresenter.switchPlayerSize(this, findViewById(R.id.top_view));
-                } else {
-                    v.setSelected(!v.isSelected());
+                LoginResponseBean accountMessage = LoginPresenter.getAccountMessage();
+                if (accountMessage == null) {
+                    DialogUtils.getAskLoginDialog(this).show();
+                    break;
                 }
+                v.setSelected(!v.isSelected());
                 break;
             case R.id.iv_settings:
                 mProfileSettingRv.setVisibility(mProfileSettingRv.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
@@ -233,18 +234,18 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
     }
 
     @Override
+    public void onProfileSelect(ContentPlaybackBean.VideoProfileBean videoProfileBean) {
+        mPresenter.setTitleAndUrl(mContentBean.getTitle(), videoProfileBean.getUrl_http());
+        mPresenter.preparePlayer(true);
+        mProfileSettingRv.setVisibility(View.GONE);
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (mPresenter.isFullScreen() && (event.getKeyCode() == KeyEvent.KEYCODE_ESCAPE || event.getKeyCode() == KeyEvent.KEYCODE_BACK)) {
             mPresenter.switchPlayerSize(this, findViewById(R.id.top_view));
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public void onProfileSelect(ContentPlaybackBean.VideoProfileBean videoProfileBean) {
-        mPresenter.setTitleAndUrl(mContentBean.getTitle(), videoProfileBean.getUrl_http());
-        mPresenter.preparePlayer(true);
-        mProfileSettingRv.setVisibility(View.GONE);
     }
 }
