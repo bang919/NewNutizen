@@ -13,6 +13,8 @@ public interface ContentPlayerView {
 
     void onWatchHistoryCount(int count);
 
+    void isFavourite(boolean favourite);
+
     void onSuccess();
 
     void onFailure(String errorMsg);

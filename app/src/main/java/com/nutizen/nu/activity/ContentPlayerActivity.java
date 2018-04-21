@@ -10,6 +10,7 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.nutizen.nu.R;
 import com.nutizen.nu.adapter.ProfileSettingAdapter;
 import com.nutizen.nu.adapter.VodRecyclerViewAdapter;
+import com.nutizen.nu.bean.request.EditFavouriteReqBean;
 import com.nutizen.nu.bean.request.WatchHistoryCountBody;
 import com.nutizen.nu.bean.response.CommentResult;
 import com.nutizen.nu.bean.response.ContentPlaybackBean;
@@ -30,16 +31,18 @@ import java.util.Date;
 public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> implements ContentPlayerView, View.OnClickListener, VodRecyclerViewAdapter.CommentAdapterCallback, ProfileSettingAdapter.OnProfileSelectListener {
 
     public static final String CONTENT_BEAN = "content bean";
+    private View mFavouriteBtn;
     private SimpleExoPlayerView mSimpleExoPlayerView;
     private RecyclerView mMessageAndCommentRv;
     private RecyclerView mProfileSettingRv;
     private VodRecyclerViewAdapter mVodRecyclerViewAdapter;
+    private ProfileSettingAdapter mProfileSettingAdapter;
 
     private ContentResponseBean.SearchBean mContentBean;
     private ContentPlaybackBean mContentPlaybackBean;
     private SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private String mStartTime;
-    private ProfileSettingAdapter mProfileSettingAdapter;
+    private String mStartTime;//用于addWatchCount
+    private boolean initFavourite;//一开始是喜爱还是不喜爱，用于editFavourite
 
     @Override
     public int getBarColor() {
@@ -61,6 +64,7 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
         mSimpleExoPlayerView = findViewById(R.id.simple_player_contentplayer);
         mMessageAndCommentRv = findViewById(R.id.rv_message_and_comment);
         mProfileSettingRv = findViewById(R.id.rv_profile_settings);
+        mFavouriteBtn = findViewById(R.id.iv_favourite);
     }
 
     @Override
@@ -85,9 +89,9 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
         mSimpleExoPlayerView.findViewById(R.id.iv_back).setOnClickListener(this);
         mSimpleExoPlayerView.findViewById(R.id.iv_download).setOnClickListener(this);
         mSimpleExoPlayerView.findViewById(R.id.iv_share).setOnClickListener(this);
-        mSimpleExoPlayerView.findViewById(R.id.iv_favourite).setOnClickListener(this);
         mSimpleExoPlayerView.findViewById(R.id.iv_settings).setOnClickListener(this);
         mSimpleExoPlayerView.findViewById(R.id.exo_fullscreen).setOnClickListener(this);
+        mFavouriteBtn.setOnClickListener(this);
         mVodRecyclerViewAdapter.setListener(this);
     }
 
@@ -96,7 +100,7 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
     protected void onResume() {
         super.onResume();
         if (mPresenter != null) {
-            mPresenter.preparePlayer(true);
+            mPresenter.preparePlayer();
         }
     }
 
@@ -121,6 +125,16 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
             watchHistoryCountBody.setEnd_time(endTime);
             mPresenter.addWatchHistoryCount(watchHistoryCountBody);
         }
+        LoginResponseBean accountMessage = LoginPresenter.getAccountMessage();
+        boolean isSelected = mFavouriteBtn.isSelected();
+        if (accountMessage != null && initFavourite != isSelected) {
+            EditFavouriteReqBean editFavouriteReqBean = new EditFavouriteReqBean();
+            editFavouriteReqBean.setContentid(mContentBean.getId());
+            editFavouriteReqBean.setContenttype(mContentBean.getType());
+            editFavouriteReqBean.setViewerid(accountMessage.getViewer_id());
+            editFavouriteReqBean.setOperation(isSelected ? EditFavouriteReqBean.EDIT_MARK : EditFavouriteReqBean.EDIT_UNMARK);
+            mPresenter.editFavourite(editFavouriteReqBean);
+        }
         super.onDestroy();
     }
 
@@ -131,7 +145,7 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
         mVodRecyclerViewAdapter.setWritter(writter);
         mProfileSettingAdapter.setVideoProfile(contentPlaybackBean.getVideo_profile());
         mPresenter.setTitleAndUrl(contentResponseBean.getTitle(), contentPlaybackBean.getVideo_profile().get(0).getUrl_http());
-        mPresenter.preparePlayer(true);
+        mPresenter.preparePlayer();
     }
 
     @Override
@@ -143,6 +157,12 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
     @Override
     public void onWatchHistoryCount(int count) {
         mVodRecyclerViewAdapter.setViewerNumber(count);
+    }
+
+    @Override
+    public void isFavourite(boolean favourite) {
+        initFavourite = favourite;
+        mFavouriteBtn.setSelected(initFavourite);
     }
 
     @Override
@@ -171,6 +191,11 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
             case R.id.iv_share:
                 break;
             case R.id.iv_favourite:
+                if (mPresenter.isFullScreen()) {
+                    mPresenter.switchPlayerSize(this, findViewById(R.id.top_view));
+                } else {
+                    v.setSelected(!v.isSelected());
+                }
                 break;
             case R.id.iv_settings:
                 mProfileSettingRv.setVisibility(mProfileSettingRv.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);

@@ -3,16 +3,19 @@ package com.nutizen.nu.http;
 
 import com.nutizen.nu.BuildConfig;
 import com.nutizen.nu.bean.request.CommentBean;
+import com.nutizen.nu.bean.request.EditFavouriteReqBean;
 import com.nutizen.nu.bean.request.LoginRequestBean;
 import com.nutizen.nu.bean.request.WatchHistoryCountBody;
 import com.nutizen.nu.bean.response.AdvertisementBean;
 import com.nutizen.nu.bean.response.CommentResult;
 import com.nutizen.nu.bean.response.ContentPlaybackBean;
 import com.nutizen.nu.bean.response.ContentResponseBean;
+import com.nutizen.nu.bean.response.FavouriteRspBean;
 import com.nutizen.nu.bean.response.ForgetPasswordResponse;
 import com.nutizen.nu.bean.response.KanalRspBean;
 import com.nutizen.nu.bean.response.LiveResponseBean;
 import com.nutizen.nu.bean.response.LoginResponseBean;
+import com.nutizen.nu.bean.response.NormalResBean;
 import com.nutizen.nu.bean.response.RegisterResponse;
 import com.nutizen.nu.bean.response.ResetPasswordResonseBean;
 import com.nutizen.nu.bean.response.WatchHistoryCountRes;
@@ -115,4 +118,16 @@ public interface ApiInterface {
 
     @HTTP(method = "DELETE", path = BuildConfig.comment_url, hasBody = true)
     Observable<CommentResult> deleteComment(@Header("Authorization") String token, @Body RequestBody commentId);
+
+    /**
+     * 添加喜爱
+     */
+    @POST(BuildConfig.data_hostname + "devapi/editFavor?apikey=" + BuildConfig.server_key)
+    Observable<NormalResBean> editFavourite(@Body EditFavouriteReqBean editFavourite);
+
+    /**
+     * 获取喜爱列表
+     */
+    @GET("viewers/favourites")
+    Observable<ArrayList<FavouriteRspBean>> getFavourites(@Header("Authorization") String token);
 }
