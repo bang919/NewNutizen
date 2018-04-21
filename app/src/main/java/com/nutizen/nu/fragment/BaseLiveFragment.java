@@ -78,7 +78,7 @@ public abstract class BaseLiveFragment extends BaseFragment<BaseLivePresetner> i
         mTitleView.setText(mInitLiveBean.getTitle());
         String synopsis = TextUtils.isEmpty(mInitLiveBean.getSynopsis()) ? getString(R.string.there_is_no_description) : mInitLiveBean.getSynopsis();
         mContentView.setText(synopsis);
-        mPresenter.setUrl(mInitLiveBean.getUrl());
+        mPresenter.setTitleAndUrl(mInitLiveBean.getTitle(), mInitLiveBean.getUrl());
     }
 
     protected LiveResponseBean initLiveBean() {

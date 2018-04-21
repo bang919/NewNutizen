@@ -1,9 +1,9 @@
 package com.nutizen.nu.common;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.nutizen.nu.utils.ExceptionUtil;
+import com.nutizen.nu.utils.LogUtils;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -93,7 +93,7 @@ public class BasePresenter<V> {
                 String errorMessage = ExceptionUtil.getHttpExceptionMessage(e);
                 observer.onMyError(errorMessage);
                 removeObserver(observerTag);
-                Log.d("okhttp", "error - " + errorMessage);
+                LogUtils.d("okhttp", "error - " + errorMessage);
             }
 
             @Override

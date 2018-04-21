@@ -94,15 +94,15 @@ dependencies {
     //for TabLayout/RecyclerView
     implementation "com.android.support:design:${supportVersion}"
     //Retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
     //RxJava
-    compile 'io.reactivex.rxjava2:rxjava:2.1.6'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.6'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.4.0'
     //Exoplayer
-    compile 'com.google.android.exoplayer:exoplayer:r2.5.4'
+    implementation 'com.google.android.exoplayer:exoplayer:r2.5.4'
 }

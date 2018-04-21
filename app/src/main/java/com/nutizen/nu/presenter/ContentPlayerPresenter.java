@@ -3,6 +3,7 @@ package com.nutizen.nu.presenter;
 import android.content.Context;
 
 import com.nutizen.nu.bean.request.CommentBean;
+import com.nutizen.nu.bean.request.WatchHistoryCountBody;
 import com.nutizen.nu.bean.response.CommentResult;
 import com.nutizen.nu.bean.response.ContentPlaybackBean;
 import com.nutizen.nu.bean.response.ContentResponseBean;
@@ -21,6 +22,7 @@ import io.reactivex.functions.Function3;
 
 public class ContentPlayerPresenter extends BasePlayerPresenter<ContentPlayerView> {
 
+    private final String TAG = "ContentPlayerPresenter";
     private ContentModel mContentModel;
     private CommentModel mCommentModel;
     private final int intPageLimit = 9999;
@@ -142,5 +144,9 @@ public class ContentPlayerPresenter extends BasePlayerPresenter<ContentPlayerVie
                 mView.onFailure(errorMessage);
             }
         });
+    }
+
+    public void addWatchHistoryCount(WatchHistoryCountBody watchHistoryCountBody) {
+            mContentModel.addWatchHistoryCount(watchHistoryCountBody).retry(2).subscribe();
     }
 }

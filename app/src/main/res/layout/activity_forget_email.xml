@@ -23,9 +23,9 @@
             android:layout_height="48dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="4dp"
-            android:background="@drawable/back_selector"
-            android:scaleType="fitXY" />
+            android:layout_marginStart="2dp"
+            android:scaleType="center"
+            android:src="@mipmap/btn_back" />
 
         <View
             android:layout_width="match_parent"
@@ -92,12 +92,12 @@
                     android:id="@+id/reset_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:minWidth="600dp"
                     android:layout_marginStart="12dp"
                     android:background="@null"
                     android:hint="@string/reset_Useremail"
                     android:inputType="text"
                     android:maxLines="1"
+                    android:minWidth="600dp"
                     android:textColor="#FFF"
                     android:textColorHint="#AFFFFFFF"
                     android:textCursorDrawable="@null"

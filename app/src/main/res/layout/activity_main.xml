@@ -60,6 +60,12 @@
             app:tabMode="scrollable"
             app:tabTextColor="#FFFFFFFF" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FF84BD00"
+            app:layout_constraintBottom_toBottomOf="@id/main_tablayout" />
+
         <com.nutizen.nu.widget.MySwipeRefreshLayout
             android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"

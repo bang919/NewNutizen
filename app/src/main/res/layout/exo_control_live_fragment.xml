@@ -9,7 +9,7 @@
         android:id="@+id/exo_play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorHalfBlack"
+        android:background="@drawable/bg_circle_halfblack"
         android:src="@mipmap/play_common_ic_play"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -18,8 +18,10 @@
 
     <ImageView
         android:id="@+id/exo_pause"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_circle_halfblack"
+        android:src="@mipmap/play_common_ic_pause"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

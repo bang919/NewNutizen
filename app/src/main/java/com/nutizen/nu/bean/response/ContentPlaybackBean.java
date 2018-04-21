@@ -1,6 +1,6 @@
 package com.nutizen.nu.bean.response;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class ContentPlaybackBean {
 
@@ -27,7 +27,7 @@ public class ContentPlaybackBean {
     private String video_encode_status;
     private int video_used;
     private int video_chapter_nums;
-    private List<VideoProfileBean> video_profile;
+    private ArrayList<VideoProfileBean> video_profile;
 
     public int getVideo_id() {
         return video_id;
@@ -101,11 +101,11 @@ public class ContentPlaybackBean {
         this.video_chapter_nums = video_chapter_nums;
     }
 
-    public List<VideoProfileBean> getVideo_profile() {
+    public ArrayList<VideoProfileBean> getVideo_profile() {
         return video_profile;
     }
 
-    public void setVideo_profile(List<VideoProfileBean> video_profile) {
+    public void setVideo_profile(ArrayList<VideoProfileBean> video_profile) {
         this.video_profile = video_profile;
     }
 

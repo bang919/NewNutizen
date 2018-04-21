@@ -4,6 +4,7 @@ package com.nutizen.nu.http;
 import com.nutizen.nu.BuildConfig;
 import com.nutizen.nu.bean.request.CommentBean;
 import com.nutizen.nu.bean.request.LoginRequestBean;
+import com.nutizen.nu.bean.request.WatchHistoryCountBody;
 import com.nutizen.nu.bean.response.AdvertisementBean;
 import com.nutizen.nu.bean.response.CommentResult;
 import com.nutizen.nu.bean.response.ContentPlaybackBean;
@@ -97,6 +98,9 @@ public interface ApiInterface {
     // 获取video播放地址
     @GET(BuildConfig.playurl_hostname + "videos/{vid}")
     Observable<ContentPlaybackBean> getPlaybackInfoByVideoId(@Path("vid") int id);
+
+    @POST("watchhistories/offline")
+    Observable<WatchHistoryCountRes> addOfflineWatchHistoryCount(@Header("Authorization") String token, @Body WatchHistoryCountBody watchHistoryCountBody);
 
     // 用contentid获取历史播放数量
     @Headers("Authorization:Bearer " + BuildConfig.server_key)

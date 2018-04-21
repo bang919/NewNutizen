@@ -9,7 +9,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:controller_layout_id="@layout/exo_control_live_fragment"
-        app:hide_on_touch="false"
         app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

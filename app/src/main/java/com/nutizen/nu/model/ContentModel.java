@@ -1,9 +1,13 @@
 package com.nutizen.nu.model;
 
+import com.nutizen.nu.BuildConfig;
+import com.nutizen.nu.bean.request.WatchHistoryCountBody;
 import com.nutizen.nu.bean.response.ContentPlaybackBean;
 import com.nutizen.nu.bean.response.ContentResponseBean;
+import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.bean.response.WatchHistoryCountRes;
 import com.nutizen.nu.http.HttpClient;
+import com.nutizen.nu.presenter.LoginPresenter;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -64,12 +68,22 @@ public class ContentModel {
 
     /**
      * 用contentid获取历史播放数量
+     *
      * @param cid
      * @return
      */
     public Observable<WatchHistoryCountRes> getWatchHistoryCount(int cid) {
         return HttpClient.getApiInterface()
                 .getWatchHistoryCount("movie", cid, "1970-01-01", "2999-12-01")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<WatchHistoryCountRes> addWatchHistoryCount(WatchHistoryCountBody watchHistoryCountBody) {
+        LoginResponseBean accountMessage = LoginPresenter.getAccountMessage();
+        String token = accountMessage == null ? BuildConfig.tourist_token : accountMessage.getViewer_token();
+        return HttpClient.getApiInterface()
+                .addOfflineWatchHistoryCount("bearer " + token, watchHistoryCountBody)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

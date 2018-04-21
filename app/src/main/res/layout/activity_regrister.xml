@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/root"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,30 +16,31 @@
             android:layout_centerInParent="true"
             android:text="@string/register"
             android:textColor="#FFF"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
 
         <ImageView
             android:id="@+id/ic_back"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="4dp"
-            android:background="@drawable/back_selector"/>
+            android:layout_marginStart="2dp"
+            android:scaleType="center"
+            android:src="@mipmap/btn_back" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
-            android:background="#86B738"/>
+            android:background="#86B738" />
 
     </RelativeLayout>
 
     <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:fadingEdge="none"
         android:overScrollMode="never"
-        android:scrollbars="none"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,7 +55,7 @@
                 android:layout_marginTop="36dp"
                 android:text="@string/enter_password"
                 android:textColor="#AFFFFFFF"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -75,7 +76,7 @@
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:layout_marginTop="2dp"
-                        android:src="@mipmap/ic_mail"/>
+                        android:src="@mipmap/ic_mail" />
 
                     <EditText
                         android:id="@+id/email"
@@ -94,7 +95,7 @@
                         android:textSelectHandle="@drawable/search_select_handler"
                         android:textSelectHandleLeft="@drawable/search_select_handler"
                         android:textSelectHandleRight="@drawable/search_select_handler"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <View
@@ -102,7 +103,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="6dp"
-                    android:background="#979797"/>
+                    android:background="#979797" />
             </LinearLayout>
 
             <LinearLayout
@@ -124,7 +125,7 @@
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:layout_marginTop="2dp"
-                        android:src="@mipmap/ic_profile"/>
+                        android:src="@mipmap/ic_profile" />
 
                     <EditText
                         android:id="@+id/usename"
@@ -143,7 +144,7 @@
                         android:textSelectHandle="@drawable/search_select_handler"
                         android:textSelectHandleLeft="@drawable/search_select_handler"
                         android:textSelectHandleRight="@drawable/search_select_handler"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <View
@@ -151,7 +152,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="6dp"
-                    android:background="#979797"/>
+                    android:background="#979797" />
             </LinearLayout>
 
             <LinearLayout
@@ -173,7 +174,7 @@
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:layout_marginTop="2dp"
-                        android:src="@mipmap/ic_lock_open"/>
+                        android:src="@mipmap/ic_lock_open" />
 
                     <EditText
                         android:id="@+id/password"
@@ -192,7 +193,7 @@
                         android:textSelectHandle="@drawable/search_select_handler"
                         android:textSelectHandleLeft="@drawable/search_select_handler"
                         android:textSelectHandleRight="@drawable/search_select_handler"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <View
@@ -200,7 +201,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="6dp"
-                    android:background="#979797"/>
+                    android:background="#979797" />
 
 
             </LinearLayout>
@@ -224,7 +225,7 @@
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:layout_marginTop="2dp"
-                        android:src="@mipmap/ic_lock_closed"/>
+                        android:src="@mipmap/ic_lock_closed" />
 
                     <EditText
                         android:id="@+id/confirm"
@@ -243,7 +244,7 @@
                         android:textSelectHandle="@drawable/search_select_handler"
                         android:textSelectHandleLeft="@drawable/search_select_handler"
                         android:textSelectHandleRight="@drawable/search_select_handler"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <View
@@ -251,7 +252,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="6dp"
-                    android:background="#979797"/>
+                    android:background="#979797" />
 
             </LinearLayout>
 
@@ -265,7 +266,7 @@
                 android:text=""
                 android:textColor="#D1FF2828"
                 android:textSize="12sp"
-                android:visibility="invisible"/>
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/submit"
@@ -273,7 +274,7 @@
                 android:layout_height="42dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="80dp"
-                android:background="@drawable/bg_create_account"/>
+                android:background="@drawable/bg_create_account" />
 
         </LinearLayout>
     </ScrollView>

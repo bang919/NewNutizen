@@ -2,7 +2,6 @@ package com.nutizen.nu.presenter;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.nutizen.nu.bean.request.LoginRequestBean;
 import com.nutizen.nu.bean.response.LoginResponseBean;
@@ -12,6 +11,7 @@ import com.nutizen.nu.common.BasePresenter;
 import com.nutizen.nu.common.Constants;
 import com.nutizen.nu.common.MyApplication;
 import com.nutizen.nu.model.LoginModel;
+import com.nutizen.nu.utils.LogUtils;
 import com.nutizen.nu.utils.SPUtils;
 import com.nutizen.nu.view.LoginView;
 
@@ -96,7 +96,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             @Override
             public void onCancel(Platform platform, int i) {
                 mView.facebookSdkCallback(false);
-                Log.d(TAG, "onCancel: " + platform.getName());
+                LogUtils.d(TAG, "onCancel: " + platform.getName());
             }
         });
         platform.showUser(null);

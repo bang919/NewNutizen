@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.mob.MobSDK;
+import com.nutizen.nu.utils.LogUtils;
 
 
 /**
@@ -17,6 +18,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        LogUtils.isDebug = true;
         MobSDK.init(this);
         mApplicationContext = getApplicationContext();
     }

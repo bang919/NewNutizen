@@ -8,7 +8,9 @@ import android.view.View;
 
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.nutizen.nu.R;
+import com.nutizen.nu.adapter.ProfileSettingAdapter;
 import com.nutizen.nu.adapter.VodRecyclerViewAdapter;
+import com.nutizen.nu.bean.request.WatchHistoryCountBody;
 import com.nutizen.nu.bean.response.CommentResult;
 import com.nutizen.nu.bean.response.ContentPlaybackBean;
 import com.nutizen.nu.bean.response.ContentResponseBean;
@@ -21,15 +23,23 @@ import com.nutizen.nu.utils.DialogUtils;
 import com.nutizen.nu.utils.ToastUtils;
 import com.nutizen.nu.view.ContentPlayerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
-public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> implements ContentPlayerView, View.OnClickListener, VodRecyclerViewAdapter.CommentAdapterCallback {
+public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> implements ContentPlayerView, View.OnClickListener, VodRecyclerViewAdapter.CommentAdapterCallback, ProfileSettingAdapter.OnProfileSelectListener {
 
     public static final String CONTENT_BEAN = "content bean";
     private SimpleExoPlayerView mSimpleExoPlayerView;
     private RecyclerView mMessageAndCommentRv;
+    private RecyclerView mProfileSettingRv;
     private VodRecyclerViewAdapter mVodRecyclerViewAdapter;
+
     private ContentResponseBean.SearchBean mContentBean;
+    private ContentPlaybackBean mContentPlaybackBean;
+    private SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private String mStartTime;
+    private ProfileSettingAdapter mProfileSettingAdapter;
 
     @Override
     public int getBarColor() {
@@ -50,6 +60,7 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
     protected void initView() {
         mSimpleExoPlayerView = findViewById(R.id.simple_player_contentplayer);
         mMessageAndCommentRv = findViewById(R.id.rv_message_and_comment);
+        mProfileSettingRv = findViewById(R.id.rv_profile_settings);
     }
 
     @Override
@@ -63,10 +74,19 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
         mVodRecyclerViewAdapter = new VodRecyclerViewAdapter(this, mContentBean);
         mMessageAndCommentRv.setAdapter(mVodRecyclerViewAdapter);
         mMessageAndCommentRv.setLayoutManager(new LinearLayoutManager(this));
+        mProfileSettingAdapter = new ProfileSettingAdapter();
+        mProfileSettingAdapter.setOnProfileSelectListener(this);
+        mProfileSettingRv.setAdapter(mProfileSettingAdapter);
+        mProfileSettingRv.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
     protected void initEvent() {
+        mSimpleExoPlayerView.findViewById(R.id.iv_back).setOnClickListener(this);
+        mSimpleExoPlayerView.findViewById(R.id.iv_download).setOnClickListener(this);
+        mSimpleExoPlayerView.findViewById(R.id.iv_share).setOnClickListener(this);
+        mSimpleExoPlayerView.findViewById(R.id.iv_favourite).setOnClickListener(this);
+        mSimpleExoPlayerView.findViewById(R.id.iv_settings).setOnClickListener(this);
         mSimpleExoPlayerView.findViewById(R.id.exo_fullscreen).setOnClickListener(this);
         mVodRecyclerViewAdapter.setListener(this);
     }
@@ -76,7 +96,7 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
     protected void onResume() {
         super.onResume();
         if (mPresenter != null) {
-            mPresenter.preparePlayer();
+            mPresenter.preparePlayer(true);
         }
     }
 
@@ -89,10 +109,29 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
     }
 
     @Override
+    protected void onDestroy() {
+        String endTime = sDateFormat.format(new Date());
+        if (mContentPlaybackBean != null && mStartTime != null) {
+            WatchHistoryCountBody watchHistoryCountBody = new WatchHistoryCountBody();
+            watchHistoryCountBody.setContent_name(mContentBean.getTitle());
+            watchHistoryCountBody.setContent_type(mContentBean.getType());
+            watchHistoryCountBody.setContent_id(mContentBean.getId());
+            watchHistoryCountBody.setVideo_id(mContentPlaybackBean.getVideo_id());
+            watchHistoryCountBody.setStart_time(mStartTime);
+            watchHistoryCountBody.setEnd_time(endTime);
+            mPresenter.addWatchHistoryCount(watchHistoryCountBody);
+        }
+        super.onDestroy();
+    }
+
+    @Override
     public void onContentPlaybackResponse(String writter, ContentResponseBean.SearchBean contentResponseBean, ContentPlaybackBean contentPlaybackBean) {
+        mStartTime = sDateFormat.format(new Date());
+        mContentPlaybackBean = contentPlaybackBean;
         mVodRecyclerViewAdapter.setWritter(writter);
-        mPresenter.setUrl(contentPlaybackBean.getVideo_profile().get(0).getUrl_http());
-        mPresenter.preparePlayer();
+        mProfileSettingAdapter.setVideoProfile(contentPlaybackBean.getVideo_profile());
+        mPresenter.setTitleAndUrl(contentResponseBean.getTitle(), contentPlaybackBean.getVideo_profile().get(0).getUrl_http());
+        mPresenter.preparePlayer(true);
     }
 
     @Override
@@ -120,6 +159,22 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.iv_back:
+                if (mPresenter.isFullScreen()) {
+                    mPresenter.switchPlayerSize(this, findViewById(R.id.top_view));
+                } else {
+                    finish();
+                }
+                break;
+            case R.id.iv_download:
+                break;
+            case R.id.iv_share:
+                break;
+            case R.id.iv_favourite:
+                break;
+            case R.id.iv_settings:
+                mProfileSettingRv.setVisibility(mProfileSettingRv.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                break;
             case R.id.exo_fullscreen:
                 mPresenter.switchPlayerSize(this, findViewById(R.id.top_view));
                 break;
@@ -159,5 +214,12 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onProfileSelect(ContentPlaybackBean.VideoProfileBean videoProfileBean) {
+        mPresenter.setTitleAndUrl(mContentBean.getTitle(), videoProfileBean.getUrl_http());
+        mPresenter.preparePlayer(true);
+        mProfileSettingRv.setVisibility(View.GONE);
     }
 }

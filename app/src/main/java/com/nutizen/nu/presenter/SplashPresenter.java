@@ -3,7 +3,6 @@ package com.nutizen.nu.presenter;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -18,6 +17,7 @@ import com.nutizen.nu.common.Constants;
 import com.nutizen.nu.common.MyApplication;
 import com.nutizen.nu.model.SplashModel;
 import com.nutizen.nu.utils.FileUtils;
+import com.nutizen.nu.utils.LogUtils;
 import com.nutizen.nu.utils.SPUtils;
 import com.nutizen.nu.view.SplashView;
 
@@ -58,11 +58,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     }
 
     private void downloadBackgroundPic(final File splashImagePath) throws IOException {
-        Log.d(TAG, "start downloadBackgroundPic  -- " + splashImagePath.getAbsolutePath());
+        LogUtils.d(TAG, "start downloadBackgroundPic  -- " + splashImagePath.getAbsolutePath());
         final String splashPicSharedPreferencesUrl = (String) SPUtils.get(MyApplication.getMyApplicationContext(), Constants.SPLASH_PIC_URL, "");
         //如果splashImagePath还没有初始化，复制splash_default到目标文件
         if (TextUtils.isEmpty(splashPicSharedPreferencesUrl)) {
-            Log.d(TAG, "开始复制splash_default");
+            LogUtils.d(TAG, "开始复制splash_default");
             if (!splashImagePath.exists()) {
                 splashImagePath.createNewFile();
             }
@@ -77,7 +77,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             is.close();
             os.close();
             SPUtils.put(MyApplication.getMyApplicationContext(), Constants.SPLASH_PIC_URL, Constants.SPLASH_PIC_URL);
-            Log.d(TAG, "完成复制splash_default");
+            LogUtils.d(TAG, "完成复制splash_default");
         }
         //下载最新Splash图片
         mSplashModel.getAdvertisement().flatMap(new Function<AdvertisementBean, ObservableSource<ResponseBody>>() {
@@ -86,7 +86,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 List<AdvertisementBean.PictureArrayBean> picture_array = advertisementBean.getPicture_array();
                 if (picture_array != null && picture_array.size() > 0) {
                     String pictureUrl = picture_array.get((int) (Math.random() * picture_array.size())).getUrl();
-                    Log.d(TAG, "请求Splash图片成功，开始下载图片: " + pictureUrl);
+                    LogUtils.d(TAG, "请求Splash图片成功，开始下载图片: " + pictureUrl);
                     if (!pictureUrl.equals(splashPicSharedPreferencesUrl)) {
                         SPUtils.put(MyApplication.getMyApplicationContext(), Constants.SPLASH_PIC_URL, pictureUrl);
                         return mSplashModel.downloadAdvertisement(pictureUrl);
@@ -105,16 +105,16 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 if (responseBody != null) {
                     try {
                         FileUtils.saveResponseBody(responseBody, splashImagePath);
-                        Log.d(TAG, "save Splash pic success");
+                        LogUtils.d(TAG, "save Splash pic success");
                     } catch (IOException e) {
-                        Log.d(TAG, "save Splash pic failure");
+                        LogUtils.d(TAG, "save Splash pic failure");
                     }
                 }
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.d(TAG, e.getLocalizedMessage());
+                LogUtils.d(TAG, e.getLocalizedMessage());
             }
 
             @Override

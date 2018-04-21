@@ -9,8 +9,8 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.support.constraint.ConstraintLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -24,13 +24,16 @@ import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.PlaybackControlView;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.nutizen.nu.R;
 import com.nutizen.nu.common.BaseActivity;
 import com.nutizen.nu.common.BasePresenter;
+import com.nutizen.nu.utils.LogUtils;
 
 import java.lang.ref.WeakReference;
 
@@ -44,8 +47,10 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
     private MyHandler mMyHandler;
     private SimpleExoPlayer mSimpleExoPlayer;
     private ComponentListener mListener;
+    private String mTitle;
     private String mUrl;
     private SimpleExoPlayerView mSimpleExoPlayerView;
+    private TextView mTitleTextView;
 
     public BasePlayerPresenter(Context context, V view) {
         super(context, view);
@@ -55,9 +60,20 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
 
     public void setSimpleExoPlayerView(SimpleExoPlayerView simpleExoPlayerView) {
         mSimpleExoPlayerView = simpleExoPlayerView;
+        mTitleTextView = mSimpleExoPlayerView.findViewById(R.id.tv_content_title);
+        mSimpleExoPlayerView.setControllerVisibilityListener(new PlaybackControlView.VisibilityListener() {
+            @Override
+            public void onVisibilityChange(int visibility) {
+                View profileSettingView = mSimpleExoPlayerView.findViewById(R.id.rv_profile_settings);
+                if (profileSettingView != null) {
+                    profileSettingView.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
-    public void setUrl(String url) {
+    public void setTitleAndUrl(String title, String url) {
+        this.mTitle = title;
         this.mUrl = url;
     }
 
@@ -65,9 +81,17 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
         preparePlayer(false);
     }
 
-    private void preparePlayer(boolean fromRetry) {
+    public void preparePlayer(boolean playWhenReady) {
+        preparePlayer(playWhenReady, true);
+    }
+
+    public void preparePlayer(boolean playWhenReady, boolean continuePlay) {
         if (mSimpleExoPlayerView == null || TextUtils.isEmpty(mUrl) || !mSimpleExoPlayerView.getGlobalVisibleRect(new Rect())) {//SimperExoPlayer不可见
             return;
+        }
+        long lastPosition = -1;
+        if (continuePlay && mSimpleExoPlayer != null) {
+            lastPosition = mSimpleExoPlayer.getCurrentPosition();
         }
         releasePlayer();
         TrackSelector trackSelector = new DefaultTrackSelector();
@@ -79,9 +103,9 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
         mSimpleExoPlayerView.setPlayer(mSimpleExoPlayer);
         MediaSource mediaSource = new HlsMediaSource(Uri.parse(mUrl), mediaDataSourceFactory, null, null);
         mSimpleExoPlayer.prepare(mediaSource, true, false);
-        mSimpleExoPlayer.setPlayWhenReady(fromRetry);
-        mSimpleExoPlayer.seekTo(0);
-        Log.d(TAG, "preparePlayer - " + mUrl);
+        mSimpleExoPlayer.setPlayWhenReady(playWhenReady);
+        mSimpleExoPlayer.seekTo(continuePlay && lastPosition != -1 ? lastPosition : 0);
+        LogUtils.d(TAG, "preparePlayer - " + mUrl);
     }
 
     public void releasePlayer() {
@@ -134,7 +158,7 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
 
         @Override
         public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-            if (playWhenReady) {
+            if (playWhenReady && playbackState != Player.STATE_ENDED) {
                 keepScreen(mContext);
             } else {
                 unkeepScreen();
@@ -195,6 +219,7 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
     public void switchPlayerSize(BaseActivity baseActivity, View topBarView) {
         if (isFullScreen) {//变成小窗口
             isFullScreen = false;
+            mTitleTextView.setVisibility(View.GONE);
             topBarView.setVisibility(View.VISIBLE);
             baseActivity.setSystemBarTransparent();
             baseActivity.setSystemBarColor(baseActivity.getBarColor());
@@ -207,6 +232,8 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
         } else {//变成全屏
             isFullScreen = true;
             int width = mSimpleExoPlayerView.getWidth();
+            mTitleTextView.setText(mTitle);
+            mTitleTextView.setVisibility(View.VISIBLE);
             topBarView.setVisibility(View.GONE);
             baseActivity.getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
             baseActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);//切换成左侧横屏
