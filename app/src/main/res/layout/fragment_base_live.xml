@@ -46,7 +46,7 @@
     <TextView
         android:id="@+id/live_content"
         android:layout_width="wrap_content"
-        android:layout_height="1dp"
+        android:layout_height="1px"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical"
         android:textColor="@color/colorTintWhite"
