@@ -8,7 +8,8 @@ import android.view.View;
 import com.nutizen.nu.R;
 import com.nutizen.nu.adapter.KanalIndexAdpater;
 import com.nutizen.nu.adapter.KanalListAdapter;
-import com.nutizen.nu.adapter.MoreKanalItemHeaderDecoration;
+import com.nutizen.nu.widget.MoreKanalItemHeaderDecoration;
+import com.nutizen.nu.widget.MyLinearLayoutManager;
 import com.nutizen.nu.bean.response.KanalRspBean;
 import com.nutizen.nu.common.BaseActivity;
 import com.nutizen.nu.common.BasePresenter;
@@ -27,7 +28,7 @@ public class MoreKanalActivity extends BaseActivity implements View.OnClickListe
     private RecyclerView mKanalsRv;
     private RecyclerView mIndexRv;
     private KanalListAdapter mKanalListAdapter;
-    private LinearLayoutManager mLayoutManager;
+    private MyLinearLayoutManager mLayoutManager;
     private MoreKanalItemHeaderDecoration mKanalsItemDecoration;
     private KanalIndexAdpater mIndexAdapter;
 
@@ -74,7 +75,7 @@ public class MoreKanalActivity extends BaseActivity implements View.OnClickListe
         handleData();
         mKanalListAdapter.setData(mKanals);
 
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new MyLinearLayoutManager(this);
 
         mKanalsItemDecoration = new MoreKanalItemHeaderDecoration();
         mKanalsItemDecoration.setSearchBeanList(mKanals);
@@ -89,7 +90,6 @@ public class MoreKanalActivity extends BaseActivity implements View.OnClickListe
         mIndexAdapter.setOnIndexClickListener(this);
         mIndexAdapter.setData(mHeaderBeans);
         mIndexRv.setAdapter(mIndexAdapter);
-        mKanalsRv.addOnScrollListener(new RecyclerViewListener());
     }
 
     private void handleData() {
@@ -135,40 +135,6 @@ public class MoreKanalActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onIndexClick(int jumpPosition) {
-        smoothMoveToPostion(jumpPosition);
+        mKanalsRv.smoothScrollToPosition(jumpPosition);
     }
-
-    /**
-     * 以下用于点击mIndexRv后让mKanalsRv跳转到对应地方
-     */
-    private boolean needMove = false;
-
-    private void smoothMoveToPostion(int n) {
-        int firstItem = mLayoutManager.findFirstVisibleItemPosition();
-        int lastItem = mLayoutManager.findLastVisibleItemPosition();
-        if (n <= firstItem) {
-            mKanalsRv.smoothScrollToPosition(n);
-        } else if (n <= lastItem) {
-            int top = mKanalsRv.getChildAt(n - firstItem).getTop();
-            mKanalsRv.smoothScrollBy(0, top);
-        } else {
-            mKanalsRv.smoothScrollToPosition(n);
-            needMove = true;
-        }
-    }
-
-
-    private class RecyclerViewListener extends RecyclerView.OnScrollListener {
-
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            if (needMove && newState == RecyclerView.SCROLL_STATE_IDLE) {
-                needMove = false;
-                int n = mLayoutManager.findLastVisibleItemPosition() - mLayoutManager.findFirstVisibleItemPosition();
-                int top = mKanalsRv.getChildAt(n).getTop();
-                mKanalsRv.smoothScrollBy(0, top);
-            }
-        }
-    }
-
 }

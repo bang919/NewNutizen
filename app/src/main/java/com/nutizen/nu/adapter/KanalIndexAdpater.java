@@ -47,7 +47,7 @@ public class KanalIndexAdpater extends RecyclerView.Adapter<KanalIndexAdpater.In
     @Override
     public void onBindViewHolder(IndexHolder holder, final int position) {
         holder.mIndexTv.setText(mData.keyAt(position));
-        holder.itemView.setSelected(position == mCurrentPosition);
+        holder.mSelectView.setSelected(position == mCurrentPosition);
 
         if (mOnIndexFocusListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -70,10 +70,12 @@ public class KanalIndexAdpater extends RecyclerView.Adapter<KanalIndexAdpater.In
 
     class IndexHolder extends RecyclerView.ViewHolder {
 
+        View mSelectView;
         TextView mIndexTv;
 
         public IndexHolder(View itemView) {
             super(itemView);
+            mSelectView = itemView.findViewById(R.id.view_selector);
             mIndexTv = itemView.findViewById(R.id.tv_index);
         }
     }

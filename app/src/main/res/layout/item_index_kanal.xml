@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="18dp"
-    android:layout_height="18dp"
-    android:background="@drawable/bg_kanal_index_selector">
+    android:layout_width="60dp"
+    android:layout_height="22dp">
+
+    <View
+        android:id="@+id/view_selector"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_kanal_index_selector" />
 
     <TextView
         android:id="@+id/tv_index"

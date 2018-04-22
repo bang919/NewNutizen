@@ -1,4 +1,4 @@
-package com.nutizen.nu.adapter;
+package com.nutizen.nu.widget;
 
 import android.graphics.Canvas;
 import android.support.v7.widget.LinearLayoutManager;
