@@ -21,8 +21,15 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="TranslucentActivity" parent="AppThemeLight">
+    <style name="DisablePreviewTheme" parent="AppThemeLight">
         <item name="android:windowDisablePreview">true</item>
+    </style>
+
+    <style name="TranslucentTheme" parent="AppThemeLight">
+        <item name="android:windowBackground">@color/colorTranslucent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
     <!--Tablayout style-->

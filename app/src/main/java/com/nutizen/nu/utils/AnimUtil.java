@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.nutizen.nu.R;
 
-public class DownArrowAnimUtil {
+public class AnimUtil {
     public static void switchDownArrow(final View downArrowIv, final TextView changeHeighView) {
 
         Paint textViewPaint = changeHeighView.getPaint();
@@ -41,5 +41,17 @@ public class DownArrowAnimUtil {
         });
         valueAnimator.setDuration(200);
         valueAnimator.start();
+    }
+
+    public static void setViewAlphaAnim(View view, boolean appear) {
+        setViewAlphaAnim(view, appear, -1);
+    }
+
+    public static void setViewAlphaAnim(View view, boolean appear, int duration) {
+        Animation animation = AnimationUtils.loadAnimation(view.getContext(), appear ? R.anim.anim_appear : R.anim.anim_disappear);
+        if (duration != -1) {
+            animation.setDuration(duration);
+        }
+        view.startAnimation(animation);
     }
 }

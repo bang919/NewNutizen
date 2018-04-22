@@ -27,16 +27,19 @@
         </activity>
         <activity
             android:name=".activity.MainActivity"
-            android:theme="@style/TranslucentActivity" />
+            android:theme="@style/DisablePreviewTheme" />
         <activity
             android:name=".activity.LoginActivity"
-            android:theme="@style/TranslucentActivity" />
+            android:theme="@style/DisablePreviewTheme" />
         <activity android:name=".activity.ForgetEmailActivity" />
         <activity android:name=".activity.ForgetPasswordActivity" />
         <activity android:name=".activity.RegisterActivity" />
         <activity
             android:name=".activity.ContentPlayerActivity"
-            android:configChanges="orientation|keyboardHidden|navigation|screenSize"/>
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize" />
+        <activity
+            android:name=".activity.MoreKanalActivity"
+            android:theme="@style/TranslucentTheme" />
     </application>
 
 </manifest>

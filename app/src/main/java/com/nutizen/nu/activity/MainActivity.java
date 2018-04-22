@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nutizen.nu.R;
@@ -21,6 +22,7 @@ import com.nutizen.nu.common.BaseFragment;
 import com.nutizen.nu.common.BasePresenter;
 import com.nutizen.nu.dialog.NormalDialog;
 import com.nutizen.nu.presenter.LoginPresenter;
+import com.nutizen.nu.utils.AnimUtil;
 import com.nutizen.nu.utils.ScreenUtils;
 import com.nutizen.nu.widget.MySwipeRefreshLayout;
 
@@ -41,6 +43,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public int getBarColor() {
         return R.color.colorBlack;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AnimUtil.setViewAlphaAnim(((ViewGroup) findViewById(R.id.toolbar)).getChildAt(0), true);
+        AnimUtil.setViewAlphaAnim(findViewById(R.id.iv_main_search), true);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AnimUtil.setViewAlphaAnim(((ViewGroup) findViewById(R.id.toolbar)).getChildAt(0), false);
+        AnimUtil.setViewAlphaAnim(findViewById(R.id.iv_main_search), false);
     }
 
     @Override
@@ -171,9 +187,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((event.getKeyCode() == KeyEvent.KEYCODE_ESCAPE || event.getKeyCode() == KeyEvent.KEYCODE_BACK)) {
-            if(mDrawerLayout.isDrawerOpen(Gravity.START)){
+            if (mDrawerLayout.isDrawerOpen(Gravity.START)) {
                 mDrawerLayout.closeDrawer(Gravity.START);
-            }else {
+            } else {
                 new NormalDialog(this, getString(R.string.ye), getString(R.string.no), getString(R.string.do_you_want_to_exit), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

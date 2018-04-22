@@ -13,7 +13,7 @@ import com.nutizen.nu.adapter.BaseLiveListAdapter;
 import com.nutizen.nu.bean.response.LiveResponseBean;
 import com.nutizen.nu.common.BaseFragment;
 import com.nutizen.nu.presenter.BaseLivePresetner;
-import com.nutizen.nu.utils.DownArrowAnimUtil;
+import com.nutizen.nu.utils.AnimUtil;
 import com.nutizen.nu.utils.ToastUtils;
 import com.nutizen.nu.view.BaseLiveView;
 
@@ -94,7 +94,7 @@ public abstract class BaseLiveFragment extends BaseFragment<BaseLivePresetner> i
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_open_desc:
-                DownArrowAnimUtil.switchDownArrow(v, mContentView);
+                AnimUtil.switchDownArrow(v, mContentView);
                 break;
         }
     }

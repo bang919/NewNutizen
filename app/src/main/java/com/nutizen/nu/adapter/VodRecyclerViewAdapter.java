@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.common.MyApplication;
 import com.nutizen.nu.dialog.NormalDialog;
 import com.nutizen.nu.presenter.LoginPresenter;
-import com.nutizen.nu.utils.DownArrowAnimUtil;
+import com.nutizen.nu.utils.AnimUtil;
 import com.nutizen.nu.utils.ScreenUtils;
 
 import java.text.DecimalFormat;
@@ -97,7 +98,8 @@ public class VodRecyclerViewAdapter extends RecyclerView.Adapter implements View
                 _holder.mViews.setVisibility(View.VISIBLE);
                 _holder.mViews.setText(mContext.getString(R.string.viewers, mViewerNumber));
             }
-            _holder.mDescription.setText(mVideoInfo.getDescription());
+            _holder.mDescription.setText(TextUtils.isEmpty(mVideoInfo.getDescription()) ?
+                    _holder.mDescription.getContext().getString(R.string.there_is_no_description) : mVideoInfo.getDescription());
             _holder.mShowDescription.setOnClickListener(this);
             if (mWritter != null) {
                 _holder.mWritter.setText(mWritter);
@@ -239,7 +241,7 @@ public class VodRecyclerViewAdapter extends RecyclerView.Adapter implements View
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_show_detail:
-                DownArrowAnimUtil.switchDownArrow(v, mDescription);
+                AnimUtil.switchDownArrow(v, mDescription);
                 break;
         }
     }
@@ -359,7 +361,7 @@ public class VodRecyclerViewAdapter extends RecyclerView.Adapter implements View
         if (commentEditText != null) {
             unwindMap.clear();
             commentEditText.setText("");
-            commentEditText.setHint("");
+            commentEditText.setHint(commentEditText.getContext().getString(R.string.please_input_comment));
             InputMethodManager imm = (InputMethodManager) MyApplication.getMyApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(commentEditText.getWindowToken(), 0);
         }
