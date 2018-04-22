@@ -23,20 +23,14 @@ public class KanalListAdapter extends RecyclerView.Adapter {
     private ArrayList<KanalRspBean.SearchBean> mSearchBeanList;
     private ItemOnClickListener itemOnClickListener;
     private int limit = -1;
-    private boolean isAdvancedAdapter = false;
 
     public KanalListAdapter(Context context) {
         this(context, -1);
     }
 
     public KanalListAdapter(Context context, int limit) {
-        this(context, limit, false);
-    }
-
-    public KanalListAdapter(Context context, int limit, boolean isAdvancedAdapter) {
         mContext = context;
         this.limit = limit;
-        this.isAdvancedAdapter = isAdvancedAdapter;
         mSearchBeanList = new ArrayList<>();
     }
 
@@ -95,9 +89,7 @@ public class KanalListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        return isAdvancedAdapter ?
-                mSearchBeanList.get(position).isHead() ? R.layout.item_kanal_head : R.layout.item_fragment_kanal
-                : R.layout.item_fragment_kanal;
+        return mSearchBeanList.get(position).isHead() ? R.layout.item_kanal_head : R.layout.item_fragment_kanal;
     }
 
     public void setData(ArrayList<KanalRspBean.SearchBean> list) {
@@ -124,10 +116,10 @@ public class KanalListAdapter extends RecyclerView.Adapter {
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            iv = (ImageView) itemView.findViewById(R.id.iv);
-            title = (TextView) itemView.findViewById(R.id.title);
-            video = (TextView) itemView.findViewById(R.id.rb_video);
-            follow = (TextView) itemView.findViewById(R.id.follow);
+            iv = itemView.findViewById(R.id.iv);
+            title = itemView.findViewById(R.id.title);
+            video =  itemView.findViewById(R.id.rb_video);
+            follow =  itemView.findViewById(R.id.follow);
         }
     }
 

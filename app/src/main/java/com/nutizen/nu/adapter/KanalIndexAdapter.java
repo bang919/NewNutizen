@@ -9,12 +9,11 @@ import android.widget.TextView;
 
 import com.nutizen.nu.R;
 
-public class KanalIndexAdpater extends RecyclerView.Adapter<KanalIndexAdpater.IndexHolder> {
+public class KanalIndexAdapter extends RecyclerView.Adapter<KanalIndexAdapter.IndexHolder> {
 
     private ArrayMap<String, Integer> mData;
     private OnIndexFocusListener mOnIndexFocusListener;
     private int mCurrentPosition = 0;
-    private String mCurrentC = "";
 
     public void setData(ArrayMap<String, Integer> list) {
         mData = list;
@@ -25,17 +24,11 @@ public class KanalIndexAdpater extends RecyclerView.Adapter<KanalIndexAdpater.In
         mOnIndexFocusListener = listener;
     }
 
-    public void jumpToKanalPosition(String c) {
-        if (mCurrentC.equals(c)) {
+    public void jumpToKanalPosition(int position) {
+        if (mCurrentPosition == position) {
             return;
         }
-        mCurrentC = c;
-        for (int i = 0; i < mData.size(); i++) {
-            if (mData.keyAt(i).equals(c)) {
-                mCurrentPosition = i;
-                break;
-            }
-        }
+        mCurrentPosition = position;
         notifyDataSetChanged();
     }
 
@@ -53,11 +46,7 @@ public class KanalIndexAdpater extends RecyclerView.Adapter<KanalIndexAdpater.In
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int p = 0;
-                    for (int i = 0; i < position; i++) {
-                        p = p + 1 + mData.valueAt(i);
-                    }
-                    mOnIndexFocusListener.onIndexClick(p);
+                    mOnIndexFocusListener.onIndexClick(mData.valueAt(position));
                 }
             });
         }

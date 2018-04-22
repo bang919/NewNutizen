@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class MoreKanalItemHeaderDecoration extends RecyclerView.ItemDecoration {
 
     private ArrayList<KanalRspBean.SearchBean> mSearchBeanList;
+    private ArrayList<String> mStringToPositionList;
     private KanalRspBean.SearchBean mCurrentTag;
     private OnHeadChangeListener mOnHeadChangeListener;
 
@@ -27,8 +28,9 @@ public class MoreKanalItemHeaderDecoration extends RecyclerView.ItemDecoration {
     }
 
 
-    public void setSearchBeanList(ArrayList<KanalRspBean.SearchBean> list) {
+    public void setSearchBeanList(ArrayList<KanalRspBean.SearchBean> list, ArrayList<String> stringToPositionList) {
         mSearchBeanList = list;
+        mStringToPositionList = stringToPositionList;
     }
 
     public void setOnHeadChangeListener(OnHeadChangeListener listener) {
@@ -57,7 +59,7 @@ public class MoreKanalItemHeaderDecoration extends RecyclerView.ItemDecoration {
             canvas.restore();
         }
         if (mOnHeadChangeListener != null) {
-            mOnHeadChangeListener.onHeadChange(mCurrentTag.getUsername().substring(0, 1).toUpperCase());
+            mOnHeadChangeListener.onHeadChange(mStringToPositionList.indexOf(mCurrentTag.getUsername().substring(0, 1).toUpperCase()));
         }
     }
 
@@ -100,6 +102,6 @@ public class MoreKanalItemHeaderDecoration extends RecyclerView.ItemDecoration {
     }
 
     public interface OnHeadChangeListener {
-        void onHeadChange(String s);
+        void onHeadChange(int position);
     }
 }

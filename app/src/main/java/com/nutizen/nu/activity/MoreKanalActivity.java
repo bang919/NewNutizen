@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.nutizen.nu.R;
-import com.nutizen.nu.adapter.KanalIndexAdpater;
+import com.nutizen.nu.adapter.KanalIndexAdapter;
 import com.nutizen.nu.adapter.KanalListAdapter;
 import com.nutizen.nu.widget.MoreKanalItemHeaderDecoration;
 import com.nutizen.nu.widget.MyLinearLayoutManager;
@@ -19,18 +19,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class MoreKanalActivity extends BaseActivity implements View.OnClickListener, KanalIndexAdpater.OnIndexFocusListener, MoreKanalItemHeaderDecoration.OnHeadChangeListener {
+public class MoreKanalActivity extends BaseActivity implements View.OnClickListener, KanalIndexAdapter.OnIndexFocusListener, MoreKanalItemHeaderDecoration.OnHeadChangeListener {
 
     public static final String KANAL_BEANS = "kanal beans";
     private ArrayList<KanalRspBean.SearchBean> mKanals;
-    private ArrayMap<String, Integer> mHeaderBeans;
+    private ArrayList<String> mStringToPositionList;//MoreKanalintemHeaderDecoration需要用到的索引
+    private ArrayMap<String, Integer> mHeaderBeansMap;//KanalIndexAdapter需要用到的索引
     private View mBackBtn;
     private RecyclerView mKanalsRv;
     private RecyclerView mIndexRv;
     private KanalListAdapter mKanalListAdapter;
     private MyLinearLayoutManager mLayoutManager;
     private MoreKanalItemHeaderDecoration mKanalsItemDecoration;
-    private KanalIndexAdpater mIndexAdapter;
+    private KanalIndexAdapter mIndexAdapter;
 
     @Override
     public int getBarColor() {
@@ -45,12 +46,6 @@ public class MoreKanalActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected BasePresenter initPresenter() {
         return null;
-    }
-
-    @Override
-    protected void onDestroy() {
-        AnimUtil.setViewAlphaAnim(mBackBtn, false, 100);
-        super.onDestroy();
     }
 
     @Override
@@ -71,14 +66,14 @@ public class MoreKanalActivity extends BaseActivity implements View.OnClickListe
             }
         });
 
-        mKanalListAdapter = new KanalListAdapter(this, -1, true);
+        mKanalListAdapter = new KanalListAdapter(this, -1);
         handleData();
         mKanalListAdapter.setData(mKanals);
 
         mLayoutManager = new MyLinearLayoutManager(this);
 
         mKanalsItemDecoration = new MoreKanalItemHeaderDecoration();
-        mKanalsItemDecoration.setSearchBeanList(mKanals);
+        mKanalsItemDecoration.setSearchBeanList(mKanals, mStringToPositionList);
         mKanalsItemDecoration.setOnHeadChangeListener(this);
         mKanalsRv.setHasFixedSize(true);
         mKanalsRv.setAdapter(mKanalListAdapter);
@@ -86,15 +81,16 @@ public class MoreKanalActivity extends BaseActivity implements View.OnClickListe
         mKanalsRv.addItemDecoration(mKanalsItemDecoration);
 
         mIndexRv.setLayoutManager(new LinearLayoutManager(this));
-        mIndexAdapter = new KanalIndexAdpater();
+        mIndexAdapter = new KanalIndexAdapter();
         mIndexAdapter.setOnIndexClickListener(this);
-        mIndexAdapter.setData(mHeaderBeans);
+        mIndexAdapter.setData(mHeaderBeansMap);
         mIndexRv.setAdapter(mIndexAdapter);
     }
 
     private void handleData() {
         if (mKanals.size() > 0) {
-            mHeaderBeans = new ArrayMap<>();
+            mStringToPositionList = new ArrayList<>();
+            mHeaderBeansMap = new ArrayMap<>();
             char c0 = mKanals.get(mKanals.size() - 1).getUsername().toLowerCase().charAt(0);
             int number = 0;
             for (int i = mKanals.size() - 1; i >= -1; i--) {//i == - 1，在遍历Kanals(0)后再走一遍处理数据
@@ -104,11 +100,19 @@ public class MoreKanalActivity extends BaseActivity implements View.OnClickListe
                     bean.setUsername(String.valueOf(c0).toUpperCase());
                     bean.setHead(true);
                     mKanals.add(i + 1, bean);
-                    mHeaderBeans.put(String.valueOf(c0).toUpperCase(), number);
+                    mHeaderBeansMap.put(String.valueOf(c0).toUpperCase(), number);
+                    mStringToPositionList.add(0, String.valueOf(c0).toUpperCase());
                     number = 0;
                 }
                 c0 = c;
                 number++;
+            }
+
+            int total = 0;//用来记录总postiion
+            for (int i = 0; i < mHeaderBeansMap.size(); i++) {
+                int temp = total;
+                total += 1 + mHeaderBeansMap.valueAt(i);
+                mHeaderBeansMap.put(mHeaderBeansMap.keyAt(i), temp);
             }
         }
     }
@@ -129,8 +133,8 @@ public class MoreKanalActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    public void onHeadChange(String c) {
-        mIndexAdapter.jumpToKanalPosition(c);
+    public void onHeadChange(int position) {
+        mIndexAdapter.jumpToKanalPosition(position);
     }
 
     @Override
