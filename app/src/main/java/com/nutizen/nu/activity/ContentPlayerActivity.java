@@ -1,10 +1,14 @@
 package com.nutizen.nu.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.nutizen.nu.R;
@@ -100,7 +104,7 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
     protected void onResume() {
         super.onResume();
         if (mPresenter != null) {
-            mPresenter.preparePlayer();
+            mPresenter.preparePlayer(true);
         }
     }
 
@@ -168,6 +172,7 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
     @Override
     public void onSuccess() {
         setLoadingVisibility(false);
+        mPresenter.setPlayWhenReady(true);
     }
 
     @Override
@@ -181,41 +186,74 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
         switch (v.getId()) {
             case R.id.iv_back:
                 if (mPresenter.isFullScreen()) {
-                    mPresenter.switchPlayerSize(this, findViewById(R.id.top_view));
+                    mPresenter.switchPlayerSize(this, findViewById(R.id.top_view), !mPresenter.isFullScreen());
                 } else {
                     finish();
                 }
                 break;
             case R.id.iv_download:
+                if (checkLogin()) {
+
+                }
                 break;
             case R.id.iv_share:
+
                 break;
             case R.id.iv_favourite:
-                LoginResponseBean accountMessage = LoginPresenter.getAccountMessage();
-                if (accountMessage == null) {
-                    DialogUtils.getAskLoginDialog(this).show();
-                    break;
+                if (checkLogin()) {
+                    v.setSelected(!v.isSelected());
                 }
-                v.setSelected(!v.isSelected());
                 break;
             case R.id.iv_settings:
                 mProfileSettingRv.setVisibility(mProfileSettingRv.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 break;
             case R.id.exo_fullscreen:
-                mPresenter.switchPlayerSize(this, findViewById(R.id.top_view));
+                mPresenter.switchPlayerSize(this, findViewById(R.id.top_view), !mPresenter.isFullScreen());
                 break;
         }
     }
 
-    @Override
-    public void commitComment(String commit) {
+    private void setTranslucentStatus() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//5.0 全透明实现
+            Window window = getWindow();
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.INVISIBLE);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.TRANSPARENT);
+        } else {//4.4 全透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+    }
+
+    private boolean checkLogin() {
         LoginResponseBean accountMessage = LoginPresenter.getAccountMessage();
         if (accountMessage == null) {
             DialogUtils.getAskLoginDialog(this).show();
-            return;
+            if (mPresenter.isFullScreen()) {
+                mSimpleExoPlayerView.postOnAnimation(new Runnable() {//TODO 全屏弹窗有白色任务栏的bug，先用这个顶住先，以后再看原因
+                    @Override
+                    public void run() {
+                        setTranslucentStatus();
+                    }
+                });
+                mSimpleExoPlayerView.postOnAnimationDelayed(new Runnable() {//不要删这里啊，就是这么奇怪，要调用两次，原因不明，再会再会。。
+                    @Override
+                    public void run() {
+                        setTranslucentStatus();
+                    }
+                }, 500);
+            }
+            return false;
         }
-        mPresenter.commitComment(mContentBean, commit);
-        setLoadingVisibility(true);
+        return true;
+    }
+
+    @Override
+    public void commitComment(String commit) {
+        if (checkLogin()) {
+            mPresenter.commitComment(mContentBean, commit);
+            setLoadingVisibility(true);
+        }
     }
 
     @Override
@@ -243,7 +281,7 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (mPresenter.isFullScreen() && (event.getKeyCode() == KeyEvent.KEYCODE_ESCAPE || event.getKeyCode() == KeyEvent.KEYCODE_BACK)) {
-            mPresenter.switchPlayerSize(this, findViewById(R.id.top_view));
+            mPresenter.switchPlayerSize(this, findViewById(R.id.top_view), !mPresenter.isFullScreen());
             return true;
         }
         return super.onKeyDown(keyCode, event);

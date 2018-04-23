@@ -119,6 +119,12 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
         }
     }
 
+    public void setPlayWhenReady(boolean playWhenReady) {
+        if (mSimpleExoPlayer != null) {
+            mSimpleExoPlayer.setPlayWhenReady(playWhenReady);
+        }
+    }
+
     private void keepScreen(Context context) {
         if (mWakeLock == null) {
             PowerManager pManager = ((PowerManager) context.getSystemService(POWER_SERVICE));
@@ -216,8 +222,8 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
         return isFullScreen;
     }
 
-    public void switchPlayerSize(BaseActivity baseActivity, View topBarView) {
-        if (isFullScreen) {//变成小窗口
+    public void switchPlayerSize(BaseActivity baseActivity, View topBarView, boolean fullScreen) {
+        if (!fullScreen) {//变成小窗口
             isFullScreen = false;
             mTitleTextView.setVisibility(View.GONE);
             topBarView.setVisibility(View.VISIBLE);

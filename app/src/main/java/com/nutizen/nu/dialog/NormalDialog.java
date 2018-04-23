@@ -3,10 +3,12 @@ package com.nutizen.nu.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.nutizen.nu.R;
@@ -16,7 +18,7 @@ import com.nutizen.nu.R;
  * Created by Administrator on 2017/11/21.
  */
 
-public class NormalDialog extends Dialog {
+public class NormalDialog extends Dialog {//姑且不考虑继承Dialog这种创建Dialog的方法，没办法，历史遗留问题。Dialog的创建方法官方已经建议使用DialogFragment进行创建了。
 
 
     private TextView mTvDesc;
@@ -47,12 +49,23 @@ public class NormalDialog extends Dialog {
         getWindow().setBackgroundDrawable(new ColorDrawable());
 //        getWindow().setBackgroundDrawableResource(R.mipmap.icon_bg);
 
+        applyCompat();
+
         setContentView(R.layout.dialog_normal);
         //按空白处不能取消动画
         setCanceledOnTouchOutside(false);
         //初始化界面控件
         initView();
         initData();
+    }
+
+    private void applyCompat() {//TODO 全屏弹窗有白色任务栏的bug，先用这个顶住先，以后再看原因
+        if (Build.VERSION.SDK_INT < 19) {
+            return;
+        }
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     private void initData() {

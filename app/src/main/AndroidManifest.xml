@@ -39,7 +39,7 @@
             android:configChanges="orientation|keyboardHidden|navigation|screenSize" />
         <activity
             android:name=".activity.MoreKanalActivity"
-            android:theme="@style/TranslucentTheme" />
+            android:theme="@style/DisablePreviewTheme" />
     </application>
 
 </manifest>
