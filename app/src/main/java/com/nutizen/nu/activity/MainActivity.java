@@ -19,15 +19,18 @@ import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.common.BaseActivity;
 import com.nutizen.nu.common.BaseFragment;
 import com.nutizen.nu.common.BasePresenter;
+import com.nutizen.nu.common.Constants;
 import com.nutizen.nu.dialog.NormalDialog;
+import com.nutizen.nu.fragment.TvFragment;
 import com.nutizen.nu.presenter.LoginPresenter;
 import com.nutizen.nu.utils.ScreenUtils;
+import com.nutizen.nu.widget.CustomViewPager;
 import com.nutizen.nu.widget.MySwipeRefreshLayout;
 
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
-    private ViewPager mViewPager;
+    private CustomViewPager mViewPager;
     private TabLayout mTabLayout;
     private MainViewPagerAdapter mViewpagerAdapter;
     private MySwipeRefreshLayout mSwipeRefreshLayout;
@@ -40,7 +43,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public int getBarColor() {
-        return R.color.colorBlack;
+        return Constants.NULL_COLOR;
     }
 
     @Override
@@ -168,10 +171,31 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             mSwipeRefreshLayout.setRefreshEnable(enable);
     }
 
+    /**
+     * 给TvFragment调用的，使TvFragment的player全屏播放
+     */
+    public void switchLiveFullScreen(boolean fullscreen) {
+        setRefreshing(false);
+        int v = fullscreen ? View.GONE : View.VISIBLE;
+        mTabLayout.setVisibility(v);
+        findViewById(R.id.toolbar).setVisibility(v);
+        findViewById(R.id.view_title).setVisibility(v);
+        findViewById(R.id.line).setVisibility(v);
+        setRefreshEnable(!fullscreen);
+        mViewPager.requestDisallowInterceptTouchEvent(true);
+        mViewPager.getParent().requestDisallowInterceptTouchEvent(true);
+        mViewPager.setScanScroll(!fullscreen);
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((event.getKeyCode() == KeyEvent.KEYCODE_ESCAPE || event.getKeyCode() == KeyEvent.KEYCODE_BACK)) {
-            if (mDrawerLayout.isDrawerOpen(Gravity.START)) {
+            if (findViewById(R.id.toolbar).getVisibility() == View.GONE) {//判断是否全屏播放Tv
+                TvFragment tvFragment = (TvFragment) mViewpagerAdapter.getItem(mViewPager.getCurrentItem());
+                tvFragment.switchFullScreen();
+                return true;
+            }
+            if (mDrawerLayout.isDrawerOpen(Gravity.START)) {//判断是否拉开了DrawerLayout
                 mDrawerLayout.closeDrawer(Gravity.START);
             } else {
                 new NormalDialog(this, getString(R.string.ye), getString(R.string.no), getString(R.string.do_you_want_to_exit), new View.OnClickListener() {

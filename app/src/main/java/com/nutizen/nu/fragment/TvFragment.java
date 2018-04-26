@@ -2,25 +2,20 @@ package com.nutizen.nu.fragment;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.view.View;
 
 import com.nutizen.nu.R;
+import com.nutizen.nu.activity.MainActivity;
 import com.nutizen.nu.bean.response.LiveResponseBean;
 
 public class TvFragment extends BaseLiveFragment {
 
     @Override
     protected Bitmap setArtwork() {
+        View fullscreenBt = mExoPlayerView.findViewById(R.id.exo_fullscreen);
+        fullscreenBt.setVisibility(View.VISIBLE);
+        fullscreenBt.setOnClickListener(new FullscreenClickListener());
         return BitmapFactory.decodeResource(getContext().getResources(), R.mipmap.bg_tv_player);
-    }
-
-    @Override
-    protected LiveResponseBean initLiveBean() {
-        LiveResponseBean bean = new LiveResponseBean();
-        bean.setTitle("Net Tv");
-        bean.setSynopsis("Net Tv !");
-        bean.setUrl("http://nu.onwardsmg.com/live/ch010.m3u8");
-//        bean.setUrl("http://dlhls.cdn.zhanqi.tv/zqlive/49858_wgGj1.m3u8");
-        return bean;
     }
 
     @Override
@@ -31,6 +26,23 @@ public class TvFragment extends BaseLiveFragment {
 
     @Override
     public void onItemClickListener(LiveResponseBean liveBean) {
+        if (mPresenter != null) {
+            initPlayerMessage(liveBean);
+            mPresenter.preparePlayer(true);
+        }
+    }
 
+    class FullscreenClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            switchFullScreen();
+        }
+    }
+
+    public void switchFullScreen() {
+        MainActivity mainactivity = (MainActivity) getContext();
+        mainactivity.switchLiveFullScreen(!mPresenter.isFullScreen());
+        mPresenter.switchPlayerSize(mainactivity, null, !mPresenter.isFullScreen());
     }
 }

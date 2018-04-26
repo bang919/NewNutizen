@@ -14,8 +14,6 @@ import com.nutizen.nu.R;
 import com.nutizen.nu.bean.response.LiveResponseBean;
 import com.nutizen.nu.utils.FileUtils;
 
-import java.util.ArrayList;
-
 public class RadioFragment extends BaseLiveFragment {
 
 
@@ -31,13 +29,9 @@ public class RadioFragment extends BaseLiveFragment {
     }
 
     @Override
-    public void onLivesResponse(ArrayList<LiveResponseBean> liveResponseBeans) {
-        super.onLivesResponse(liveResponseBeans);
-        if (liveResponseBeans != null && liveResponseBeans.size() > 0) {
-            int random = (int) (Math.random() * liveResponseBeans.size());
-            LiveResponseBean liveResponseBean = liveResponseBeans.get(random);
-            initPlayerMessage(liveResponseBean);//这里presenter设置了url
-            mPresenter.preparePlayer();
+    protected void initPlayerMessage(LiveResponseBean liveResponseBean) {
+        super.initPlayerMessage(liveResponseBean);
+        if (liveResponseBean != null) {
             Glide.with(getContext()).load(liveResponseBean.getThumbnail()).apply(new RequestOptions().transforms(new CenterCrop()))
                     .transition(new DrawableTransitionOptions().crossFade()).into(new SimpleTarget<Drawable>() {
                 @Override
@@ -50,6 +44,9 @@ public class RadioFragment extends BaseLiveFragment {
 
     @Override
     public void onItemClickListener(LiveResponseBean liveBean) {
-
+        if (mPresenter != null) {
+            initPlayerMessage(liveBean);
+            mPresenter.preparePlayer(true);
+        }
     }
 }

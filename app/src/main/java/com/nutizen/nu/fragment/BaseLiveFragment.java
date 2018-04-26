@@ -27,6 +27,7 @@ public abstract class BaseLiveFragment extends BaseFragment<BaseLivePresetner> i
     private RecyclerView mRecyclerView;
     private BaseLiveListAdapter mBaseLiveListAdapter;
     private LiveResponseBean mInitLiveBean;
+    private View grayLine, greenLine, mDescView;
 
     @Override
     protected int getLayout() {
@@ -42,10 +43,13 @@ public abstract class BaseLiveFragment extends BaseFragment<BaseLivePresetner> i
 
     @Override
     protected void initView(View rootView) {
-        rootView.findViewById(R.id.iv_open_desc).setOnClickListener(this);
+        mDescView = rootView.findViewById(R.id.iv_open_desc);
+        mDescView.setOnClickListener(this);
         mTitleView = rootView.findViewById(R.id.live_title);
         mContentView = rootView.findViewById(R.id.live_content);
         mExoPlayerView = rootView.findViewById(R.id.exo_top_play);
+        grayLine = rootView.findViewById(R.id.line);
+        greenLine = rootView.findViewById(R.id.line2);
         Bitmap bitmap = setArtwork();
         if (bitmap != null) {
             mExoPlayerView.setDefaultArtwork(bitmap);
@@ -63,8 +67,6 @@ public abstract class BaseLiveFragment extends BaseFragment<BaseLivePresetner> i
         mRecyclerView.setAdapter(mBaseLiveListAdapter);
 
         mPresenter.setSimpleExoPlayerView(mExoPlayerView);
-        mInitLiveBean = initLiveBean();
-        initPlayerMessage(mInitLiveBean);
     }
 
     protected void initPlayerMessage(LiveResponseBean liveResponseBean) {
@@ -76,13 +78,10 @@ public abstract class BaseLiveFragment extends BaseFragment<BaseLivePresetner> i
         }
 
         mTitleView.setText(mInitLiveBean.getTitle());
+        ((TextView) mExoPlayerView.findViewById(R.id.tv_content_title)).setText(mInitLiveBean.getTitle());
         String synopsis = TextUtils.isEmpty(mInitLiveBean.getSynopsis()) ? getString(R.string.there_is_no_description) : mInitLiveBean.getSynopsis();
         mContentView.setText(synopsis);
         mPresenter.setTitleAndUrl(mInitLiveBean.getTitle(), mInitLiveBean.getUrl());
-    }
-
-    protected LiveResponseBean initLiveBean() {
-        return null;
     }
 
     @Override
@@ -102,6 +101,19 @@ public abstract class BaseLiveFragment extends BaseFragment<BaseLivePresetner> i
     @Override
     public void onLivesResponse(ArrayList<LiveResponseBean> liveResponseBeans) {
         onDataRefreshFinish(true);
+
+        grayLine.setVisibility(View.VISIBLE);
+        greenLine.setVisibility(View.VISIBLE);
+        mDescView.setVisibility(View.VISIBLE);
+
+        if (liveResponseBeans != null && liveResponseBeans.size() > 0 && mInitLiveBean == null) {
+            int random = (int) (Math.random() * liveResponseBeans.size());
+            mBaseLiveListAdapter.setCurrentPosition(random);
+            LiveResponseBean liveResponseBean = liveResponseBeans.get(random);
+            initPlayerMessage(liveResponseBean);//这里presenter设置了url
+            mPresenter.preparePlayer();
+        }
+
         mBaseLiveListAdapter.setData(liveResponseBeans);
     }
 

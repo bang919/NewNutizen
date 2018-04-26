@@ -21,6 +21,7 @@ public class BaseLiveListAdapter extends RecyclerView.Adapter<BaseLiveListAdapte
     private Context mContext;
     private ArrayList<LiveResponseBean> mLiveResponseBeans;
     private ItemOnClickListener itemOnClickListener;
+    private int mCurrentPosition = -1;
 
     public BaseLiveListAdapter(Context context) {
         mContext = context;
@@ -29,6 +30,10 @@ public class BaseLiveListAdapter extends RecyclerView.Adapter<BaseLiveListAdapte
 
     public void setItemOnClickListener(ItemOnClickListener itemOnClickListener) {
         this.itemOnClickListener = itemOnClickListener;
+    }
+
+    public void setCurrentPosition(int position) {
+        mCurrentPosition = position;
     }
 
     @Override
@@ -41,6 +46,8 @@ public class BaseLiveListAdapter extends RecyclerView.Adapter<BaseLiveListAdapte
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final LiveResponseBean liveResponseBean = mLiveResponseBeans.get(position);
         holder.title.setText(liveResponseBean.getTitle());
+        holder.title.setSelected(position == mCurrentPosition);
+        holder.title.setTextSize(position == mCurrentPosition ? 22 : 18);
         holder.video.setText(liveResponseBean.getSynopsis());
 
         GlideUtils.loadImage(holder.iv, -1, liveResponseBean.getThumbnail(), new CenterCrop());
@@ -50,6 +57,8 @@ public class BaseLiveListAdapter extends RecyclerView.Adapter<BaseLiveListAdapte
                 @Override
                 public void onClick(View v) {
                     itemOnClickListener.onItemClickListener(liveResponseBean);
+                    mCurrentPosition = position;
+                    notifyDataSetChanged();
                 }
             });
         }

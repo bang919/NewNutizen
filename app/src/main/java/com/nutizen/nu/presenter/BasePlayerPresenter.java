@@ -225,8 +225,11 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
     public void switchPlayerSize(BaseActivity baseActivity, View topBarView, boolean fullScreen) {
         if (!fullScreen) {//变成小窗口
             isFullScreen = false;
-            mTitleTextView.setVisibility(View.GONE);
-            topBarView.setVisibility(View.VISIBLE);
+            if (mTitleTextView != null) {
+                mTitleTextView.setVisibility(View.GONE);
+            }
+            if (topBarView != null)
+                topBarView.setVisibility(View.VISIBLE);
             baseActivity.setSystemBarTransparent();
             baseActivity.setSystemBarColor(baseActivity.getBarColor());
             baseActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -238,9 +241,12 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
         } else {//变成全屏
             isFullScreen = true;
             int width = mSimpleExoPlayerView.getWidth();
-            mTitleTextView.setText(mTitle);
-            mTitleTextView.setVisibility(View.VISIBLE);
-            topBarView.setVisibility(View.GONE);
+            if (mTitleTextView != null) {
+                mTitleTextView.setText(mTitle);
+                mTitleTextView.setVisibility(View.VISIBLE);
+            }
+            if (topBarView != null)
+                topBarView.setVisibility(View.GONE);
             baseActivity.getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
             baseActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);//切换成左侧横屏
             ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) mSimpleExoPlayerView.getLayoutParams();

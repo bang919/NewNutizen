@@ -18,6 +18,7 @@
         tools:replace="android:name">
         <activity
             android:name=".activity.SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,18 +28,29 @@
         </activity>
         <activity
             android:name=".activity.MainActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="portrait"
             android:theme="@style/DisablePreviewTheme" />
         <activity
             android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/DisablePreviewTheme" />
-        <activity android:name=".activity.ForgetEmailActivity" />
-        <activity android:name=".activity.ForgetPasswordActivity" />
-        <activity android:name=".activity.RegisterActivity" />
+        <activity
+            android:name=".activity.ForgetEmailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ForgetPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ContentPlayerActivity"
-            android:configChanges="orientation|keyboardHidden|navigation|screenSize" />
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MoreKanalActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/DisablePreviewTheme" />
     </application>
 
