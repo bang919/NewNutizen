@@ -37,8 +37,7 @@ public abstract class BaseLiveFragment extends BaseFragment<BaseLivePresetner> i
 
     @Override
     protected BaseLivePresetner initPresenter() {
-        BaseLivePresetner baseLivePresetner = new BaseLivePresetner(getContext(), this);
-        return baseLivePresetner;
+        return new BaseLivePresetner(getContext(), this);
     }
 
     @Override

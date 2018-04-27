@@ -11,10 +11,15 @@ import com.nutizen.nu.bean.response.LiveResponseBean;
 public class TvFragment extends BaseLiveFragment {
 
     @Override
-    protected Bitmap setArtwork() {
+    protected void initView(View rootView) {
+        super.initView(rootView);
         View fullscreenBt = mExoPlayerView.findViewById(R.id.exo_fullscreen);
         fullscreenBt.setVisibility(View.VISIBLE);
         fullscreenBt.setOnClickListener(new FullscreenClickListener());
+    }
+
+    @Override
+    protected Bitmap setArtwork() {
         return BitmapFactory.decodeResource(getContext().getResources(), R.mipmap.bg_tv_player);
     }
 

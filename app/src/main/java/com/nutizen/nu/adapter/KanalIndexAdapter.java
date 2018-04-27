@@ -28,8 +28,10 @@ public class KanalIndexAdapter extends RecyclerView.Adapter<KanalIndexAdapter.In
         if (mCurrentPosition == position) {
             return;
         }
+        int positionBefore = mCurrentPosition;
         mCurrentPosition = position;
-        notifyDataSetChanged();
+        notifyItemChanged(mCurrentPosition);
+        notifyItemChanged(positionBefore);
     }
 
     @Override

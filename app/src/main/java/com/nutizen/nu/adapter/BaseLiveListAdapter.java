@@ -66,7 +66,7 @@ public class BaseLiveListAdapter extends RecyclerView.Adapter<BaseLiveListAdapte
 
     @Override
     public int getItemCount() {
-        return Math.min(mLiveResponseBeans.size(), 9);
+        return mLiveResponseBeans.size();
     }
 
 
