@@ -48,10 +48,6 @@
             android:name=".activity.ContentPlayerActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.MoreKanalActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/DisablePreviewTheme" />
     </application>
 
 </manifest>

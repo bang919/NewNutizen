@@ -25,7 +25,7 @@ def releaseTime() {
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.nutizen.nu"
+        applicationId "com.nutizen.nu3"
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 1

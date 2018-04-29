@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nutizen.nu.R;
@@ -23,6 +24,7 @@ import com.nutizen.nu.common.Constants;
 import com.nutizen.nu.dialog.NormalDialog;
 import com.nutizen.nu.fragment.TvFragment;
 import com.nutizen.nu.presenter.LoginPresenter;
+import com.nutizen.nu.utils.AnimUtil;
 import com.nutizen.nu.utils.ScreenUtils;
 import com.nutizen.nu.widget.CustomViewPager;
 import com.nutizen.nu.widget.MySwipeRefreshLayout;
@@ -185,6 +187,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mViewPager.requestDisallowInterceptTouchEvent(true);
         mViewPager.getParent().requestDisallowInterceptTouchEvent(true);
         mViewPager.setScanScroll(!fullscreen);
+    }
+
+    public void resumeToShowIcons() {
+        AnimUtil.setViewAlphaAnim(((ViewGroup) findViewById(R.id.toolbar)).getChildAt(0), true);
+        AnimUtil.setViewAlphaAnim(findViewById(R.id.iv_main_search), true);
+    }
+
+    public void pauseToHideIcons() {
+        AnimUtil.setViewAlphaAnim(((ViewGroup) findViewById(R.id.toolbar)).getChildAt(0), false);
+        AnimUtil.setViewAlphaAnim(findViewById(R.id.iv_main_search), false);
     }
 
     @Override

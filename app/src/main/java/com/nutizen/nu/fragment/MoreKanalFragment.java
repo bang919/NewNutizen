@@ -1,26 +1,35 @@
-package com.nutizen.nu.activity;
+package com.nutizen.nu.fragment;
 
+import android.app.Activity;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 
 import com.nutizen.nu.R;
+import com.nutizen.nu.activity.MainActivity;
 import com.nutizen.nu.adapter.KanalIndexAdapter;
 import com.nutizen.nu.adapter.KanalListAdapter;
+import com.nutizen.nu.bean.response.KanalRspBean;
+import com.nutizen.nu.utils.AnimUtil;
 import com.nutizen.nu.widget.MoreKanalItemHeaderDecoration;
 import com.nutizen.nu.widget.MyLinearLayoutManager;
-import com.nutizen.nu.bean.response.KanalRspBean;
-import com.nutizen.nu.common.BaseActivity;
-import com.nutizen.nu.common.BasePresenter;
-import com.nutizen.nu.utils.AnimUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class MoreKanalActivity extends BaseActivity implements View.OnClickListener, KanalIndexAdapter.OnIndexFocusListener, MoreKanalItemHeaderDecoration.OnHeadChangeListener {
+public class MoreKanalFragment extends DialogFragment implements View.OnClickListener, MoreKanalItemHeaderDecoration.OnHeadChangeListener, KanalIndexAdapter.OnIndexFocusListener {
 
+    public static final String TAG = "MoreKanalFragment";
     public static final String KANAL_BEANS = "kanal beans";
     private ArrayList<KanalRspBean.SearchBean> mKanals;
     private ArrayList<String> mStringToPositionList;//MoreKanalintemHeaderDecoration需要用到的索引
@@ -33,32 +42,70 @@ public class MoreKanalActivity extends BaseActivity implements View.OnClickListe
     private MoreKanalItemHeaderDecoration mKanalsItemDecoration;
     private KanalIndexAdapter mIndexAdapter;
 
-    @Override
-    public int getBarColor() {
-        return R.color.colorBlack;
+    public static MoreKanalFragment getInstance(Bundle bundle) {
+        MoreKanalFragment moreKanalFragment = new MoreKanalFragment();
+        moreKanalFragment.setArguments(bundle);
+        moreKanalFragment.setStyle(0, R.style.FullScreenLightDialog);
+        return moreKanalFragment;
     }
 
     @Override
-    protected int getLayout() {
-        return R.layout.activity_more_kanal;
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mKanals = new ArrayList<KanalRspBean.SearchBean>();
+            mKanals.addAll((ArrayList<KanalRspBean.SearchBean>) arguments.getSerializable(KANAL_BEANS));//防止改原数据
+        }
     }
 
     @Override
-    protected BasePresenter initPresenter() {
-        return null;
+    public void onPause() {
+        super.onPause();
+        switchMainIconAppear(true);
     }
 
     @Override
-    protected void initView() {
-        mKanalsRv = findViewById(R.id.rv_more_kanal);
-        mIndexRv = findViewById(R.id.rv_index_kanal);
-        mBackBtn = findViewById(R.id.back);
+    public void onResume() {
+        super.onResume();
+        switchMainIconAppear(false);
+    }
+
+    private void switchMainIconAppear(boolean appear) {
+        Activity activity = getActivity();
+        if (activity == null || !(activity instanceof MainActivity)) {
+            return;
+        }
+        if (appear) {
+            AnimUtil.setViewAlphaAnim(mBackBtn, false, 800);
+            ((MainActivity) activity).resumeToShowIcons();
+        } else {
+            AnimUtil.setViewAlphaAnim(mBackBtn, true, 800);
+            ((MainActivity) activity).pauseToHideIcons();
+        }
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable());
+        getDialog().getWindow().setWindowAnimations(R.style.animate_dialog_enter_and_exit);
+
+        View inflate = inflater.inflate(R.layout.activity_more_kanal, container, false);
+        mKanalsRv = inflate.findViewById(R.id.rv_more_kanal);
+        mIndexRv = inflate.findViewById(R.id.rv_index_kanal);
+        mBackBtn = inflate.findViewById(R.id.back);
         mBackBtn.setOnClickListener(this);
+
+        initData();
+
+        return inflate;
     }
 
-    @Override
     protected void initData() {
-        mKanals = (ArrayList<KanalRspBean.SearchBean>) getIntent().getSerializableExtra(KANAL_BEANS);
         Collections.sort(mKanals, new Comparator<KanalRspBean.SearchBean>() {
             @Override
             public int compare(KanalRspBean.SearchBean o1, KanalRspBean.SearchBean o2) {
@@ -66,11 +113,11 @@ public class MoreKanalActivity extends BaseActivity implements View.OnClickListe
             }
         });
 
-        mKanalListAdapter = new KanalListAdapter(this, -1);
+        mKanalListAdapter = new KanalListAdapter(getContext(), -1);
         handleData();
         mKanalListAdapter.setData(mKanals);
 
-        mLayoutManager = new MyLinearLayoutManager(this);
+        mLayoutManager = new MyLinearLayoutManager(getContext());
 
         mKanalsItemDecoration = new MoreKanalItemHeaderDecoration();
         mKanalsItemDecoration.setSearchBeanList(mKanals, mStringToPositionList);
@@ -80,7 +127,7 @@ public class MoreKanalActivity extends BaseActivity implements View.OnClickListe
         mKanalsRv.setLayoutManager(mLayoutManager);
         mKanalsRv.addItemDecoration(mKanalsItemDecoration);
 
-        mIndexRv.setLayoutManager(new LinearLayoutManager(this));
+        mIndexRv.setLayoutManager(new LinearLayoutManager(getContext()));
         mIndexAdapter = new KanalIndexAdapter();
         mIndexAdapter.setOnIndexClickListener(this);
         mIndexAdapter.setData(mHeaderBeansMap);
@@ -118,16 +165,10 @@ public class MoreKanalActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    protected void initEvent() {
-        AnimUtil.setViewAlphaAnim(mBackBtn, true, 800);
-    }
-
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back:
-                finish();
+                dismiss();
                 break;
         }
     }

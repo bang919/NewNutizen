@@ -15,6 +15,19 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
+    <style name="FullScreenLightDialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="animate_dialog_enter_and_exit">
+
+        <item name="android:windowEnterAnimation">@anim/anim_dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/anim_dialog_exit</item>
+    </style>
+
     <style name="LauncherActivity" parent="AppThemeLight">
         <item name="android:background">@mipmap/login_bg</item>
         <item name="android:windowNoTitle">true</item>

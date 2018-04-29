@@ -1,13 +1,12 @@
 package com.nutizen.nu.fragment;
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 
 import com.nutizen.nu.R;
-import com.nutizen.nu.activity.MoreKanalActivity;
 import com.nutizen.nu.adapter.KanalListAdapter;
 import com.nutizen.nu.bean.response.KanalRspBean;
 import com.nutizen.nu.common.BaseFragment;
@@ -79,9 +78,9 @@ public class KanalFragment extends BaseFragment<KanalPresenter> implements Kanal
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_kanal_show_more:
-                Intent intent = new Intent(getContext(), MoreKanalActivity.class);
-                intent.putExtra(MoreKanalActivity.KANAL_BEANS, mKanals);
-                startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(MoreKanalFragment.KANAL_BEANS, mKanals);
+                MoreKanalFragment.getInstance(bundle).show(getFragmentManager(), MoreKanalFragment.TAG);
                 break;
         }
     }
