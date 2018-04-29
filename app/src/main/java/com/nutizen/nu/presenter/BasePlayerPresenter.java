@@ -10,6 +10,7 @@ import android.os.PowerManager;
 import android.support.constraint.ConstraintLayout;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -247,8 +248,11 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
             }
             if (topBarView != null)
                 topBarView.setVisibility(View.GONE);
-            baseActivity.getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
+            baseActivity.getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);//去掉DecorView
             baseActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);//切换成左侧横屏
+
+            baseActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);// 去掉信息栏
+
             ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) mSimpleExoPlayerView.getLayoutParams();
             layoutParams.dimensionRatio = null;
             layoutParams.height = width;

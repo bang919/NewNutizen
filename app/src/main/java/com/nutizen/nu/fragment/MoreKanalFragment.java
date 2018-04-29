@@ -78,7 +78,6 @@ public class MoreKanalFragment extends DialogFragment implements View.OnClickLis
             return;
         }
         if (appear) {
-            AnimUtil.setViewAlphaAnim(mBackBtn, false, 800);
             ((MainActivity) activity).resumeToShowIcons();
         } else {
             AnimUtil.setViewAlphaAnim(mBackBtn, true, 800);
