@@ -23,7 +23,6 @@
     </style>
 
     <style name="animate_dialog_enter_and_exit">
-
         <item name="android:windowEnterAnimation">@anim/anim_dialog_enter</item>
         <item name="android:windowExitAnimation">@anim/anim_dialog_exit</item>
     </style>

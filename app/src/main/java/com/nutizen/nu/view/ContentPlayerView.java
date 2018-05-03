@@ -7,7 +7,7 @@ import com.nutizen.nu.bean.response.ContentResponseBean;
 import java.util.ArrayList;
 
 public interface ContentPlayerView {
-    void onContentPlaybackResponse(String writter, ContentResponseBean.SearchBean contentResponseBean, ContentPlaybackBean contentPlaybackBean);
+    void onContentPlaybackResponse(ContentResponseBean.SearchBean contentResponseBean, ContentPlaybackBean contentPlaybackBean);
 
     void onCommentListResponse(ArrayList<CommentResult> comments);
 

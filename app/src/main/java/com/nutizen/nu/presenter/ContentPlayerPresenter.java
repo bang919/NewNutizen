@@ -56,16 +56,7 @@ public class ContentPlayerPresenter extends BasePlayerPresenter<ContentPlayerVie
                 }).doOnNext(new Consumer<ContentPlaybackBean>() {
                     @Override
                     public void accept(ContentPlaybackBean contentPlaybackBean) throws Exception {
-                        String[] genres = contentBean.getGenres().split(",");
-                        String writter = "";
-                        for (int i = 0; i < genres.length; i++) {
-                            String genre = genres[i];
-                            if (genre.contains("-")) {
-                                String[] split = genre.split("-");
-                                writter = split[1];
-                            }
-                        }
-                        mView.onContentPlaybackResponse(writter, contentBean, contentPlaybackBean);
+                        mView.onContentPlaybackResponse(contentBean, contentPlaybackBean);
                     }
                 });
 

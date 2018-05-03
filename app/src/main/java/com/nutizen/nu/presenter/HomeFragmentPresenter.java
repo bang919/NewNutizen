@@ -10,13 +10,10 @@ import com.nutizen.nu.model.LiveModel;
 import com.nutizen.nu.view.HomeFragmentView;
 
 import java.util.ArrayList;
-import java.util.TreeMap;
-import java.util.regex.Pattern;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.functions.Function4;
 import io.reactivex.schedulers.Schedulers;
 
@@ -44,32 +41,14 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
                         mView.onBannerData(contentResponseBean);
                     }
                 });
-        Observable<ContentResponseBean> source2 = mContentModel.requestEditors().map(new Function<ContentResponseBean, ContentResponseBean>() {
+
+        Observable<ContentResponseBean> source2 = mContentModel.requestEditors().doOnNext(new Consumer<ContentResponseBean>() {
             @Override
-            public ContentResponseBean apply(ContentResponseBean contentResponseBean) throws Exception {
-                ArrayList<ContentResponseBean.SearchBean> searchs = contentResponseBean.getSearch();
-
-                Pattern pattern = Pattern.compile("editors[0-9]");
-                TreeMap<Integer, ContentResponseBean.SearchBean> map = new TreeMap<>();
-
-                for (ContentResponseBean.SearchBean searchBean : searchs) {
-                    String[] genres = searchBean.getGenres().split(",");
-                    for (String genre : genres) {
-                        if (pattern.matcher(genre).matches()) {
-                            map.put(Integer.valueOf(genre.replace("editors", "")), searchBean);
-                            break;
-                        }
-                    }
-                }
-
-                if (map.size() > 0) {
-                    contentResponseBean.setSearch(new ArrayList(map.values()));
-                }
-
+            public void accept(ContentResponseBean contentResponseBean) throws Exception {
                 mView.onEditorsData(contentResponseBean);
-                return contentResponseBean;
             }
         });
+
         Observable<ContentResponseBean> source3 = mContentModel.requestNewly(9, 0)
                 .doOnNext(new Consumer<ContentResponseBean>() {
                     @Override
@@ -77,19 +56,14 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
                         mView.onNewlyData(contentResponseBean);
                     }
                 });
-        Observable<ArrayList<LiveResponseBean>> source4 = mLiveModel.requestLive().map(new Function<ArrayList<LiveResponseBean>, ArrayList<LiveResponseBean>>() {
-            @Override
-            public ArrayList<LiveResponseBean> apply(ArrayList<LiveResponseBean> liveResponseBeans) throws Exception {
-                ArrayList<LiveResponseBean> result = new ArrayList<>();
-                for (LiveResponseBean bean : liveResponseBeans) {
-                    if (bean.getSynopsis().contains(";")) {
-                        result.add(bean);
+
+        Observable<ArrayList<LiveResponseBean>> source4 = mLiveModel.requestLive()
+                .doOnNext(new Consumer<ArrayList<LiveResponseBean>>() {
+                    @Override
+                    public void accept(ArrayList<LiveResponseBean> liveResponseBeans) throws Exception {
+                        mView.onLiveData(liveResponseBeans);
                     }
-                }
-                mView.onLiveData(result);
-                return result;
-            }
-        });
+                });
 
         Observable<String> zip = Observable.zip(source1, source2, source3, source4,
                 new Function4<ContentResponseBean, ContentResponseBean, ContentResponseBean, ArrayList<LiveResponseBean>, String>() {

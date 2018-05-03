@@ -45,7 +45,7 @@ public class KanalListAdapter extends RecyclerView.Adapter {
             case R.layout.item_kanal_head:
                 viewHolder = new HeadHolder(LayoutInflater.from(mContext).inflate(viewType, parent, false));
                 break;
-            case R.layout.item_fragment_kanal:
+            case R.layout.item_pic_title_2text:
                 viewHolder = new ItemViewHolder(LayoutInflater.from(mContext).inflate(viewType, parent, false));
                 break;
         }
@@ -89,7 +89,7 @@ public class KanalListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        return mSearchBeanList.get(position).isHead() ? R.layout.item_kanal_head : R.layout.item_fragment_kanal;
+        return mSearchBeanList.get(position).isHead() ? R.layout.item_kanal_head : R.layout.item_pic_title_2text;
     }
 
     public void setData(ArrayList<KanalRspBean.SearchBean> list) {

@@ -93,7 +93,7 @@ public class MoreKanalFragment extends DialogFragment implements View.OnClickLis
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable());
         getDialog().getWindow().setWindowAnimations(R.style.animate_dialog_enter_and_exit);
 
-        View inflate = inflater.inflate(R.layout.activity_more_kanal, container, false);
+        View inflate = inflater.inflate(R.layout.fragment_more_kanal, container, false);
         mKanalsRv = inflate.findViewById(R.id.rv_more_kanal);
         mIndexRv = inflate.findViewById(R.id.rv_index_kanal);
         mBackBtn = inflate.findViewById(R.id.back);

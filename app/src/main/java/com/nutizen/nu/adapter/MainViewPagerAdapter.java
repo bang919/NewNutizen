@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.nutizen.nu.R;
-import com.nutizen.nu.common.BaseFragment;
+import com.nutizen.nu.common.BaseMainFragment;
 import com.nutizen.nu.common.MyApplication;
 import com.nutizen.nu.fragment.HomeFragment;
 import com.nutizen.nu.fragment.KanalFragment;
@@ -21,7 +21,7 @@ import java.util.HashMap;
 public class MainViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private int[] tabTitles = {R.string.home, R.string.kanal, R.string.tv, R.string.radio};
-    private HashMap<Integer, BaseFragment> mFragmentMap;
+    private HashMap<Integer, BaseMainFragment> mFragmentMap;
 
     public MainViewPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -30,8 +30,8 @@ public class MainViewPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
-    public BaseFragment getItem(int position) {
-        BaseFragment f = mFragmentMap.get(position);
+    public BaseMainFragment getItem(int position) {
+        BaseMainFragment f = mFragmentMap.get(position);
         if (f == null) {
             switch (position) {
                 case 0:

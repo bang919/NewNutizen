@@ -11,7 +11,7 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.nutizen.nu.R;
 import com.nutizen.nu.adapter.BaseLiveListAdapter;
 import com.nutizen.nu.bean.response.LiveResponseBean;
-import com.nutizen.nu.common.BaseFragment;
+import com.nutizen.nu.common.BaseMainFragment;
 import com.nutizen.nu.presenter.BaseLivePresetner;
 import com.nutizen.nu.utils.AnimUtil;
 import com.nutizen.nu.utils.ToastUtils;
@@ -19,7 +19,7 @@ import com.nutizen.nu.view.BaseLiveView;
 
 import java.util.ArrayList;
 
-public abstract class BaseLiveFragment extends BaseFragment<BaseLivePresetner> implements View.OnClickListener, BaseLiveView, BaseLiveListAdapter.ItemOnClickListener {
+public abstract class BaseLiveFragment extends BaseMainFragment<BaseLivePresetner> implements View.OnClickListener, BaseLiveView, BaseLiveListAdapter.ItemOnClickListener {
 
     private TextView mTitleView;
     private TextView mContentView;

@@ -9,14 +9,14 @@ import android.widget.Button;
 import com.nutizen.nu.R;
 import com.nutizen.nu.adapter.KanalListAdapter;
 import com.nutizen.nu.bean.response.KanalRspBean;
-import com.nutizen.nu.common.BaseFragment;
+import com.nutizen.nu.common.BaseMainFragment;
 import com.nutizen.nu.presenter.KanalPresenter;
 import com.nutizen.nu.utils.ToastUtils;
 import com.nutizen.nu.view.KanalView;
 
 import java.util.ArrayList;
 
-public class KanalFragment extends BaseFragment<KanalPresenter> implements KanalView, KanalListAdapter.ItemOnClickListener, View.OnClickListener {
+public class KanalFragment extends BaseMainFragment<KanalPresenter> implements KanalView, KanalListAdapter.ItemOnClickListener, View.OnClickListener {
 
     private RecyclerView mKanalsRv;
     private KanalListAdapter mKanalListAdapter;

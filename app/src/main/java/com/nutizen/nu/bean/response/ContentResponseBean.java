@@ -50,7 +50,7 @@ public class ContentResponseBean {
         this.Search = Search;
     }
 
-    public static class SearchBean implements Serializable{
+    public static class SearchBean implements Serializable {
 
         private static final long serialVersionUID = 5642750732654L;
 
@@ -103,6 +103,15 @@ public class ContentResponseBean {
         private List<?> subtitle;
         private List<?> poster;
         private List<?> trailer;
+        private String writter;//目前writers为空，Nu做法是在genres用"-"标志标记的writter，需手动解析
+
+        public String getWritter() {
+            return writter;
+        }
+
+        public void setWritter(String writter) {
+            this.writter = writter;
+        }
 
         public int getId() {
             return id;

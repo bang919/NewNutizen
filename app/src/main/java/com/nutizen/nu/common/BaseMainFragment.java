@@ -19,7 +19,7 @@ import java.util.Map;
  * Created by bigbang on 2018/4/11.
  */
 
-public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
+public abstract class BaseMainFragment<P extends BasePresenter> extends Fragment {
 
     protected P mPresenter;
     private Activity mActivity;

@@ -61,7 +61,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         LogUtils.d(TAG, "start downloadBackgroundPic  -- " + splashImagePath.getAbsolutePath());
         final String splashPicSharedPreferencesUrl = (String) SPUtils.get(MyApplication.getMyApplicationContext(), Constants.SPLASH_PIC_URL, "");
         //如果splashImagePath还没有初始化，复制splash_default到目标文件
-        if (TextUtils.isEmpty(splashPicSharedPreferencesUrl)) {
+        if (TextUtils.isEmpty(splashPicSharedPreferencesUrl) || !splashImagePath.exists()) {
             LogUtils.d(TAG, "开始复制splash_default");
             if (!splashImagePath.exists()) {
                 splashImagePath.createNewFile();
@@ -87,7 +87,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 if (picture_array != null && picture_array.size() > 0) {
                     String pictureUrl = picture_array.get((int) (Math.random() * picture_array.size())).getUrl();
                     LogUtils.d(TAG, "请求Splash图片成功，开始下载图片: " + pictureUrl);
-                    if (!pictureUrl.equals(splashPicSharedPreferencesUrl)) {
+                    if (!pictureUrl.equals(splashPicSharedPreferencesUrl) || !splashImagePath.exists()) {
                         SPUtils.put(MyApplication.getMyApplicationContext(), Constants.SPLASH_PIC_URL, pictureUrl);
                         return mSplashModel.downloadAdvertisement(pictureUrl);
                     }

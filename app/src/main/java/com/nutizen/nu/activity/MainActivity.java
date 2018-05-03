@@ -18,7 +18,7 @@ import com.nutizen.nu.R;
 import com.nutizen.nu.adapter.MainViewPagerAdapter;
 import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.common.BaseActivity;
-import com.nutizen.nu.common.BaseFragment;
+import com.nutizen.nu.common.BaseMainFragment;
 import com.nutizen.nu.common.BasePresenter;
 import com.nutizen.nu.common.Constants;
 import com.nutizen.nu.dialog.NormalDialog;
@@ -81,7 +81,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onPageScrollStateChanged(int state) {
                 //Proof SwipeRefreshLayout's function when ViewPager dragging
-                BaseFragment fragment = mViewpagerAdapter.getItem(mViewPager.getCurrentItem());
+                BaseMainFragment fragment = mViewpagerAdapter.getItem(mViewPager.getCurrentItem());
                 if (state == ViewPager.SCROLL_STATE_DRAGGING) {
                     mSwipeRefreshLayout.setRefreshing(false);
                     //这里要走Fragment的setRefreshEnable，看看有没有条件需要判断，不能直接走SwipeRefreshLayout.setRefreshEnable
@@ -101,7 +101,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void refreshData() {
-        BaseFragment fragment = mViewpagerAdapter.getItem(mViewPager.getCurrentItem());
+        BaseMainFragment fragment = mViewpagerAdapter.getItem(mViewPager.getCurrentItem());
         fragment.refreshData();
     }
 
@@ -183,6 +183,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         findViewById(R.id.toolbar).setVisibility(v);
         findViewById(R.id.view_title).setVisibility(v);
         findViewById(R.id.line).setVisibility(v);
+        findViewById(R.id.line2).setVisibility(v);
         setRefreshEnable(!fullscreen);
         mViewPager.requestDisallowInterceptTouchEvent(true);
         mViewPager.getParent().requestDisallowInterceptTouchEvent(true);

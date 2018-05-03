@@ -10,7 +10,10 @@ import com.nutizen.nu.http.HttpClient;
 import com.nutizen.nu.presenter.LoginPresenter;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -22,13 +25,16 @@ public class ContentModel {
     public Observable<ContentResponseBean> requestHomeBanner() {
         return HttpClient.getApiInterface()
                 .requestHomeBanner()
+                .compose(getWritterTransformer())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+
     public Observable<ContentResponseBean> requestEditors() {
         return HttpClient.getApiInterface()
                 .requestEditors()
+                .compose(getWritterTransformer())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -36,9 +42,37 @@ public class ContentModel {
     public Observable<ContentResponseBean> requestNewly(int limit, int offset) {
         return HttpClient.getApiInterface()
                 .requestNewly(limit, offset)
+                .compose(getWritterTransformer())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    private ObservableTransformer<ContentResponseBean, ContentResponseBean> getWritterTransformer() {
+        return new ObservableTransformer<ContentResponseBean, ContentResponseBean>() {
+            @Override
+            public ObservableSource<ContentResponseBean> apply(Observable<ContentResponseBean> upstream) {
+                return upstream.map(new Function<ContentResponseBean, ContentResponseBean>() {
+                    @Override
+                    public ContentResponseBean apply(ContentResponseBean contentResponseBean) throws Exception {
+                        for (ContentResponseBean.SearchBean contentBean : contentResponseBean.getSearch()) {
+                            String[] genres = contentBean.getGenres().split(",");
+                            String writter = "";
+                            for (int i = 0; i < genres.length; i++) {
+                                String genre = genres[i];
+                                if (genre.contains("-")) {
+                                    String[] split = genre.split("-");
+                                    writter = split[1];
+                                }
+                            }
+                            contentBean.setWritter(writter);
+                        }
+                        return contentResponseBean;
+                    }
+                });
+            }
+        };
+    }
+
 
     /**
      * 获取Content的VideoId，以调用getPlaybackInfoByVideoId获取播放地址

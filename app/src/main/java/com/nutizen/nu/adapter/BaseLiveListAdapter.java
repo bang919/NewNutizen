@@ -38,7 +38,7 @@ public class BaseLiveListAdapter extends RecyclerView.Adapter<BaseLiveListAdapte
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        MyViewHolder viewHolder = new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_fragment_kanal, parent, false));
+        MyViewHolder viewHolder = new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_pic_title_2text, parent, false));
         return viewHolder;
     }
 

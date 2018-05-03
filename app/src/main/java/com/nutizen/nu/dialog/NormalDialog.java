@@ -3,12 +3,10 @@ package com.nutizen.nu.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.nutizen.nu.R;
@@ -49,8 +47,6 @@ public class NormalDialog extends Dialog {//姑且不考虑继承Dialog这种创
         getWindow().setBackgroundDrawable(new ColorDrawable());
 //        getWindow().setBackgroundDrawableResource(R.mipmap.icon_bg);
 
-        applyCompat();
-
         setContentView(R.layout.dialog_normal);
         //按空白处不能取消动画
         setCanceledOnTouchOutside(false);
@@ -59,14 +55,6 @@ public class NormalDialog extends Dialog {//姑且不考虑继承Dialog这种创
         initData();
     }
 
-    private void applyCompat() {//TODO 全屏弹窗有白色任务栏的bug，先用这个顶住先，以后再看原因
-        if (Build.VERSION.SDK_INT < 19) {
-            return;
-        }
-        getWindow().setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    }
 
     private void initData() {
         mTvDesc.setText(mTextDesc);

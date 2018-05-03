@@ -17,7 +17,7 @@ import com.nutizen.nu.adapter.HomeLiveAdapter;
 import com.nutizen.nu.adapter.MainBannerAdapter;
 import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.bean.response.LiveResponseBean;
-import com.nutizen.nu.common.BaseFragment;
+import com.nutizen.nu.common.BaseMainFragment;
 import com.nutizen.nu.listener.ContentItemClickListener;
 import com.nutizen.nu.presenter.HomeFragmentPresenter;
 import com.nutizen.nu.utils.ScreenUtils;
@@ -26,14 +26,18 @@ import com.nutizen.nu.view.HomeFragmentView;
 import com.nutizen.nu.widget.MyScrollView;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
+import java.util.regex.Pattern;
 
-public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements View.OnClickListener, HomeFragmentView, ContentItemClickListener, HomeLiveAdapter.OnLiveClickListener {
+public class HomeFragment extends BaseMainFragment<HomeFragmentPresenter> implements View.OnClickListener, HomeFragmentView, ContentItemClickListener, HomeLiveAdapter.OnLiveClickListener {
 
     private View mLiveLayout;
     private LinearLayout mBannerDotLayout;
     private RecyclerView mBannerView;
     private RecyclerView mEditorRv, mNewlyRv, mLiveRv;
     private HomeContentAdapterd mEditorAdapter, mNewlyAdapter;
+    private ArrayList<ContentResponseBean.SearchBean> mEditorDatas, mNewlyDatas;
+    private ArrayList<LiveResponseBean> mLiveDatas;
     private HomeLiveAdapter mLiveAdapter;
     private MyScrollView mScrollView;
     private MainBannerAdapter mMainBannerAdapter;
@@ -184,10 +188,12 @@ public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.more_iv:
-                switch (((View) v.getParent()).getId()) {
+                switch (((View) v.getParent().getParent()).getId()) {
                     case R.id.vid_layout:
+                        EditorMoreFragment.getInstance(mEditorDatas, getString(R.string.editor)).show(getFragmentManager(), BaseHomeMoreFragment.TAG);
                         break;
                     case R.id.news_layout:
+                        NewlyMoreFragment.getInstance(mNewlyDatas, getString(R.string.newly)).show(getFragmentManager(), BaseHomeMoreFragment.TAG);
                         break;
                     case R.id.live_layout:
                         break;
@@ -234,19 +240,44 @@ public class HomeFragment extends BaseFragment<HomeFragmentPresenter> implements
 
     @Override
     public void onEditorsData(ContentResponseBean contentResponseBean) {
-        mEditorAdapter.setDatas(contentResponseBean.getSearch());
+        mEditorDatas = contentResponseBean.getSearch();
+
+        //首页的editors要排序
+        ArrayList<ContentResponseBean.SearchBean> searchs = contentResponseBean.getSearch();
+
+        Pattern pattern = Pattern.compile("editors[0-9]");
+        TreeMap<Integer, ContentResponseBean.SearchBean> map = new TreeMap<>();
+
+        for (ContentResponseBean.SearchBean searchBean : searchs) {
+            String[] genres = searchBean.getGenres().split(",");
+            for (String genre : genres) {
+                if (pattern.matcher(genre).matches()) {
+                    map.put(Integer.valueOf(genre.replace("editors", "")), searchBean);
+                    break;
+                }
+            }
+        }
+        ArrayList datas;
+        if (map.size() > 0) {
+            datas = new ArrayList(map.values());
+        } else {
+            datas = mEditorDatas;
+        }
+        mEditorAdapter.setDatas(datas);
     }
 
     @Override
     public void onNewlyData(ContentResponseBean contentResponseBean) {
-        mNewlyAdapter.setDatas(contentResponseBean.getSearch());
+        mNewlyDatas = contentResponseBean.getSearch();
+        mNewlyAdapter.setDatas(mNewlyDatas);
     }
 
     @Override
     public void onLiveData(ArrayList<LiveResponseBean> liveResponseBeans) {
         if (liveResponseBeans != null && liveResponseBeans.size() > 0) {
             mLiveLayout.setVisibility(View.VISIBLE);
-            mLiveAdapter.setDatas(liveResponseBeans);
+            mLiveDatas = liveResponseBeans;
+            mLiveAdapter.setDatas(mLiveDatas);
         } else {
             mLiveLayout.setVisibility(View.GONE);
         }

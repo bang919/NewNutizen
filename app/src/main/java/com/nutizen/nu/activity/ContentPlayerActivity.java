@@ -104,14 +104,14 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
     protected void onResume() {
         super.onResume();
         if (mPresenter != null) {
-            mPresenter.preparePlayer(true);
+            mPresenter.setPlayWhenReady(true);
         }
     }
 
     @Override
     protected void onPause() {
         if (mPresenter != null) {
-            mPresenter.releasePlayer();
+            mPresenter.setPlayWhenReady(false);
         }
         super.onPause();
     }
@@ -139,14 +139,15 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
             editFavouriteReqBean.setOperation(isSelected ? EditFavouriteReqBean.EDIT_MARK : EditFavouriteReqBean.EDIT_UNMARK);
             mPresenter.editFavourite(editFavouriteReqBean);
         }
+        mPresenter.releasePlayer();
         super.onDestroy();
     }
 
     @Override
-    public void onContentPlaybackResponse(String writter, ContentResponseBean.SearchBean contentResponseBean, ContentPlaybackBean contentPlaybackBean) {
+    public void onContentPlaybackResponse(ContentResponseBean.SearchBean contentResponseBean, ContentPlaybackBean contentPlaybackBean) {
         mStartTime = sDateFormat.format(new Date());
         mContentPlaybackBean = contentPlaybackBean;
-        mVodRecyclerViewAdapter.setWritter(writter);
+        mVodRecyclerViewAdapter.setWritter(contentResponseBean.getWritter());
         mProfileSettingAdapter.setVideoProfile(contentPlaybackBean.getVideo_profile());
         mPresenter.setTitleAndUrl(contentResponseBean.getTitle(), contentPlaybackBean.getVideo_profile().get(0).getUrl_http());
         mPresenter.preparePlayer();
@@ -229,20 +230,6 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
         LoginResponseBean accountMessage = LoginPresenter.getAccountMessage();
         if (accountMessage == null) {
             DialogUtils.getAskLoginDialog(this).show();
-            if (mPresenter.isFullScreen()) {
-                mSimpleExoPlayerView.postOnAnimation(new Runnable() {//TODO 全屏弹窗有白色任务栏的bug，先用这个顶住先，以后再看原因
-                    @Override
-                    public void run() {
-                        setTranslucentStatus();
-                    }
-                });
-                mSimpleExoPlayerView.postOnAnimationDelayed(new Runnable() {//不要删这里啊，就是这么奇怪，要调用两次，原因不明，再会再会。。
-                    @Override
-                    public void run() {
-                        setTranslucentStatus();
-                    }
-                }, 500);
-            }
             return false;
         }
         return true;

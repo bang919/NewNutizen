@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBlack">
+
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="2dp"
+        android:scaleType="center"
+        android:src="@mipmap/btn_back"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_title_home_more"
+        app:layout_constraintTop_toTopOf="@+id/tv_title_home_more" />
+
+    <TextView
+        android:id="@+id/tv_title_home_more"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorGreen"
+        app:layout_constraintTop_toBottomOf="@id/tv_title_home_more" />
+
+    <com.nutizen.nu.widget.MySwipeRefreshLayout
+        android:id="@+id/swipe_refresh_home_more"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/line">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_more_home"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.nutizen.nu.widget.MySwipeRefreshLayout>
+
+    <RelativeLayout
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:layout_marginRight="10dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+
+        <ProgressBar
+            android:id="@+id/loading_pb"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_centerVertical="true"
+            android:indeterminateDrawable="@drawable/bg_pb_loading_more" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/loading_pb"
+            android:text="@string/loading_more"
+            android:textColor="@color/colorWhite" />
+    </RelativeLayout>
+
+
+</android.support.constraint.ConstraintLayout>
