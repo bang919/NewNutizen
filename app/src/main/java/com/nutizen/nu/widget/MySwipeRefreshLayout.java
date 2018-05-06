@@ -31,9 +31,6 @@ public class MySwipeRefreshLayout extends SwipeRefreshLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (!mTouchEnable) {
-            return false;
-        }
-        return super.onInterceptTouchEvent(ev);
+        return mTouchEnable && super.onInterceptTouchEvent(ev);
     }
 }

@@ -71,7 +71,9 @@ public class KanalFragment extends BaseMainFragment<KanalPresenter> implements K
 
     @Override
     public void onItemClickListener(KanalRspBean.SearchBean kanalBean) {
-
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(KanalDetailFragment.KANAL_BEAN_DETAIL, kanalBean);
+        KanalDetailFragment.getInstance(true, bundle).show(getFragmentManager(), KanalDetailFragment.TAG);
     }
 
     @Override

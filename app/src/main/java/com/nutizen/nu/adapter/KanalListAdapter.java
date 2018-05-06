@@ -2,7 +2,6 @@ package com.nutizen.nu.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,8 +67,7 @@ public class KanalListAdapter extends RecyclerView.Adapter {
             holder.video.setText(mContext.getString(R.string.videos, videoCount));
             holder.follow.setText(mContext.getString(R.string.follow, favorCount));
 
-            if (!TextUtils.isEmpty(thumbnail))
-                GlideUtils.loadImage(holder.iv, -1, thumbnail, new CenterCrop());
+            GlideUtils.loadImage(holder.iv, -1, thumbnail, new CenterCrop());
 
             if (itemOnClickListener != null) {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -118,8 +116,8 @@ public class KanalListAdapter extends RecyclerView.Adapter {
             super(itemView);
             iv = itemView.findViewById(R.id.iv);
             title = itemView.findViewById(R.id.title);
-            video =  itemView.findViewById(R.id.rb_video);
-            follow =  itemView.findViewById(R.id.follow);
+            video = itemView.findViewById(R.id.rb_video);
+            follow = itemView.findViewById(R.id.follow);
         }
     }
 

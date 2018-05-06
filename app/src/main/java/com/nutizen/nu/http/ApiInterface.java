@@ -10,6 +10,8 @@ import com.nutizen.nu.bean.response.AdvertisementBean;
 import com.nutizen.nu.bean.response.CommentResult;
 import com.nutizen.nu.bean.response.ContentPlaybackBean;
 import com.nutizen.nu.bean.response.ContentResponseBean;
+import com.nutizen.nu.bean.response.ContributorContentResult;
+import com.nutizen.nu.bean.response.ContributorLiveResult;
 import com.nutizen.nu.bean.response.FavouriteRspBean;
 import com.nutizen.nu.bean.response.ForgetPasswordResponse;
 import com.nutizen.nu.bean.response.KanalRspBean;
@@ -81,6 +83,14 @@ public interface ApiInterface {
 
     @GET(BuildConfig.data_hostname + "devapi/?apikey=" + BuildConfig.server_key + "&type=movie")
     Observable<ContentResponseBean> requestNewly(@Query("limit") int limit, @Query("offset") int offset);
+
+    @Headers("Authorization:Bearer " + BuildConfig.server_key)
+    @GET("contributors/movie")
+    Observable<ContributorContentResult> searchContentByContributor(@Query("vid") Integer vid, @Query("limit") Integer limit, @Query("next") Integer nextId);
+
+    @Headers("Authorization:Bearer " + BuildConfig.server_key)
+    @GET("contributors/live")
+    Observable<ContributorLiveResult> searchLiveByContributor(@Query("vid") Integer vid, @Query("status") Integer status, @Query("limit") Integer limit, @Query("next") Integer nextId);
 
     @Headers("Authorization:Bearer " + BuildConfig.server_key)
     @GET("live?status=1")

@@ -53,6 +53,7 @@ public class KanalRspBean implements Serializable {
 
     public static class SearchBean implements Serializable {
         private static final long serialVersionUID = 6725432532453l;
+        private String type = "contributor";
         /**
          * viewer_id : 46878
          * username : Gus Azmi
@@ -71,6 +72,10 @@ public class KanalRspBean implements Serializable {
         private String thumbnail;
         private PosterBean poster;
         private boolean isHead;
+
+        public String getType() {
+            return type;
+        }
 
         public boolean isHead() {
             return isHead;

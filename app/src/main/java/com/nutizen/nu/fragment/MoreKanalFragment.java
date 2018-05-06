@@ -1,25 +1,16 @@
 package com.nutizen.nu.fragment;
 
-import android.app.Activity;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 
 import com.nutizen.nu.R;
-import com.nutizen.nu.activity.MainActivity;
 import com.nutizen.nu.adapter.KanalIndexAdapter;
 import com.nutizen.nu.adapter.KanalListAdapter;
 import com.nutizen.nu.bean.response.KanalRspBean;
-import com.nutizen.nu.utils.AnimUtil;
+import com.nutizen.nu.common.BasePresenter;
 import com.nutizen.nu.widget.MoreKanalItemHeaderDecoration;
 import com.nutizen.nu.widget.MyLinearLayoutManager;
 
@@ -27,14 +18,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class MoreKanalFragment extends DialogFragment implements View.OnClickListener, MoreKanalItemHeaderDecoration.OnHeadChangeListener, KanalIndexAdapter.OnIndexFocusListener {
+public class MoreKanalFragment extends TransNutizenTitleFragment implements MoreKanalItemHeaderDecoration.OnHeadChangeListener, KanalIndexAdapter.OnIndexFocusListener, KanalListAdapter.ItemOnClickListener {
 
     public static final String TAG = "MoreKanalFragment";
     public static final String KANAL_BEANS = "kanal beans";
     private ArrayList<KanalRspBean.SearchBean> mKanals;
     private ArrayList<String> mStringToPositionList;//MoreKanalintemHeaderDecoration需要用到的索引
     private ArrayMap<String, Integer> mHeaderBeansMap;//KanalIndexAdapter需要用到的索引
-    private View mBackBtn;
     private RecyclerView mKanalsRv;
     private RecyclerView mIndexRv;
     private KanalListAdapter mKanalListAdapter;
@@ -43,68 +33,35 @@ public class MoreKanalFragment extends DialogFragment implements View.OnClickLis
     private KanalIndexAdapter mIndexAdapter;
 
     public static MoreKanalFragment getInstance(Bundle bundle) {
-        MoreKanalFragment moreKanalFragment = new MoreKanalFragment();
-        moreKanalFragment.setArguments(bundle);
-        moreKanalFragment.setStyle(0, R.style.FullScreenLightDialog);
-        return moreKanalFragment;
+        return getInstance(MoreKanalFragment.class, true, bundle);
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected BasePresenter initPresenter() {
+        return null;
+    }
+
+
+    @Override
+    protected int getBodyLayout() {
+        return R.layout.fragment_more_kanal;
+    }
+
+    @Override
+    protected void initBodyView(View rootView) {
+        mKanalsRv = rootView.findViewById(R.id.rv_more_kanal);
+        mIndexRv = rootView.findViewById(R.id.rv_index_kanal);
+    }
+
+    @Override
+    protected void initEvent() {
 
         Bundle arguments = getArguments();
         if (arguments != null) {
             mKanals = new ArrayList<KanalRspBean.SearchBean>();
             mKanals.addAll((ArrayList<KanalRspBean.SearchBean>) arguments.getSerializable(KANAL_BEANS));//防止改原数据
         }
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        switchMainIconAppear(true);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        switchMainIconAppear(false);
-    }
-
-    private void switchMainIconAppear(boolean appear) {
-        Activity activity = getActivity();
-        if (activity == null || !(activity instanceof MainActivity)) {
-            return;
-        }
-        if (appear) {
-            ((MainActivity) activity).resumeToShowIcons();
-        } else {
-            AnimUtil.setViewAlphaAnim(mBackBtn, true, 800);
-            ((MainActivity) activity).pauseToHideIcons();
-        }
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable());
-        getDialog().getWindow().setWindowAnimations(R.style.animate_dialog_enter_and_exit);
-
-        View inflate = inflater.inflate(R.layout.fragment_more_kanal, container, false);
-        mKanalsRv = inflate.findViewById(R.id.rv_more_kanal);
-        mIndexRv = inflate.findViewById(R.id.rv_index_kanal);
-        mBackBtn = inflate.findViewById(R.id.back);
-        mBackBtn.setOnClickListener(this);
-
-        initData();
-
-        return inflate;
-    }
-
-    protected void initData() {
         Collections.sort(mKanals, new Comparator<KanalRspBean.SearchBean>() {
             @Override
             public int compare(KanalRspBean.SearchBean o1, KanalRspBean.SearchBean o2) {
@@ -112,9 +69,15 @@ public class MoreKanalFragment extends DialogFragment implements View.OnClickLis
             }
         });
 
+        initRecyclerView();
+
+    }
+
+    private void initRecyclerView() {
         mKanalListAdapter = new KanalListAdapter(getContext(), -1);
         handleData();
         mKanalListAdapter.setData(mKanals);
+        mKanalListAdapter.setItemOnClickListener(this);
 
         mLayoutManager = new MyLinearLayoutManager(getContext());
 
@@ -164,15 +127,6 @@ public class MoreKanalFragment extends DialogFragment implements View.OnClickLis
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.back:
-                dismiss();
-                break;
-        }
-    }
-
-    @Override
     public void onHeadChange(int position) {
         mIndexAdapter.jumpToKanalPosition(position);
     }
@@ -180,5 +134,12 @@ public class MoreKanalFragment extends DialogFragment implements View.OnClickLis
     @Override
     public void onIndexClick(int jumpPosition) {
         mKanalsRv.smoothScrollToPosition(jumpPosition);
+    }
+
+    @Override
+    public void onItemClickListener(KanalRspBean.SearchBean kanalBean) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(KanalDetailFragment.KANAL_BEAN_DETAIL, kanalBean);
+        KanalDetailFragment.getInstance(false, bundle).show(getFragmentManager(), KanalDetailFragment.TAG);
     }
 }
