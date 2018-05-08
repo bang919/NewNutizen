@@ -25,7 +25,7 @@ public class NormalContentAdapter extends RecyclerView.Adapter<NormalContentAdap
     }
 
     public void setDatas(ArrayList<ContentResponseBean.SearchBean> datas) {
-        this.datas = datas;
+        this.datas = datas != null ? datas : new ArrayList<ContentResponseBean.SearchBean>();
         notifyDataSetChanged();
     }
 

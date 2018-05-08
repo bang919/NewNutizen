@@ -60,6 +60,7 @@ public class DetailKanalSwipeRefreshLayout extends MySwipeRefreshLayout {
             fling((int) (maxScroll - getScrollY()));
         }
         needAdjustment = false;
+        target.getParent().requestDisallowInterceptTouchEvent(false);
         super.onStopNestedScroll(target);
     }
 
@@ -68,6 +69,10 @@ public class DetailKanalSwipeRefreshLayout extends MySwipeRefreshLayout {
         super.onNestedPreScroll(target, dx, dy, consumed);
         if (consumed[1] != 0) {//已经被父控件处理过了
             return;
+        }
+        if (Math.abs(dy) > Math.abs(dx)) {
+            //解决No data的时候RecyclerView因为没数据line3000不调用requestDisallowInterceptTouchEvent(true)，导致ViewPager可以滑动的bug
+            target.getParent().requestDisallowInterceptTouchEvent(true);
         }
         if (dy > 0) {//向上滑动
             if (mContentView.getY() > getScrollY() + mTopMargin) {

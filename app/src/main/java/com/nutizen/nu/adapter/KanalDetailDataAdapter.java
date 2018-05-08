@@ -47,14 +47,8 @@ public class KanalDetailDataAdapter {
                 }
             });
         }
-        if (contentResponseBeans == null || contentResponseBeans.size() == 0) {
-            mEmptyView.setVisibility(View.VISIBLE);
-            mRecyclerView.setVisibility(View.GONE);
-        } else {
-            mNormalContentAdapter.setDatas(contentResponseBeans);
-            mEmptyView.setVisibility(View.GONE);
-            mRecyclerView.setVisibility(View.VISIBLE);
-        }
+        mNormalContentAdapter.setDatas(contentResponseBeans);
+        mEmptyView.setVisibility(contentResponseBeans != null && contentResponseBeans.size() > 0 ? View.GONE : View.VISIBLE);
     }
 
     public void setLiveData(ArrayList<LiveResponseBean> liveData) {
@@ -62,7 +56,7 @@ public class KanalDetailDataAdapter {
             Context context = mRecyclerView.getContext();
             mNormalLiveAdapter = new NormalLiveAdapter(context);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-            mRecyclerView.setAdapter(mNormalContentAdapter);
+            mRecyclerView.setAdapter(mNormalLiveAdapter);
             mNormalLiveAdapter.setItemOnLiveClickListener(new NormalLiveAdapter.ItemOnLiveClickListener() {
                 @Override
                 public void onLiveClick(LiveResponseBean liveBean) {
