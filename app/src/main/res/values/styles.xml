@@ -42,7 +42,7 @@
 
     <!--Tablayout style-->
     <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabIndicatorColor">@null</item>
+        <item name="tabIndicatorColor">@color/colorGreen</item>
         <item name="tabSelectedTextColor">@color/colorGreen</item>
         <item name="tabPaddingStart">10dp</item>
         <item name="tabPaddingEnd">10dp</item>

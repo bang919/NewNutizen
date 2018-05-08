@@ -16,6 +16,7 @@ import com.nutizen.nu.common.BasePresenter;
 public abstract class BaseDialogFragment<P extends BasePresenter> extends DialogFragment {
 
     protected P mPresenter;
+    private boolean hadMeet;//是否已启动过。。用来修复一个bug：DialogFragment打开Activity，再返回DialogFragment会出现Fragment启动动画
 
     public BaseDialogFragment() {
         setStyle(0, R.style.FullScreenLightDialog);
@@ -40,6 +41,16 @@ public abstract class BaseDialogFragment<P extends BasePresenter> extends Dialog
      * 初始化事件
      */
     protected abstract void initEvent();
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //修复一个bug：DialogFragment打开Activity，再返回DialogFragment会出现Fragment启动动画
+        if (hadMeet) {//已启动过
+            getDialog().getWindow().setWindowAnimations(R.style.animate_dialog_exit);
+        }
+        hadMeet = true;
+    }
 
     @Nullable
     @Override

@@ -15,12 +15,12 @@ import com.nutizen.nu.utils.GlideUtils;
 
 import java.util.ArrayList;
 
-public class MoreHomeContentAdapter extends RecyclerView.Adapter<MoreHomeContentAdapter.ContentHolder> {
+public class NormalContentAdapter extends RecyclerView.Adapter<NormalContentAdapter.ContentHolder> {
 
     private ArrayList<ContentResponseBean.SearchBean> datas;
     private ContentItemClickListener mAdapterClickListener;
 
-    public MoreHomeContentAdapter() {
+    public NormalContentAdapter() {
         this.datas = new ArrayList<>();
     }
 

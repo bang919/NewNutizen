@@ -11,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nutizen.nu.R;
@@ -37,6 +36,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private MainViewPagerAdapter mViewpagerAdapter;
     private MySwipeRefreshLayout mSwipeRefreshLayout;
     private DrawerLayout mDrawerLayout;
+    private Toolbar mToolbar;
+    private View mSearchBtn;
 
     @Override
     protected int getLayout() {
@@ -58,11 +59,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mViewPager = findViewById(R.id.main_viewpager);
         mTabLayout = findViewById(R.id.main_tablayout);
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh);
-        mSwipeRefreshLayout.setProgressViewOffset(true, 0, (int) ScreenUtils.dip2px(this, 36f));
         mDrawerLayout = findViewById(R.id.drawer_layout);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.open, R.string.close);//Toggle DrawerLayout and Toolbar
+        mToolbar = findViewById(R.id.toolbar);
+        mSearchBtn = findViewById(R.id.iv_main_search);
+        new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.open, R.string.close);//Toggle DrawerLayout and Toolbar
 
+        mSwipeRefreshLayout.setProgressViewOffset(true, 0, (int) ScreenUtils.dip2px(this, 36f));
         mViewpagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mViewpagerAdapter);
         mViewPager.setOffscreenPageLimit(3);
@@ -91,7 +93,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
             }
         });
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorGreen);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -128,7 +129,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void initEvent() {
-        findViewById(R.id.iv_main_search).setOnClickListener(this);
+        mSearchBtn.setOnClickListener(this);
         findViewById(R.id.leftitem_profile).setOnClickListener(this);
         findViewById(R.id.leftitem_favourit).setOnClickListener(this);
         findViewById(R.id.leftitem_download).setOnClickListener(this);
@@ -180,30 +181,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setRefreshing(false);
         int v = fullscreen ? View.GONE : View.VISIBLE;
         mTabLayout.setVisibility(v);
-        findViewById(R.id.toolbar).setVisibility(v);
+        mToolbar.setVisibility(v);
         findViewById(R.id.view_title).setVisibility(v);
         findViewById(R.id.line).setVisibility(v);
         findViewById(R.id.line2).setVisibility(v);
         setRefreshEnable(!fullscreen);
-        mViewPager.requestDisallowInterceptTouchEvent(true);
-        mViewPager.getParent().requestDisallowInterceptTouchEvent(true);
         mViewPager.setScanScroll(!fullscreen);
     }
 
     public void resumeToShowIcons() {
-        AnimUtil.setViewAlphaAnim(((ViewGroup) findViewById(R.id.toolbar)).getChildAt(0), true);
-        AnimUtil.setViewAlphaAnim(findViewById(R.id.iv_main_search), true);
+        AnimUtil.setViewAlphaAnim(mToolbar.getChildAt(0), true);
+        AnimUtil.setViewAlphaAnim(mSearchBtn, true);
     }
 
     public void pauseToHideIcons() {
-        AnimUtil.setViewAlphaAnim(((ViewGroup) findViewById(R.id.toolbar)).getChildAt(0), false);
-        AnimUtil.setViewAlphaAnim(findViewById(R.id.iv_main_search), false);
+        AnimUtil.setViewAlphaAnim(mToolbar.getChildAt(0), false);
+        AnimUtil.setViewAlphaAnim(mSearchBtn, false);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((event.getKeyCode() == KeyEvent.KEYCODE_ESCAPE || event.getKeyCode() == KeyEvent.KEYCODE_BACK)) {
-            if (findViewById(R.id.toolbar).getVisibility() == View.GONE) {//判断是否全屏播放Tv
+            if (mToolbar.getVisibility() == View.GONE) {//判断是否全屏播放Tv
                 TvFragment tvFragment = (TvFragment) mViewpagerAdapter.getItem(mViewPager.getCurrentItem());
                 tvFragment.switchFullScreen();
                 return true;

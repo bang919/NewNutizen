@@ -16,20 +16,26 @@ import com.nutizen.nu.utils.GlideUtils;
 import java.util.ArrayList;
 
 
-public class BaseLiveListAdapter extends RecyclerView.Adapter<BaseLiveListAdapter.MyViewHolder> {
+public class NormalLiveAdapter extends RecyclerView.Adapter<NormalLiveAdapter.MyViewHolder> {
 
     private Context mContext;
     private ArrayList<LiveResponseBean> mLiveResponseBeans;
-    private ItemOnClickListener itemOnClickListener;
+    private ItemOnLiveClickListener mItemOnLiveClickListener;
+    private boolean mChangeClickStyle;//是否让item点击后变色
     private int mCurrentPosition = -1;
 
-    public BaseLiveListAdapter(Context context) {
+    public NormalLiveAdapter(Context context) {
+        this(context, true);
+    }
+
+    public NormalLiveAdapter(Context context, boolean changeClickStyle) {
+        mChangeClickStyle = changeClickStyle;
         mContext = context;
         mLiveResponseBeans = new ArrayList<>();
     }
 
-    public void setItemOnClickListener(ItemOnClickListener itemOnClickListener) {
-        this.itemOnClickListener = itemOnClickListener;
+    public void setItemOnLiveClickListener(ItemOnLiveClickListener itemOnLiveClickListener) {
+        this.mItemOnLiveClickListener = itemOnLiveClickListener;
     }
 
     public void setCurrentPosition(int position) {
@@ -46,17 +52,19 @@ public class BaseLiveListAdapter extends RecyclerView.Adapter<BaseLiveListAdapte
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final LiveResponseBean liveResponseBean = mLiveResponseBeans.get(position);
         holder.title.setText(liveResponseBean.getTitle());
-        holder.title.setSelected(position == mCurrentPosition);
-        holder.title.setTextSize(position == mCurrentPosition ? 22 : 18);
+        if (mChangeClickStyle) {
+            holder.title.setSelected(position == mCurrentPosition);
+            holder.title.setTextSize(position == mCurrentPosition ? 22 : 18);
+        }
         holder.video.setText(liveResponseBean.getSynopsis());
 
         GlideUtils.loadImage(holder.iv, -1, liveResponseBean.getThumbnail(), new CenterCrop());
 
-        if (itemOnClickListener != null) {
+        if (mItemOnLiveClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    itemOnClickListener.onItemClickListener(liveResponseBean);
+                    mItemOnLiveClickListener.onLiveClick(liveResponseBean);
                     mCurrentPosition = position;
                     notifyDataSetChanged();
                 }
@@ -91,7 +99,7 @@ public class BaseLiveListAdapter extends RecyclerView.Adapter<BaseLiveListAdapte
         }
     }
 
-    public interface ItemOnClickListener {
-        void onItemClickListener(LiveResponseBean liveBean);
+    public interface ItemOnLiveClickListener {
+        void onLiveClick(LiveResponseBean liveBean);
     }
 }

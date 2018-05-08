@@ -141,6 +141,7 @@
     <string name="sure">Are you sure?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="no_data">No Data</string>
     <string name="measure_logout">Logout from the current account?</string>
     <string name="cancel">Cancel</string>
     <string name="viewers">%s views</string>

@@ -69,7 +69,6 @@ public abstract class TransNutizenTitleFragment<P extends BasePresenter> extends
         if (appear) {
             ((MainActivity) activity).resumeToShowIcons();
         } else {
-
             ((MainActivity) activity).pauseToHideIcons();
         }
     }

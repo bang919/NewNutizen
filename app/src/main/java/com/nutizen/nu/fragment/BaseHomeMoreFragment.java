@@ -1,6 +1,5 @@
 package com.nutizen.nu.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +11,7 @@ import android.widget.TextView;
 
 import com.nutizen.nu.R;
 import com.nutizen.nu.activity.ContentPlayerActivity;
-import com.nutizen.nu.adapter.MoreHomeContentAdapter;
+import com.nutizen.nu.adapter.NormalContentAdapter;
 import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.listener.ContentItemClickListener;
 import com.nutizen.nu.presenter.MoreHomePresenter;
@@ -29,9 +28,9 @@ public abstract class BaseHomeMoreFragment extends BaseDialogFragment<MoreHomePr
     private MySwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mDataRv;
     private View mLoadingView;
-    private MoreHomeContentAdapter mMoreHomeContentAdapter;
+    private NormalContentAdapter mNormalContentAdapter;
     private ArrayList<ContentResponseBean.SearchBean> mDatas;
-    private boolean hadMeet;//是否已启动过。。用来修复一个bug：DialogFragment打开Activity，再返回DialogFragment会出现Fragment启动动画
+
     private View mBackToTopBt;
 
     public static <T extends BaseHomeMoreFragment> T getInstance(Class<T> cls, ArrayList<ContentResponseBean.SearchBean> datas, String title) {
@@ -47,16 +46,6 @@ public abstract class BaseHomeMoreFragment extends BaseDialogFragment<MoreHomePr
             e.printStackTrace();
             return null;
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //修复一个bug：DialogFragment打开Activity，再返回DialogFragment会出现Fragment启动动画
-        if (hadMeet) {//已启动过
-            getDialog().getWindow().setWindowAnimations(R.style.animate_dialog_exit);
-        }
-        hadMeet = true;
     }
 
     @Override
@@ -90,29 +79,29 @@ public abstract class BaseHomeMoreFragment extends BaseDialogFragment<MoreHomePr
         }
 
         mDataRv.setLayoutManager(new LinearLayoutManager(getContext()));
-        mMoreHomeContentAdapter = new MoreHomeContentAdapter();
-        mMoreHomeContentAdapter.setOnContentItemClickListener(this);
-        mDataRv.setAdapter(mMoreHomeContentAdapter);
+        mNormalContentAdapter = new NormalContentAdapter();
+        mNormalContentAdapter.setOnContentItemClickListener(this);
+        mDataRv.setAdapter(mNormalContentAdapter);
         mDataRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && !mDataRv.canScrollVertically(-1)) {//到达顶部
+                if (!mDataRv.canScrollVertically(-1)) {
                     mBackToTopBt.setVisibility(View.GONE);
-                } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {//正在滑动
+                } else {
                     mBackToTopBt.setVisibility(View.VISIBLE);
-                } else if (newState == RecyclerView.SCROLL_STATE_IDLE && !mDataRv.canScrollVertically(1) && mDatas != null) {//到达底部，加载更多
+                }
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && !mDataRv.canScrollVertically(1) && mDatas != null) {//到达底部，加载更多
                     requestMoreData();
                 }
             }
         });
         if (mDatas != null) {
-            mMoreHomeContentAdapter.setDatas(mDatas);
+            mNormalContentAdapter.setDatas(mDatas);
         } else {
             mSwipeRefreshLayout.setRefreshing(true);
             refreshData();
         }
 
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorGreen);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -142,22 +131,20 @@ public abstract class BaseHomeMoreFragment extends BaseDialogFragment<MoreHomePr
     @Override
     public void onContentItemClick(ContentResponseBean.SearchBean searchBean) {
         getDialog().getWindow().setWindowAnimations(0);
-        Intent intent = new Intent(getContext(), ContentPlayerActivity.class);
-        intent.putExtra(ContentPlayerActivity.CONTENT_BEAN, searchBean);
-        startActivity(intent);
+        ContentPlayerActivity.startContentPlayActivity(getContext(), searchBean);
     }
 
     @Override
     public void onContentDatas(ContentResponseBean contentResponseBean) {
         mDatas = contentResponseBean.getSearch();
-        mMoreHomeContentAdapter.setDatas(contentResponseBean.getSearch());
+        mNormalContentAdapter.setDatas(contentResponseBean.getSearch());
         mSwipeRefreshLayout.setRefreshing(false);
         hideLoadingView();
     }
 
     @Override
     public void onMoreContentDatas(ContentResponseBean contentResponseBean) {
-        mMoreHomeContentAdapter.addDatas(contentResponseBean.getSearch());
+        mNormalContentAdapter.addDatas(contentResponseBean.getSearch());
         mSwipeRefreshLayout.setRefreshing(false);
         hideLoadingView();
     }

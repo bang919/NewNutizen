@@ -38,7 +38,7 @@ public class ContributorModel {
                             searchBean.setDescription(result.getMovie_description());
                             searchBean.setGenres(result.getMovie_genres());
                             searchBean.setDatereleased(result.getMovie_datereleased());
-                            searchBean.setThumbnail(result.getThumbnail());
+                            searchBean.setThumbnail(result.getMovie_thumbnail());
                             searchBean.setRating(result.getMovie_rating());
                             searchBean.setType("movie");
 //                            searchBean.setDirectors(result.getMovie_directors());

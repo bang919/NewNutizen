@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.nutizen.nu.R;
-import com.nutizen.nu.adapter.BaseLiveListAdapter;
+import com.nutizen.nu.adapter.NormalLiveAdapter;
 import com.nutizen.nu.bean.response.LiveResponseBean;
 import com.nutizen.nu.common.BaseMainFragment;
 import com.nutizen.nu.presenter.BaseLivePresetner;
@@ -19,13 +19,13 @@ import com.nutizen.nu.view.BaseLiveView;
 
 import java.util.ArrayList;
 
-public abstract class BaseLiveFragment extends BaseMainFragment<BaseLivePresetner> implements View.OnClickListener, BaseLiveView, BaseLiveListAdapter.ItemOnClickListener {
+public abstract class BaseLiveFragment extends BaseMainFragment<BaseLivePresetner> implements View.OnClickListener, BaseLiveView, NormalLiveAdapter.ItemOnLiveClickListener {
 
     private TextView mTitleView;
     private TextView mContentView;
     protected SimpleExoPlayerView mExoPlayerView;
     private RecyclerView mRecyclerView;
-    private BaseLiveListAdapter mBaseLiveListAdapter;
+    private NormalLiveAdapter mNormalLiveAdapter;
     private LiveResponseBean mInitLiveBean;
     private View grayLine, greenLine, mDescView;
 
@@ -61,9 +61,9 @@ public abstract class BaseLiveFragment extends BaseMainFragment<BaseLivePresetne
     @Override
     protected void initEvent() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBaseLiveListAdapter = new BaseLiveListAdapter(getContext());
-        mBaseLiveListAdapter.setItemOnClickListener(this);
-        mRecyclerView.setAdapter(mBaseLiveListAdapter);
+        mNormalLiveAdapter = new NormalLiveAdapter(getContext());
+        mNormalLiveAdapter.setItemOnLiveClickListener(this);
+        mRecyclerView.setAdapter(mNormalLiveAdapter);
 
         mPresenter.setSimpleExoPlayerView(mExoPlayerView);
     }
@@ -107,13 +107,13 @@ public abstract class BaseLiveFragment extends BaseMainFragment<BaseLivePresetne
 
         if (liveResponseBeans != null && liveResponseBeans.size() > 0 && mInitLiveBean == null) {
             int random = (int) (Math.random() * liveResponseBeans.size());
-            mBaseLiveListAdapter.setCurrentPosition(random);
+            mNormalLiveAdapter.setCurrentPosition(random);
             LiveResponseBean liveResponseBean = liveResponseBeans.get(random);
             initPlayerMessage(liveResponseBean);//这里presenter设置了url
             mPresenter.preparePlayer();
         }
 
-        mBaseLiveListAdapter.setData(liveResponseBeans);
+        mNormalLiveAdapter.setData(liveResponseBeans);
     }
 
     @Override

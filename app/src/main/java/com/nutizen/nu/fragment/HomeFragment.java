@@ -1,6 +1,5 @@
 package com.nutizen.nu.fragment;
 
-import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.PagerSnapHelper;
@@ -173,9 +172,7 @@ public class HomeFragment extends BaseMainFragment<HomeFragmentPresenter> implem
 
     @Override
     public void onContentItemClick(ContentResponseBean.SearchBean searchBean) {
-        Intent intent = new Intent(getContext(), ContentPlayerActivity.class);
-        intent.putExtra(ContentPlayerActivity.CONTENT_BEAN, searchBean);
-        startActivity(intent);
+        ContentPlayerActivity.startContentPlayActivity(getContext(), searchBean);
     }
 
 

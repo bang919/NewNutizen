@@ -1,5 +1,6 @@
 package com.nutizen.nu.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,6 +34,8 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
 
     public static final String CONTENT_BEAN = "content bean";
     private View mFavouriteBtn;
+    private View mProgressBar;
+    private View mTopHeadView;
     private SimpleExoPlayerView mSimpleExoPlayerView;
     private RecyclerView mMessageAndCommentRv;
     private RecyclerView mProfileSettingRv;
@@ -46,6 +49,12 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
     private boolean initFavourite;//一开始是喜爱还是不喜爱，用于editFavourite
     private Handler mHandler;
     private Runnable favouriteRunnable;
+
+    public static void startContentPlayActivity(Context context, ContentResponseBean.SearchBean searchBean) {
+        Intent intent = new Intent(context, ContentPlayerActivity.class);
+        intent.putExtra(ContentPlayerActivity.CONTENT_BEAN, searchBean);
+        context.startActivity(intent);
+    }
 
     @Override
     public int getBarColor() {
@@ -68,6 +77,8 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
         mMessageAndCommentRv = findViewById(R.id.rv_message_and_comment);
         mProfileSettingRv = findViewById(R.id.rv_profile_settings);
         mFavouriteBtn = findViewById(R.id.iv_favourite);
+        mProgressBar = findViewById(R.id.progress_bar_layout);
+        mTopHeadView = findViewById(R.id.top_view);
     }
 
     @Override
@@ -195,7 +206,7 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
         switch (v.getId()) {
             case R.id.iv_back:
                 if (mPresenter.isFullScreen()) {
-                    mPresenter.switchPlayerSize(this, findViewById(R.id.top_view), !mPresenter.isFullScreen());
+                    mPresenter.switchPlayerSize(this, mTopHeadView, !mPresenter.isFullScreen());
                 } else {
                     finish();
                 }
@@ -218,7 +229,7 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
                 mProfileSettingRv.setVisibility(mProfileSettingRv.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 break;
             case R.id.exo_fullscreen:
-                mPresenter.switchPlayerSize(this, findViewById(R.id.top_view), !mPresenter.isFullScreen());
+                mPresenter.switchPlayerSize(this, mTopHeadView, !mPresenter.isFullScreen());
                 break;
         }
     }
@@ -257,7 +268,7 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
     }
 
     private void setLoadingVisibility(boolean visibility) {
-        findViewById(R.id.progress_bar_layout).setVisibility(visibility ? View.VISIBLE : View.GONE);
+        mProgressBar.setVisibility(visibility ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -270,7 +281,7 @@ public class ContentPlayerActivity extends BaseActivity<ContentPlayerPresenter> 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (mPresenter.isFullScreen() && (event.getKeyCode() == KeyEvent.KEYCODE_ESCAPE || event.getKeyCode() == KeyEvent.KEYCODE_BACK)) {
-            mPresenter.switchPlayerSize(this, findViewById(R.id.top_view), !mPresenter.isFullScreen());
+            mPresenter.switchPlayerSize(this, mTopHeadView, !mPresenter.isFullScreen());
             return true;
         }
         return super.onKeyDown(keyCode, event);

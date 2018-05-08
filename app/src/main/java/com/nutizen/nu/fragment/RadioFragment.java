@@ -43,7 +43,7 @@ public class RadioFragment extends BaseLiveFragment {
     }
 
     @Override
-    public void onItemClickListener(LiveResponseBean liveBean) {
+    public void onLiveClick(LiveResponseBean liveBean) {
         if (mPresenter != null) {
             initPlayerMessage(liveBean);
             mPresenter.preparePlayer(true);

@@ -7,6 +7,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import com.nutizen.nu.R;
+
 /**
  * Created by bigbang on 2018/4/11.
  */
@@ -22,6 +24,7 @@ public class MySwipeRefreshLayout extends SwipeRefreshLayout {
     public MySwipeRefreshLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         mTouchEnable = true;
+        setColorSchemeResources(R.color.colorGreen);
     }
 
     public void setRefreshEnable(boolean touchEnable) {
