@@ -18,6 +18,7 @@ public class DetailKanalSwipeRefreshLayout extends MySwipeRefreshLayout {
     private View mContentView;
 
     private OverScroller mScroller;
+    private boolean needAdjustment;//是否需要在滑动的最后onStopNestedScroll做调整
 
     public DetailKanalSwipeRefreshLayout(@NonNull Context context) {
         this(context, null);
@@ -46,7 +47,20 @@ public class DetailKanalSwipeRefreshLayout extends MySwipeRefreshLayout {
 
     @Override
     public boolean onStartNestedScroll(View child, View target, int nestedScrollAxes) {
+        needAdjustment = true;
         return super.onStartNestedScroll(child, target, nestedScrollAxes);
+    }
+
+    @Override
+    public void onStopNestedScroll(View target) {
+        float maxScroll = mContentView.getY() - mTopMargin;
+        if (needAdjustment && getScrollY() > 0 && getScrollY() < maxScroll / 2) {
+            fling(-getScrollY());
+        } else if (needAdjustment && getScrollY() >= maxScroll / 2 && getScrollY() < maxScroll) {
+            fling((int) (maxScroll - getScrollY()));
+        }
+        needAdjustment = false;
+        super.onStopNestedScroll(target);
     }
 
     @Override
@@ -58,7 +72,6 @@ public class DetailKanalSwipeRefreshLayout extends MySwipeRefreshLayout {
         if (dy > 0) {//向上滑动
             if (mContentView.getY() > getScrollY() + mTopMargin) {
                 offset(dy, consumed);
-                onNestedPreFling(target, 0, dy);
             } else {
                 offset((int) (mContentView.getY() - getScrollY() - mTopMargin), consumed);
             }
@@ -99,6 +112,7 @@ public class DetailKanalSwipeRefreshLayout extends MySwipeRefreshLayout {
     public void fling(int velocityY) {
         mScroller.fling(0, getScrollY(), 0, velocityY, 0, 0, 0, getMeasuredHeight());
         mScroller.startScroll(0, getScrollY(), 0, velocityY);
+        needAdjustment = false;
         invalidate();
     }
 
