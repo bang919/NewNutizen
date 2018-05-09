@@ -114,11 +114,10 @@ public class DetailKanalSwipeRefreshLayout extends MySwipeRefreshLayout {
         consumed[1] = dy;
     }
 
-    public void fling(int velocityY) {
-        mScroller.fling(0, getScrollY(), 0, velocityY, 0, 0, 0, getMeasuredHeight());
-        mScroller.startScroll(0, getScrollY(), 0, velocityY);
+    public void fling(int dy) {
+        mScroller.startScroll(0, getScrollY(), 0, dy, Math.abs(dy));
         needAdjustment = false;
-        invalidate();
+        postInvalidate();
     }
 
     @Override
@@ -126,7 +125,7 @@ public class DetailKanalSwipeRefreshLayout extends MySwipeRefreshLayout {
         // 重写computeScroll()方法，并在其内部完成平滑滚动的逻辑
         if (mScroller.computeScrollOffset()) {
             scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
-            invalidate();
         }
     }
+
 }
