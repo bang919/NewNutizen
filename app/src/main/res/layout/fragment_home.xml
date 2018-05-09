@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
+        <com.nutizen.nu.widget.MyRecyclerView
             android:id="@+id/banner_recyclerview"
             android:layout_width="0dp"
             android:layout_height="204dp"

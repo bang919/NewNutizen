@@ -29,7 +29,7 @@
         android:background="@color/colorGreen"
         app:layout_constraintTop_toBottomOf="@id/simple_player_contentplayer" />
 
-    <android.support.v7.widget.RecyclerView
+    <com.nutizen.nu.widget.MyRecyclerView
         android:id="@+id/rv_message_and_comment"
         android:layout_width="match_parent"
         android:layout_height="0dp"

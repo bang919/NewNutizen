@@ -7,14 +7,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
+        <com.nutizen.nu.widget.MyRecyclerView
             android:id="@+id/rv_more_kanal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/colorBlack"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v7.widget.RecyclerView
+        <com.nutizen.nu.widget.MyRecyclerView
             android:id="@+id/rv_index_kanal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -65,7 +65,7 @@
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/live_content" />
 
-    <android.support.v7.widget.RecyclerView
+    <com.nutizen.nu.widget.MyRecyclerView
         android:id="@+id/recyclerv_list_lives"
         android:layout_width="match_parent"
         android:layout_height="0dp"
