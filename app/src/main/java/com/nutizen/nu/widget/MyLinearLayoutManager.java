@@ -4,6 +4,9 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+/**
+ * 结合MyLinearSmoothScroller，让Recyclerview的smoothScroolTo滚动后，position在最上面
+ */
 public class MyLinearLayoutManager extends LinearLayoutManager {
     public MyLinearLayoutManager(Context context) {
         super(context);

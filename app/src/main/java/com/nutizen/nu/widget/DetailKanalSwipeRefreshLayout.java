@@ -11,6 +11,9 @@ import android.widget.OverScroller;
 
 import com.nutizen.nu.R;
 
+/**
+ * DetailKanal页面向上滑动隐藏Banner，功能类似CoordinatorLayout
+ */
 public class DetailKanalSwipeRefreshLayout extends MySwipeRefreshLayout {
 
     private int mTopMargin;

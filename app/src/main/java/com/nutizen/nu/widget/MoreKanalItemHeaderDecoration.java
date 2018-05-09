@@ -13,6 +13,9 @@ import com.nutizen.nu.bean.response.KanalRspBean;
 
 import java.util.ArrayList;
 
+/**
+ * 用于MoreKanalFragment画出ItemHeader索引View
+ */
 public class MoreKanalItemHeaderDecoration extends RecyclerView.ItemDecoration {
 
     private ArrayList<KanalRspBean.SearchBean> mSearchBeanList;

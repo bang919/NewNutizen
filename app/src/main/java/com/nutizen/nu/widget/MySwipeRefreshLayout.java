@@ -11,6 +11,7 @@ import com.nutizen.nu.R;
 
 /**
  * Created by bigbang on 2018/4/11.
+ * 提供 开/关refreshEnable 功能
  */
 
 public class MySwipeRefreshLayout extends SwipeRefreshLayout {
