@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.nutizen.nu.R;
 import com.nutizen.nu.activity.ContentPlayerActivity;
+import com.nutizen.nu.activity.LivePlayerActivity;
 import com.nutizen.nu.adapter.HomeContentAdapterd;
 import com.nutizen.nu.adapter.HomeLiveAdapter;
 import com.nutizen.nu.adapter.MainBannerAdapter;
@@ -178,7 +179,7 @@ public class HomeFragment extends BaseMainFragment<HomeFragmentPresenter> implem
 
     @Override
     public void onLiveItemClick(LiveResponseBean liveBean, int position) {
-
+        LivePlayerActivity.startLivePlayActivity(getContext(), liveBean);
     }
 
     @Override

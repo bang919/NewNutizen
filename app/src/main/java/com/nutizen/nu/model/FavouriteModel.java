@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -46,5 +49,71 @@ public class FavouriteModel {
                         return map;
                     }
                 });
+    }
+
+    public Observable<Boolean> checkFavourite(final String type, final int contentId) {
+        return Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
+                if (LoginPresenter.getAccountMessage() != null) {
+                    e.onError(new Exception("had login"));
+                } else {
+                    e.onNext(false);
+                }
+            }
+        }).onErrorResumeNext(new Function<Throwable, ObservableSource<? extends Boolean>>() {
+            @Override
+            public ObservableSource<? extends Boolean> apply(Throwable throwable) throws Exception {
+                return getFavourites().map(new Function<TreeMap<String, ArrayList<FavouriteRspBean>>, Boolean>() {
+                    @Override
+                    public Boolean apply(TreeMap<String, ArrayList<FavouriteRspBean>> stringArrayListTreeMap) throws Exception {
+                        ArrayList<FavouriteRspBean> favouriteRspBeans = stringArrayListTreeMap.get(type);
+                        boolean isFavourite = false;
+                        if (favouriteRspBeans != null) {
+                            for (FavouriteRspBean favouriteRspBean : favouriteRspBeans) {
+                                if (favouriteRspBean.getContent_id() == contentId) {
+                                    isFavourite = true;
+                                    break;
+                                }
+                            }
+                        }
+                        return isFavourite;
+                    }
+                });
+            }
+        });
+    }
+
+    public Observable<Boolean> checkFollow(final String type, final int contributorId) {
+        return Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
+                if (LoginPresenter.getAccountMessage() != null) {
+                    e.onError(new Exception("had login"));
+                } else {
+                    e.onNext(false);
+                }
+            }
+        }).onErrorResumeNext(new Function<Throwable, ObservableSource<? extends Boolean>>() {
+            @Override
+            public ObservableSource<? extends Boolean> apply(Throwable throwable) throws Exception {
+                return getFavourites().map(new Function<TreeMap<String, ArrayList<FavouriteRspBean>>, Boolean>() {
+                    @Override
+                    public Boolean apply(TreeMap<String, ArrayList<FavouriteRspBean>> stringArrayListTreeMap) throws Exception {
+                        ArrayList<FavouriteRspBean> favouriteRspBeans = stringArrayListTreeMap.get(type);
+                        boolean isFavourite = false;
+                        if (favouriteRspBeans != null) {
+                            for (FavouriteRspBean favouriteRspBean : favouriteRspBeans) {
+                                if (favouriteRspBean.getContent_id() == contributorId) {
+                                    isFavourite = true;
+                                    break;
+                                }
+                            }
+                        }
+                        return isFavourite;
+                    }
+                });
+            }
+        });
     }
 }

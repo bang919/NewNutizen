@@ -48,6 +48,10 @@
             android:name=".activity.ContentPlayerActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LivePlayerActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

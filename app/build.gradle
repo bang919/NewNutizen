@@ -75,6 +75,23 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.mysigning
         }
+        debug_staging {
+            buildConfigField "String", "data_hostname", "\"https://vmse-staging.nutizen.asia/\""
+            buildConfigField "String", "playurl_hostname", "\"https://publicapi-staging.nutizen.asia/\""
+            buildConfigField "String", "login_hostname", "\"https://vmseapi-staging.nutizen.asia/\""
+            buildConfigField "String", "comment_url", "\"https://comment-staging.nutizen.asia/\""
+            buildConfigField "String", "server_key", "\"58acb7acccce58ffa8b953b12b5a7702bd42dae441c1ad85057fa70b\""
+            buildConfigField "String", "tourist_token", "\"9da05ae43184d5de9fd96b60c3955a3d9cd508e9ab89b07e205681f34b230636\""
+            buildConfigField "String", "google_analytics", "\"UA-76194624-10\""
+
+            debuggable true
+            jniDebuggable true
+            renderscriptDebuggable true
+            minifyEnabled false
+            pseudoLocalesEnabled false
+            zipAlignEnabled false
+            signingConfig signingConfigs.mysigning
+        }
     }
 }
 

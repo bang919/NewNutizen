@@ -3,10 +3,10 @@ package com.nutizen.nu.adapter;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +17,12 @@ import android.widget.TextView;
 
 import com.nutizen.nu.R;
 import com.nutizen.nu.bean.response.CommentResult;
-import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.common.MyApplication;
 import com.nutizen.nu.dialog.NormalDialog;
 import com.nutizen.nu.presenter.LoginPresenter;
-import com.nutizen.nu.utils.AnimUtil;
 import com.nutizen.nu.utils.ScreenUtils;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
@@ -34,35 +31,33 @@ import java.util.TreeMap;
  * Created by Administrator on 2017/3/17.
  */
 
-public class VodRecyclerViewAdapter extends RecyclerView.Adapter implements View.OnClickListener {
+public abstract class BasePlayerAdapter<HV extends BasePlayerAdapter.BaseHeadHolder> extends RecyclerView.Adapter {
 
+    private Context mContext;
     final private int DEFAULT = 0;
     final private int LARGE = 2;
     final private int LARGE_UNWIND = 3;
-    private Context mContext;
     private final int HEAD_VIEW_TYPE = 1;
     private final int END_VIEW_TYPE = 2;
     private boolean showEnd = true;
     private int userVid;
-    private ContentResponseBean.SearchBean mVideoInfo;
-    private String mWritter;
-    private String mViewerNumber = "0";
+
+
     private ArrayList<CommentResult> mCommentResultList = new ArrayList<>();
     private CommentAdapterCallback mCommentAdapterCallback;
     private EditText commentEditText;
     private TextView showMoreTextView;
-    private TextView mDescription;
+
     private TreeMap<Integer, Integer> unwindMap = new TreeMap<>();
     private int mAvailableWidth;
     private Typeface mHeavyTypeface, mBookTypeface;
-    public int showDeletePosition = -1;
+    private int showDeletePosition = -1;
 
-    public VodRecyclerViewAdapter(Context context, ContentResponseBean.SearchBean videoInfo) {
+    protected BasePlayerAdapter() {
         LoginResponseBean accountMessage = LoginPresenter.getAccountMessage();
         if (accountMessage != null) {
             userVid = Integer.valueOf(accountMessage.getViewer_id());
         }
-        mVideoInfo = videoInfo;
     }
 
     public void initAvailableWidth(int availableWidth) {
@@ -76,8 +71,10 @@ public class VodRecyclerViewAdapter extends RecyclerView.Adapter implements View
         mHeavyTypeface = Typeface.createFromAsset(mContext.getAssets(), "font/avenir/avenirHeavy.otf");
         mBookTypeface = Typeface.createFromAsset(mContext.getAssets(), "font/avenir/avenirLTStd_Book.ttf");
         if (viewType == HEAD_VIEW_TYPE) {
-            View inflate = LayoutInflater.from(mContext).inflate(R.layout.item_vodplayer_firstitem, parent, false);
-            return new HeadHolder(inflate);
+            View inflate = LayoutInflater.from(mContext).inflate(R.layout.item_player_head, parent, false);
+            ConstraintLayout includeView = inflate.findViewById(R.id.head_include_view);
+            LayoutInflater.from(inflate.getContext()).inflate(setHeadLayoutSource(), includeView, true);
+            return getHeadViewHolder(inflate);
         } else if (viewType == END_VIEW_TYPE) {
             View inflate = LayoutInflater.from(mContext).inflate(R.layout.item_vodplayer_lastitem, parent, false);
             return new EndHolder(inflate);
@@ -88,30 +85,8 @@ public class VodRecyclerViewAdapter extends RecyclerView.Adapter implements View
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if (holder instanceof HeadHolder) {
-            final HeadHolder _holder = (HeadHolder) holder;
-            mDescription = _holder.mDescription;
-            commentEditText = _holder.mCommentEditText;
-            _holder.mTitle.setText(mVideoInfo.getTitle());
-            if (!mViewerNumber.equalsIgnoreCase("0")) {
-                _holder.mViews.setVisibility(View.VISIBLE);
-                _holder.mViews.setText(mContext.getString(R.string.viewers, mViewerNumber));
-            }
-            _holder.mDescription.setText(TextUtils.isEmpty(mVideoInfo.getDescription()) ?
-                    _holder.mDescription.getContext().getString(R.string.there_is_no_description) : mVideoInfo.getDescription());
-            _holder.mShowDescription.setOnClickListener(this);
-            if (mWritter != null) {
-                _holder.mWritter.setText(mWritter);
-            }
-            _holder.mSendIv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String comment = _holder.mCommentEditText.getText().toString();
-                    mCommentAdapterCallback.commitComment(comment);
-                }
-            });
-        } else if (holder instanceof EndHolder) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+        if (holder instanceof BasePlayerAdapter.EndHolder) {
             EndHolder _holder = (EndHolder) holder;
             showMoreTextView = _holder.mShowMore;
             if (!showEnd) {
@@ -123,7 +98,7 @@ public class VodRecyclerViewAdapter extends RecyclerView.Adapter implements View
                     mCommentAdapterCallback.showMore();
                 }
             });
-        } else if (holder instanceof CommentHolder) {
+        } else if (holder instanceof BasePlayerAdapter.CommentHolder) {
             final CommentHolder _holder = (CommentHolder) holder;
 
             CommentResult.UserBean user = mCommentResultList.get(position - 1).getUser();
@@ -167,6 +142,17 @@ public class VodRecyclerViewAdapter extends RecyclerView.Adapter implements View
                     showDailog(position);
                 }
             });
+        } else {
+            ((BaseHeadHolder) holder).mTitle.setText(getTitle());
+            commentEditText = ((BaseHeadHolder) holder).mCommentEditText;
+            ((BaseHeadHolder) holder).mSendIv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String comment = ((BaseHeadHolder) holder).mCommentEditText.getText().toString();
+                    mCommentAdapterCallback.commitComment(comment);
+                }
+            });
+            onBindHeadViewHolder((HV) holder, position);
         }
     }
 
@@ -237,44 +223,20 @@ public class VodRecyclerViewAdapter extends RecyclerView.Adapter implements View
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_show_detail:
-                AnimUtil.switchDownArrow(v, mDescription);
-                break;
-        }
-    }
+    protected class BaseHeadHolder extends RecyclerView.ViewHolder {
 
-    /**
-     * Holder  两个
-     */
-
-    private class HeadHolder extends RecyclerView.ViewHolder {
-
-        private final ImageView mShowDescription;
         private final TextView mTitle;
-        private final TextView mWritter;
-        private final TextView mViews;
-        private final TextView mDescription;
+        private EditText mCommentEditText;
+        private ImageView mSendIv;
 
-
-        private final EditText mCommentEditText;
-        private final ImageView mSendIv;
-
-
-        private HeadHolder(View itemView) {
+        public BaseHeadHolder(View itemView) {
             super(itemView);
-            mShowDescription = itemView.findViewById(R.id.iv_show_detail);
             mTitle = itemView.findViewById(R.id.vod_title);
-            mWritter = itemView.findViewById(R.id.tv_writter);
-            mViews = itemView.findViewById(R.id.tv_views);
-            mDescription = itemView.findViewById(R.id.tv_detail);
             mCommentEditText = itemView.findViewById(R.id.comment_et);
             mSendIv = itemView.findViewById(R.id.comment_send_iv);
-            mDescription.setTypeface(mBookTypeface);
         }
     }
+
 
     private class EndHolder extends RecyclerView.ViewHolder {
 
@@ -308,6 +270,20 @@ public class VodRecyclerViewAdapter extends RecyclerView.Adapter implements View
     }
 
     /**
+     * ---------------------------- OMG 这个类写的太乱了，本大人承认类，但是不改了，work就好。。。OMG OMG --------------------------
+     * @return
+     */
+
+
+    protected abstract String getTitle();
+
+    protected abstract int setHeadLayoutSource();
+
+    protected abstract HV getHeadViewHolder(View inflate);
+
+    protected abstract void onBindHeadViewHolder(HV holder, int position);
+
+    /**
      * 数据绑定
      *
      * @param commentResultList
@@ -316,17 +292,6 @@ public class VodRecyclerViewAdapter extends RecyclerView.Adapter implements View
         mCommentResultList = (ArrayList<CommentResult>) commentResultList;
         resetEditText();
         notifyDataSetChanged();
-    }
-
-    public void setWritter(String writter) {
-        mWritter = writter;
-        notifyItemChanged(0);
-    }
-
-    public void setViewerNumber(int number) {
-        DecimalFormat df = new DecimalFormat("###,###");
-        mViewerNumber = df.format(number);
-        notifyItemChanged(0);
     }
 
     public void setListener(CommentAdapterCallback callback) {

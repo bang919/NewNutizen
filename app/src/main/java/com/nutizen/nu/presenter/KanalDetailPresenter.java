@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.nutizen.nu.bean.request.EditFavouriteReqBean;
 import com.nutizen.nu.bean.response.ContentResponseBean;
-import com.nutizen.nu.bean.response.FavouriteRspBean;
 import com.nutizen.nu.bean.response.KanalRspBean;
 import com.nutizen.nu.bean.response.LiveResponseBean;
 import com.nutizen.nu.bean.response.LoginResponseBean;
@@ -16,14 +15,9 @@ import com.nutizen.nu.utils.DialogUtils;
 import com.nutizen.nu.view.KanalDetailView;
 
 import java.util.ArrayList;
-import java.util.TreeMap;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.functions.Function3;
 
 public class KanalDetailPresenter extends BasePresenter<KanalDetailView> {
@@ -57,39 +51,10 @@ public class KanalDetailPresenter extends BasePresenter<KanalDetailView> {
                     }
                 });
 
-        Observable<Boolean> checkFollowObservable = Observable.create(new ObservableOnSubscribe<Boolean>() {
+        Observable<Boolean> checkFollowObservable = mFavouriteModel.checkFollow(kanalBean.getType(), kanalBean.getViewer_id()).doOnNext(new Consumer<Boolean>() {
             @Override
-            public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
-                if (LoginPresenter.getAccountMessage() != null) {
-                    e.onError(new Exception("had login"));
-                } else {
-                    e.onNext(false);
-                }
-            }
-        }).onErrorResumeNext(new Function<Throwable, ObservableSource<? extends Boolean>>() {
-            @Override
-            public ObservableSource<? extends Boolean> apply(Throwable throwable) throws Exception {
-                return mFavouriteModel.getFavourites().doOnNext(new Consumer<TreeMap<String, ArrayList<FavouriteRspBean>>>() {
-                    @Override
-                    public void accept(TreeMap<String, ArrayList<FavouriteRspBean>> maps) throws Exception {
-                        ArrayList<FavouriteRspBean> favouriteRspBeans = maps.get(kanalBean.getType());
-                        boolean isFavourite = false;
-                        if (favouriteRspBeans != null) {
-                            for (FavouriteRspBean favouriteRspBean : favouriteRspBeans) {
-                                if (favouriteRspBean.getContent_id() == kanalBean.getViewer_id()) {
-                                    isFavourite = true;
-                                    break;
-                                }
-                            }
-                        }
-                        mView.isFollow(isFavourite);
-                    }
-                }).map(new Function<TreeMap<String, ArrayList<FavouriteRspBean>>, Boolean>() {
-                    @Override
-                    public Boolean apply(TreeMap<String, ArrayList<FavouriteRspBean>> stringArrayListTreeMap) throws Exception {
-                        return true;
-                    }
-                });
+            public void accept(Boolean isFavourite) throws Exception {
+                mView.isFollow(isFavourite);
             }
         });
 
@@ -127,6 +92,6 @@ public class KanalDetailPresenter extends BasePresenter<KanalDetailView> {
      * 更改喜爱
      */
     public void editFavourite(EditFavouriteReqBean editFavouriteReqBean) {
-        mFavouriteModel.editFavourite(editFavouriteReqBean).retry(2).subscribe();
+        subscribeNetworkTask(mFavouriteModel.editFavourite(editFavouriteReqBean));
     }
 }

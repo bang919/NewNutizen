@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+
+        <ImageView
+            android:id="@+id/follow_bt"
+            android:layout_width="132dp"
+            android:layout_height="36dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/follow_selector"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <TextView
+            android:id="@+id/text_create_by"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/created"
+            android:textColor="#AFFFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/follow_bt"
+            app:layout_constraintTop_toTopOf="@id/follow_bt" />
+
+        <TextView
+            android:id="@+id/author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text=""
+            android:textColor="@color/colorGreen"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_create_by"
+            app:layout_constraintLeft_toRightOf="@+id/text_create_by" />
+    </android.support.constraint.ConstraintLayout>
+</merge>
+

@@ -1,11 +1,14 @@
 package com.nutizen.nu.bean.response;
 
+import java.io.Serializable;
+
 /**
  * Created by bigbang on 2018/4/11.
  */
 
-public class LiveResponseBean {
+public class LiveResponseBean implements Serializable {
 
+    private static final long serialVersionUID = 241351615651L;
     /**
      * id : 244
      * title : Elshinta FM
