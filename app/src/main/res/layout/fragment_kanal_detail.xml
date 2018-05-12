@@ -36,6 +36,15 @@
                         app:layout_constraintBottom_toBottomOf="@+id/kanal_banner"
                         app:layout_constraintRight_toRightOf="parent" />
 
+                    <View
+                        android:layout_width="88dp"
+                        android:layout_height="88dp"
+                        android:background="@drawable/glide_default_circle_bg"
+                        app:layout_constraintBottom_toBottomOf="@+id/portrait"
+                        app:layout_constraintLeft_toLeftOf="@+id/portrait"
+                        app:layout_constraintRight_toRightOf="@+id/portrait"
+                        app:layout_constraintTop_toTopOf="@+id/portrait" />
+
                     <ImageView
                         android:id="@+id/portrait"
                         android:layout_width="86dp"

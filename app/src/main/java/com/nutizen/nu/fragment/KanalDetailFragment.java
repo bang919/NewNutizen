@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.nutizen.nu.R;
 import com.nutizen.nu.adapter.KanalDetailPagerAdapter;
 import com.nutizen.nu.bean.request.EditFavouriteReqBean;
@@ -173,9 +174,9 @@ public class KanalDetailFragment extends TransNutizenTitleFragment<KanalDetailPr
             Log.d(TAG, "initData() called error -- no Horizontal poster");
         }
         try {
-            GlideUtils.loadImage((ImageView) mRootView.findViewById(R.id.portrait), -1, kanalBean.getPoster().getVertical().get(0).getPoster_url(), new CenterCrop());
+            GlideUtils.loadImage((ImageView) mRootView.findViewById(R.id.portrait), R.drawable.glide_default_circle_bg, kanalBean.getPoster().getVertical().get(0).getPoster_url(), new CenterCrop(), new CircleCrop());
         } catch (Exception e) {
-            GlideUtils.loadImage((ImageView) mRootView.findViewById(R.id.portrait), -1, null, new CenterCrop());
+            GlideUtils.loadImage((ImageView) mRootView.findViewById(R.id.portrait), R.drawable.glide_default_circle_bg, null, new CenterCrop(), new CircleCrop());
             Log.d(TAG, "initData() called error -- no Horizontal poster");
         }
     }

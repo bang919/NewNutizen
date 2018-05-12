@@ -35,7 +35,7 @@ public class GlideUtils {
             requestBuilder.apply(requestOptions);
             requestBuilder.into(imageView);
         } else {
-            Glide.with(imageView.getContext()).load(R.drawable.glide_default_bg).into(imageView);
+            Glide.with(imageView.getContext()).load(imgDefaultSource != 1 ? imgDefaultSource : R.drawable.glide_default_bg).into(imageView);
         }
     }
 
@@ -54,7 +54,7 @@ public class GlideUtils {
             requestBuilder.apply(requestOptions);
             requestBuilder.into(imageView);
         } else {
-            Glide.with(imageView.getContext()).load(R.drawable.glide_default_bg).into(imageView);
+            Glide.with(imageView.getContext()).load(imgDefaultSource != 1 ? imgDefaultSource : R.drawable.glide_default_bg).into(imageView);
         }
     }
 }
