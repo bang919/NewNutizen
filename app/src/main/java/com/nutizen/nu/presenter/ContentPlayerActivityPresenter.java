@@ -24,7 +24,7 @@ public class ContentPlayerActivityPresenter extends PlayerActivityPresenter<Cont
 
     private ContentModel mContentModel;
 
-    protected FavouriteModel mFavouriteModel;
+    private FavouriteModel mFavouriteModel;
 
 
     public ContentPlayerActivityPresenter(Context context, ContentPlayerActivityView view) {

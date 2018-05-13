@@ -39,7 +39,7 @@ public class LivePlayerAdapter extends BasePlayerAdapter<LivePlayerAdapter.LiveH
     @Override
     protected void onBindHeadViewHolder(LiveHeadHolder holder, int position) {
         mFollowBtn = holder.mFollowBtn;
-        holder.mAuthor.setText(mLiveInfo.getSynopsis().split(";")[0]);
+        holder.mAuthor.setText(mLiveInfo.getAuthorName());
     }
 
     public class LiveHeadHolder extends BasePlayerAdapter.BaseHeadHolder {

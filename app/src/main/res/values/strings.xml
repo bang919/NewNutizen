@@ -263,4 +263,7 @@
     <string name="do_you_want_to_login">No logged in yet. Do you want to login ?</string>
     <string name="please_input_comment">Please input comment</string>
     <string name="loading_more">Loading more . . .</string>
+    <string name="live_create_by">Live create by :</string>
+    <string name="dynamic_link_error">Error: Request dynamic link error.</string>
+    <string name="share_success">Share success.</string>
 </resources>

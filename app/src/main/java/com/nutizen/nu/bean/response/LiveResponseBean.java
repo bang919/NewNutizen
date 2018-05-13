@@ -71,8 +71,21 @@ public class LiveResponseBean implements Serializable {
         this.category = category;
     }
 
-    public String getSynopsis() {
+    public String getSynopsis() {//1.如果是Tv或者radio，这里就是详情。  2.如果是contributor的直播live，这里就是{contributor_name;contributor_id}
         return synopsis;
+    }
+
+    public String getAuthorName() {
+        return getSynopsis().split(";")[0];
+    }
+
+    public int getAuthorId() {
+        String[] split = getSynopsis().split(";");
+        if (split.length > 1) {
+            return Integer.valueOf(split[1]);
+        } else {
+            return 0;
+        }
     }
 
     public void setSynopsis(String synopsis) {

@@ -1,30 +1,54 @@
 package com.nutizen.nu.presenter;
 
 import android.content.Context;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
+import com.nutizen.nu.R;
 import com.nutizen.nu.bean.request.CommentBean;
 import com.nutizen.nu.bean.response.CommentResult;
+import com.nutizen.nu.bean.response.ContentResponseBean;
+import com.nutizen.nu.bean.response.LiveResponseBean;
 import com.nutizen.nu.model.CommentModel;
+import com.nutizen.nu.model.ShareModel;
 import com.nutizen.nu.view.BasePlayerActivityView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
-public abstract class PlayerActivityPresenter<D, T extends BasePlayerActivityView> extends BasePlayerPresenter<T> {
+public abstract class PlayerActivityPresenter<D, T extends BasePlayerActivityView> extends BasePlayerPresenter<T> implements ShareModel.OnShortDynamicCompleteListener, PlatformActionListener {
 
     private CommentModel mCommentModel;
+    private ShareModel mShareModel;
+
     private final int intPageLimit = 9999;
 
     public PlayerActivityPresenter(Context context, T view) {
         super(context, view);
         mCommentModel = new CommentModel();
+        mShareModel = new ShareModel(this);
     }
 
     public abstract void getDatas(D dataBean);
+
+    public void shareToPlatform(D dataBean, String platformName) {
+        if (dataBean instanceof ContentResponseBean.SearchBean) {
+            mShareModel.shareContent((ContentResponseBean.SearchBean) dataBean, platformName);
+        } else if (dataBean instanceof LiveResponseBean) {
+            mShareModel.shareLive((LiveResponseBean) dataBean, platformName);
+        }
+    }
+
 
     public Observable<ArrayList<CommentResult>> getComments(String commentType, int commentId) {
         Observable<ArrayList<CommentResult>> commentListObs = mCommentModel
@@ -83,5 +107,39 @@ public abstract class PlayerActivityPresenter<D, T extends BasePlayerActivityVie
                 mView.onFailure(errorMessage);
             }
         });
+    }
+
+    @Override
+    public void onComplete(String platformName, @NonNull Task<ShortDynamicLink> task) {
+        if (mView == null) {//如果mView==null即dynamic link未返回就离开Activity，则不分享
+            return;
+        }
+        if (task.isSuccessful()) {
+            // Short link created
+            Uri shortLink = task.getResult().getShortLink();
+            Platform platform = ShareSDK.getPlatform(platformName);
+            Platform.ShareParams params = new Platform.ShareParams();
+            params.setUrl(shortLink.toString());
+            params.setText(shortLink.toString());
+            platform.setPlatformActionListener(this);
+            platform.share(params);
+        } else {
+            mView.onFailure(mContext.getString(R.string.dynamic_link_error));
+        }
+    }
+
+    @Override
+    public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+        mView.onFailure(mContext.getString(R.string.share_success));
+    }
+
+    @Override
+    public void onError(Platform platform, int i, Throwable throwable) {
+        mView.onFailure(throwable.getLocalizedMessage());
+    }
+
+    @Override
+    public void onCancel(Platform platform, int i) {
+        mView.onFailure(mContext.getString(R.string.cancel));
     }
 }

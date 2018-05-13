@@ -15,6 +15,7 @@ import com.nutizen.nu.bean.response.CommentResult;
 import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.common.BaseActivity;
 import com.nutizen.nu.common.Constants;
+import com.nutizen.nu.fragment.ShareFragment;
 import com.nutizen.nu.presenter.LoginPresenter;
 import com.nutizen.nu.presenter.PlayerActivityPresenter;
 import com.nutizen.nu.utils.DialogUtils;
@@ -23,7 +24,7 @@ import com.nutizen.nu.view.BasePlayerActivityView;
 
 import java.util.ArrayList;
 
-public abstract class PlayerActivity<D, P extends PlayerActivityPresenter> extends BaseActivity<P> implements BasePlayerActivityView, View.OnClickListener, BasePlayerAdapter.CommentAdapterCallback {
+public abstract class PlayerActivity<D, P extends PlayerActivityPresenter> extends BaseActivity<P> implements BasePlayerActivityView, View.OnClickListener, BasePlayerAdapter.CommentAdapterCallback, ShareFragment.OnSharePlatformClickListener {
 
     public static final String DATA_BEAN = "data bean";
 
@@ -38,6 +39,8 @@ public abstract class PlayerActivity<D, P extends PlayerActivityPresenter> exten
     private boolean initFavourite;//一开始是喜爱还是不喜爱，用于editFavourite
     private Handler mHandler;
     private Runnable favouriteRunnable;
+
+    private ShareFragment mShareFragment;
 
     @Override
     public int getBarColor() {
@@ -94,7 +97,7 @@ public abstract class PlayerActivity<D, P extends PlayerActivityPresenter> exten
         };
     }
 
-    private void initHeadDatas(){
+    private void initHeadDatas() {
         mData = setDataBean();
         mPresenter.getDatas(mData);
 
@@ -177,7 +180,12 @@ public abstract class PlayerActivity<D, P extends PlayerActivityPresenter> exten
                 }
                 break;
             case R.id.iv_share:
-
+                if (mShareFragment == null) {
+                    mShareFragment = ShareFragment.getInstance();
+                    mShareFragment.setOnSharePlatformClickListener(this);
+                }
+                mPresenter.setPlayWhenReady(false);
+                mShareFragment.show(getSupportFragmentManager(), ShareFragment.TAG);
                 break;
             case R.id.iv_favourite:
                 if (checkLogin()) {
@@ -243,6 +251,12 @@ public abstract class PlayerActivity<D, P extends PlayerActivityPresenter> exten
         setLoadingVisibility(true);
     }
 
+    @Override
+    public void onSharePlatformClick(String platformName) {
+        setLoadingVisibility(true);
+        mPresenter.shareToPlatform(mData, platformName);
+    }
+
     protected abstract D setDataBean();
 
     protected abstract BasePlayerAdapter createBasePlayerAdapter();
@@ -254,4 +268,5 @@ public abstract class PlayerActivity<D, P extends PlayerActivityPresenter> exten
     protected abstract View setFavouriteBtn();
 
     protected abstract void editFavourite(EditFavouriteReqBean editFavouriteReqBean);
+
 }

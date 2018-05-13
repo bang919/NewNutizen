@@ -45,7 +45,6 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
 
     private final String TAG = "BasePlayerPresenter";
     private PowerManager.WakeLock mWakeLock;
-    private Context mContext;
     private MyHandler mMyHandler;
     private SimpleExoPlayer mSimpleExoPlayer;
     private ComponentListener mListener;
@@ -56,7 +55,6 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
 
     public BasePlayerPresenter(Context context, V view) {
         super(context, view);
-        mContext = context;
         mMyHandler = new MyHandler(this);
     }
 

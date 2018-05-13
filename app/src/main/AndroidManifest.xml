@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemeLight"
         tools:replace="android:name">
+
         <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait"

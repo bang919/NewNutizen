@@ -11,7 +11,22 @@ MobSDK {
             Facebook {
                 appKey "922868707874265"
                 appSecret "56ed91d224d9dd4607f926057b9c5e44"
-                callbackUri "http://www.nutizen.com"
+                callbackUri "https://nutizen.com/"
+                shareByAppClient true
+            }
+            Twitter {
+                appKey "nKMdvdeFf4BZ1whOqDlXCtCGY"
+                appSecret "8gszaY2OiRgFni6remsGdWkRPN40fsoqF7vZMOlc617abyjDRT"
+                shareByAppClient true
+            }
+            WhatsApp {
+                shareByAppClient true
+            }
+            Email {
+
+            }
+            ShortMessage {
+
             }
         }
     }
@@ -122,4 +137,9 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.4.0'
     //Exoplayer
     implementation 'com.google.android.exoplayer:exoplayer:r2.5.4'
+    //Firebase
+    implementation 'com.google.firebase:firebase-core:11.8.0'
+    implementation 'com.google.firebase:firebase-invites:11.8.0'
 }
+
+apply plugin: 'com.google.gms.google-services'

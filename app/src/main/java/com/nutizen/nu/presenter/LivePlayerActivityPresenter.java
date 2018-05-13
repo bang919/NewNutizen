@@ -5,7 +5,6 @@ import android.content.Context;
 import com.nutizen.nu.bean.request.EditFavouriteReqBean;
 import com.nutizen.nu.bean.response.CommentResult;
 import com.nutizen.nu.bean.response.LiveResponseBean;
-import com.nutizen.nu.model.CommentModel;
 import com.nutizen.nu.model.FavouriteModel;
 import com.nutizen.nu.view.LivePlayerActivityView;
 
@@ -17,13 +16,11 @@ import io.reactivex.functions.Consumer;
 
 public class LivePlayerActivityPresenter extends PlayerActivityPresenter<LiveResponseBean, LivePlayerActivityView> {
 
-    protected CommentModel mCommentModel;
-    protected FavouriteModel mFavouriteModel;
+    private FavouriteModel mFavouriteModel;
 
 
     public LivePlayerActivityPresenter(Context context, LivePlayerActivityView view) {
         super(context, view);
-        mCommentModel = new CommentModel();
         mFavouriteModel = new FavouriteModel();
     }
 
