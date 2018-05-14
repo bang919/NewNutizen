@@ -5,12 +5,12 @@
     android:layout_height="match_parent">
 
     <com.nutizen.nu.widget.MyRecyclerView
-        android:id="@+id/pager_item_kanal_recycler"
+        android:id="@+id/pager_item_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <LinearLayout
-        android:id="@+id/pager_item_kanal_nodata_layout"
+        android:id="@+id/pager_item_nodata_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="120dp"

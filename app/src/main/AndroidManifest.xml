@@ -16,7 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemeLight"
         tools:replace="android:name">
-
         <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait"
@@ -53,6 +52,19 @@
             android:name=".activity.LivePlayerActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.SearchActivity"></activity>
+        <!--消除"power by sharesdk"字样-->
+        <activity
+            android:name="com.mob.tools.MobUIShell"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:multiprocess="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <meta-data
+                android:name="AuthorizeAdapter"
+                android:value="com.nutizen.nu.adapter.MyAuthorizeAdapter" />
+        </activity>
+
     </application>
 
 </manifest>

@@ -32,8 +32,8 @@
             layout="@layout/home_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="24dp"
             app:layout_constraintTop_toBottomOf="@id/banner_recyclerview" />
 
@@ -42,8 +42,8 @@
             layout="@layout/home_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="18dp"
             app:layout_constraintTop_toBottomOf="@id/vid_layout" />
 
@@ -52,8 +52,8 @@
             layout="@layout/home_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="18dp"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/news_layout" />

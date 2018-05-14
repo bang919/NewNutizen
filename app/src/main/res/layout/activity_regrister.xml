@@ -22,8 +22,7 @@
             android:id="@+id/ic_back"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
             android:scaleType="center"
             android:src="@mipmap/btn_back" />
 
@@ -51,7 +50,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
                 android:layout_marginTop="36dp"
                 android:text="@string/enter_password"
                 android:textColor="#AFFFFFFF"
@@ -60,8 +59,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginStart="18dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginLeft="18dp"
                 android:layout_marginTop="16dp"
                 android:orientation="vertical">
 
@@ -82,7 +81,7 @@
                         android:id="@+id/email"
                         android:layout_width="0dp"
                         android:layout_height="16dp"
-                        android:layout_marginStart="14dp"
+                        android:layout_marginLeft="14dp"
                         android:layout_marginTop="16dp"
                         android:layout_weight="1"
                         android:background="@null"
@@ -102,15 +101,15 @@
                     android:id="@+id/email_line"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginStart="6dp"
+                    android:layout_marginLeft="6dp"
                     android:background="#979797" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginStart="18dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginLeft="18dp"
                 android:layout_marginTop="16dp"
                 android:orientation="vertical">
 
@@ -131,7 +130,7 @@
                         android:id="@+id/usename"
                         android:layout_width="0dp"
                         android:layout_height="16dp"
-                        android:layout_marginStart="14dp"
+                        android:layout_marginLeft="14dp"
                         android:layout_marginTop="16dp"
                         android:layout_weight="1"
                         android:background="@null"
@@ -151,15 +150,15 @@
                     android:id="@+id/usename_line"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginStart="6dp"
+                    android:layout_marginLeft="6dp"
                     android:background="#979797" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginStart="18dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginLeft="18dp"
                 android:layout_marginTop="16dp"
                 android:orientation="vertical">
 
@@ -180,7 +179,7 @@
                         android:id="@+id/password"
                         android:layout_width="0dp"
                         android:layout_height="16dp"
-                        android:layout_marginStart="14dp"
+                        android:layout_marginLeft="14dp"
                         android:layout_marginTop="16dp"
                         android:layout_weight="1"
                         android:background="@null"
@@ -200,7 +199,7 @@
                     android:id="@+id/password_line"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginStart="6dp"
+                    android:layout_marginLeft="6dp"
                     android:background="#979797" />
 
 
@@ -209,8 +208,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginStart="18dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginLeft="18dp"
                 android:layout_marginTop="16dp"
                 android:orientation="vertical">
 
@@ -231,7 +230,7 @@
                         android:id="@+id/confirm"
                         android:layout_width="0dp"
                         android:layout_height="16dp"
-                        android:layout_marginStart="14dp"
+                        android:layout_marginLeft="14dp"
                         android:layout_marginTop="16dp"
                         android:layout_weight="1"
                         android:background="@null"
@@ -251,7 +250,7 @@
                     android:id="@+id/confirm_line"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginStart="6dp"
+                    android:layout_marginLeft="6dp"
                     android:background="#979797" />
 
             </LinearLayout>
@@ -260,7 +259,7 @@
                 android:id="@+id/hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
                 android:layout_marginTop="6dp"
                 android:maxLines="1"
                 android:text=""

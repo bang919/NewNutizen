@@ -9,7 +9,7 @@
         android:id="@+id/back"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
         android:scaleType="center"
         android:src="@mipmap/btn_back" />
 

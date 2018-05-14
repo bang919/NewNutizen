@@ -29,13 +29,15 @@ import com.nutizen.nu.widget.DetailKanalSwipeRefreshLayout;
 
 import java.util.ArrayList;
 
-public class KanalDetailFragment extends TransNutizenTitleFragment<KanalDetailPresenter> implements KanalDetailView {
+public class KanalDetailFragment extends BaseDialogFragment<KanalDetailPresenter> implements KanalDetailView, View.OnClickListener {
 
     public static final String TAG = "KanalDetailFragment";
+    public static final String START_FRAM_MAIN = "start from main";
     public static final String KANAL_BEAN_DETAIL = "kanal_bean_detail";
 
     private KanalRspBean.SearchBean mKanalBean;
     private DetailKanalSwipeRefreshLayout mDetailKanalSwipeRefreshLayout;
+    private View mBackBtn;
     private View mRootView;
     private ImageView mFollowBt;
     private View mProgressBarView;
@@ -47,9 +49,14 @@ public class KanalDetailFragment extends TransNutizenTitleFragment<KanalDetailPr
     private Runnable followRunnable;
     private Handler mHandler;
 
-    public static KanalDetailFragment getInstance(boolean isFromMainAct, Bundle bundle) {
-        return getInstance(KanalDetailFragment.class, isFromMainAct, bundle);
+    public static KanalDetailFragment getInstance(KanalRspBean.SearchBean kanalBean) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(KanalDetailFragment.KANAL_BEAN_DETAIL, kanalBean);
+        KanalDetailFragment kanalDetailFragment = new KanalDetailFragment();
+        kanalDetailFragment.setArguments(bundle);
+        return kanalDetailFragment;
     }
+
 
     @Override
     public void onPause() {
@@ -58,23 +65,25 @@ public class KanalDetailFragment extends TransNutizenTitleFragment<KanalDetailPr
     }
 
     @Override
-    protected int getBodyLayout() {
+    protected int getLayout() {
         return R.layout.fragment_kanal_detail;
     }
 
     @Override
-    protected void initBodyView(View rootView) {
+    protected KanalDetailPresenter initPresenter() {
+        return new KanalDetailPresenter(getContext(), this);
+    }
+
+    @Override
+    protected void initView(View rootView) {
         mRootView = rootView;
         mDetailKanalSwipeRefreshLayout = rootView.findViewById(R.id.kanal_detail_swiperefreshlayout);
         mFollowBt = rootView.findViewById(R.id.follow_bt);
         mProgressBarView = rootView.findViewById(R.id.progress_bar_layout);
         mTabLayout = rootView.findViewById(R.id.kanal_detail_tablayout);
         mDataViewpager = rootView.findViewById(R.id.kanal_detail_viewpager);
-    }
-
-    @Override
-    protected KanalDetailPresenter initPresenter() {
-        return new KanalDetailPresenter(getContext(), this);
+        mBackBtn = rootView.findViewById(R.id.back);
+        mBackBtn.setOnClickListener(this);
     }
 
     @Override
@@ -217,8 +226,10 @@ public class KanalDetailFragment extends TransNutizenTitleFragment<KanalDetailPr
 
     @Override
     public void onClick(View v) {
-        super.onClick(v);
         switch (v.getId()) {
+            case R.id.back:
+                dismiss();
+                break;
             case R.id.follow_bt:
                 if (mPresenter.checkLogin((BaseActivity) getContext())) {
                     v.setSelected(!v.isSelected());

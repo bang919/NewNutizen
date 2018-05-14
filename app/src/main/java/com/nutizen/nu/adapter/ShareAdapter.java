@@ -9,11 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nutizen.nu.R;
+import com.nutizen.nu.common.Twitter;
 
 import cn.sharesdk.facebook.Facebook;
 import cn.sharesdk.system.email.Email;
 import cn.sharesdk.system.text.ShortMessage;
-import cn.sharesdk.twitter.Twitter;
 import cn.sharesdk.whatsapp.WhatsApp;
 
 public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ShareViewHolder> {

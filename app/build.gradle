@@ -14,11 +14,6 @@ MobSDK {
                 callbackUri "https://nutizen.com/"
                 shareByAppClient true
             }
-            Twitter {
-                appKey "nKMdvdeFf4BZ1whOqDlXCtCGY"
-                appSecret "8gszaY2OiRgFni6remsGdWkRPN40fsoqF7vZMOlc617abyjDRT"
-                shareByAppClient true
-            }
             WhatsApp {
                 shareByAppClient true
             }
@@ -140,6 +135,10 @@ dependencies {
     //Firebase
     implementation 'com.google.firebase:firebase-core:11.8.0'
     implementation 'com.google.firebase:firebase-invites:11.8.0'
+    //Twitter
+    implementation('com.twitter.sdk.android:tweet-composer:3.1.1@aar') {
+        transitive = true
+    }
 }
 
 apply plugin: 'com.google.gms.google-services'

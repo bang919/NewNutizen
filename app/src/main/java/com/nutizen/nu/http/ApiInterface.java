@@ -104,6 +104,11 @@ public interface ApiInterface {
     @GET("contributors?limit=99999999")
     Observable<KanalRspBean> getKanal(@Query("filename") String filename);
 
+    //SearchActivity，标题搜索
+    @Headers("Authorization:Bearer " + BuildConfig.server_key)
+    @GET("contents/movie")
+    Observable<ContentResponseBean> searchMovieByTitle(@Query("filename") String title);
+
     // 获取content对应video id
     @GET(BuildConfig.data_hostname + "devapi/?apikey=" + BuildConfig.server_key + "&type=movie")
     Observable<ContentResponseBean> getVideoIdByContentId(@Query("id") int id);

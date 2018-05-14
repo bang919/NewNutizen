@@ -15,7 +15,6 @@
             android:id="@+id/comment_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:maxLines="1"
             android:textColor="#81A05B"
             android:textSize="12sp"/>
@@ -24,7 +23,6 @@
             android:id="@+id/iv_more"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:layout_alignParentEnd="true"
             android:scaleType="center"
             android:background="@drawable/ic_more_selector"
             android:visibility="gone"/>
@@ -47,10 +45,9 @@
         android:id="@+id/comment_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_below="@id/rl"
         android:layout_marginBottom="10dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginRight="48dp"
         android:layout_marginTop="4dp"
         android:ellipsize="end"
         android:maxLines="2"

@@ -266,4 +266,5 @@
     <string name="live_create_by">Live create by :</string>
     <string name="dynamic_link_error">Error: Request dynamic link error.</string>
     <string name="share_success">Share success.</string>
+    <string name="jump_to_twitter_share">Jump to Twitter .</string>
 </resources>

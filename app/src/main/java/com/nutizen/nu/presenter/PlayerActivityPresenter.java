@@ -11,10 +11,14 @@ import com.nutizen.nu.bean.request.CommentBean;
 import com.nutizen.nu.bean.response.CommentResult;
 import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.bean.response.LiveResponseBean;
+import com.nutizen.nu.common.Twitter;
 import com.nutizen.nu.model.CommentModel;
 import com.nutizen.nu.model.ShareModel;
 import com.nutizen.nu.view.BasePlayerActivityView;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -109,6 +113,12 @@ public abstract class PlayerActivityPresenter<D, T extends BasePlayerActivityVie
         });
     }
 
+    /**
+     * shareToPlatform 生成 DynamicLink 回调
+     *
+     * @param platformName
+     * @param task
+     */
     @Override
     public void onComplete(String platformName, @NonNull Task<ShortDynamicLink> task) {
         if (mView == null) {//如果mView==null即dynamic link未返回就离开Activity，则不分享
@@ -117,6 +127,13 @@ public abstract class PlayerActivityPresenter<D, T extends BasePlayerActivityVie
         if (task.isSuccessful()) {
             // Short link created
             Uri shortLink = task.getResult().getShortLink();
+            /**
+             * Twitter需要另外处理
+             */
+            if (platformName.equals(Twitter.NAME)) {
+                shareToTwitter(shortLink);
+                return;
+            }
             Platform platform = ShareSDK.getPlatform(platformName);
             Platform.ShareParams params = new Platform.ShareParams();
             params.setUrl(shortLink.toString());
@@ -125,6 +142,19 @@ public abstract class PlayerActivityPresenter<D, T extends BasePlayerActivityVie
             platform.share(params);
         } else {
             mView.onFailure(mContext.getString(R.string.dynamic_link_error));
+        }
+    }
+
+    private void shareToTwitter(Uri shortLink) {
+        try {
+            new TweetComposer.Builder(mContext)
+                    .text(" ")
+                    .url(new URL(shortLink.toString()))
+                    .show();
+            mView.onFailure(mContext.getString(R.string.jump_to_twitter_share));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            mView.onFailure(e.getLocalizedMessage());
         }
     }
 

@@ -27,9 +27,9 @@ public class KanalDetailDataAdapter {
     }
 
     public View initView(Context context) {
-        View inflate = LayoutInflater.from(context).inflate(R.layout.pager_kanal_detail, null);
-        mRecyclerView = inflate.findViewById(R.id.pager_item_kanal_recycler);
-        mEmptyView = inflate.findViewById(R.id.pager_item_kanal_nodata_layout);
+        View inflate = LayoutInflater.from(context).inflate(R.layout.pager_datas_detail, null);
+        mRecyclerView = inflate.findViewById(R.id.pager_item_recycler);
+        mEmptyView = inflate.findViewById(R.id.pager_item_nodata_layout);
         return inflate;
     }
 

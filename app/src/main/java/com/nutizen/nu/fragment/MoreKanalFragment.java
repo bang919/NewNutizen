@@ -138,8 +138,6 @@ public class MoreKanalFragment extends TransNutizenTitleFragment implements More
 
     @Override
     public void onItemClickListener(KanalRspBean.SearchBean kanalBean) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(KanalDetailFragment.KANAL_BEAN_DETAIL, kanalBean);
-        KanalDetailFragment.getInstance(false, bundle).show(getFragmentManager(), KanalDetailFragment.TAG);
+        KanalDetailFragment.getInstance(kanalBean).show(getFragmentManager(), KanalDetailFragment.TAG);
     }
 }

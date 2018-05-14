@@ -121,4 +121,14 @@ public class ContentModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    /**
+     * SearchActivity，标题搜索
+     */
+    public Observable<ContentResponseBean> searchMovieByTitle(String title) {
+        return HttpClient.getApiInterface()
+                .searchMovieByTitle(title)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }
