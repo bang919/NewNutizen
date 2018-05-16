@@ -3,9 +3,7 @@ package com.nutizen.nu.presenter;
 import android.content.Context;
 
 import com.nutizen.nu.bean.request.EditFavouriteReqBean;
-import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.bean.response.FavouriteRspBean;
-import com.nutizen.nu.bean.response.KanalRspBean;
 import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.bean.response.NormalResBean;
 import com.nutizen.nu.common.BasePresenter;
@@ -79,65 +77,5 @@ public class FavouritePresenter extends BasePresenter<FavouriteView> {
                 mView.onFailure(errorMessage);
             }
         });
-    }
-
-    /**
-     * 把FavouriteRspBean转换成ContentResponseBean
-     */
-    public void getContentResponseByFavourite(final FavouriteRspBean favouriteRspBean) {
-        subscribeNetworkTask(getClass().getName().concat("getContentResponseByFavourite"),
-                mContentModel.searchMovieByTitle(favouriteRspBean.getContent_title()).map(new Function<ContentResponseBean, ContentResponseBean.SearchBean>() {
-                    @Override
-                    public ContentResponseBean.SearchBean apply(ContentResponseBean contentResponseBean) throws Exception {
-                        if (contentResponseBean != null && contentResponseBean.getSearch() != null && contentResponseBean.getSearch().size() > 0) {
-                            for (ContentResponseBean.SearchBean bean : contentResponseBean.getSearch()) {
-                                if (bean.getId() == favouriteRspBean.getContent_id()) {
-                                    return bean;
-                                }
-                            }
-                        }
-                        throw new Exception("Can't find content.");
-                    }
-                }), new MyObserver<ContentResponseBean.SearchBean>() {
-                    @Override
-                    public void onMyNext(ContentResponseBean.SearchBean searchBean) {
-                        mView.onContentClick(searchBean);
-                    }
-
-                    @Override
-                    public void onMyError(String errorMessage) {
-                        mView.onFailure(errorMessage);
-                    }
-                });
-    }
-
-    /**
-     * 把FavouriteRspBean转换成KanalRspBean
-     */
-    public void getKanalResponseByFavourite(final FavouriteRspBean favouriteRspBean) {
-        subscribeNetworkTask(getClass().getName().concat("getKanalResponseByFavourite"),
-                mKanalModel.requestKanals(favouriteRspBean.getContent_title()).map(new Function<KanalRspBean, KanalRspBean.SearchBean>() {
-                    @Override
-                    public KanalRspBean.SearchBean apply(KanalRspBean kanalRspBean) throws Exception {
-                        if (kanalRspBean != null && kanalRspBean.getSearch() != null && kanalRspBean.getSearch().size() > 0) {
-                            for (KanalRspBean.SearchBean searchBean : kanalRspBean.getSearch()) {
-                                if (searchBean.getViewer_id() == favouriteRspBean.getContent_id()) {
-                                    return searchBean;
-                                }
-                            }
-                        }
-                        throw new Exception("Can't find kanal.");
-                    }
-                }), new MyObserver<KanalRspBean.SearchBean>() {
-                    @Override
-                    public void onMyNext(KanalRspBean.SearchBean searchBean) {
-                        mView.onKanalClick(searchBean);
-                    }
-
-                    @Override
-                    public void onMyError(String errorMessage) {
-                        mView.onFailure(errorMessage);
-                    }
-                });
     }
 }

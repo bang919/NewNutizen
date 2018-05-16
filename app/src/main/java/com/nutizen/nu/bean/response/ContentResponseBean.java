@@ -90,7 +90,7 @@ public class ContentResponseBean {
         private String datereleased;
         private String thumbnail;
         private int rating;
-        private String type;
+        private String type = "movie";
         private String directors;
         private String writers;
         private String cast;
@@ -99,10 +99,10 @@ public class ContentResponseBean {
         private int video_id;
         private double video_duration;
         private double duration;
-        private List<?> thumbnails;
-        private List<?> subtitle;
-        private List<?> poster;
-        private List<?> trailer;
+        private List<String> thumbnails;
+        private List<String> subtitle;
+        private List<String> poster;
+        private List<String> trailer;
         private String writter;//目前writers为空，Nu做法是在genres用"-"标志标记的writter，需手动解析
 
         public String getWritter() {
@@ -197,10 +197,6 @@ public class ContentResponseBean {
             return type;
         }
 
-        public void setType(String type) {
-            this.type = type;
-        }
-
         public String getDirectors() {
             return directors;
         }
@@ -269,31 +265,31 @@ public class ContentResponseBean {
             return thumbnails;
         }
 
-        public void setThumbnails(List<?> thumbnails) {
+        public void setThumbnails(List<String> thumbnails) {
             this.thumbnails = thumbnails;
         }
 
-        public List<?> getSubtitle() {
+        public List<String> getSubtitle() {
             return subtitle;
         }
 
-        public void setSubtitle(List<?> subtitle) {
+        public void setSubtitle(List<String> subtitle) {
             this.subtitle = subtitle;
         }
 
-        public List<?> getPoster() {
+        public List<String> getPoster() {
             return poster;
         }
 
-        public void setPoster(List<?> poster) {
+        public void setPoster(List<String> poster) {
             this.poster = poster;
         }
 
-        public List<?> getTrailer() {
+        public List<String> getTrailer() {
             return trailer;
         }
 
-        public void setTrailer(List<?> trailer) {
+        public void setTrailer(List<String> trailer) {
             this.trailer = trailer;
         }
     }

@@ -7,9 +7,7 @@ import android.widget.TextView;
 
 import com.nutizen.nu.R;
 import com.nutizen.nu.adapter.FavouriteAdapter;
-import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.bean.response.FavouriteRspBean;
-import com.nutizen.nu.bean.response.KanalRspBean;
 import com.nutizen.nu.presenter.FavouritePresenter;
 import com.nutizen.nu.utils.ToastUtils;
 import com.nutizen.nu.view.FavouriteView;
@@ -62,8 +60,15 @@ public abstract class FavouriteFragment extends BaseDialogFragment<FavouritePres
         mFavouriteAdapter.setOnFavouriteItemClickListener(this);
         mFavouriteRv.setAdapter(mFavouriteAdapter);
         mFavouriteRv.setLayoutManager(new LinearLayoutManager(getContext()));
-        mPresenter.requestFavouriteContent();
         setEditStatus(false);
+        requestData();
+    }
+
+    private void requestData() {
+        if (mPresenter != null) {
+            mPresenter.requestFavouriteContent();
+            setProgressBarVisibility(true);
+        }
     }
 
     @Override
@@ -91,16 +96,6 @@ public abstract class FavouriteFragment extends BaseDialogFragment<FavouritePres
     @Override
     public void onFavouriteResponse(TreeMap<String, ArrayList<FavouriteRspBean>> favouriteMap) {
         mFavouriteAdapter.setData(favouriteMap.get(setType()));
-        setProgressBarVisibility(false);
-        setEditStatus(false);
-    }
-
-    public void onContentClick(ContentResponseBean.SearchBean contentBean) {
-        setProgressBarVisibility(false);
-        setEditStatus(false);
-    }
-
-    public void onKanalClick(KanalRspBean.SearchBean kanalBean) {
         setProgressBarVisibility(false);
         setEditStatus(false);
     }

@@ -25,13 +25,11 @@ public class FavouriteContentFragment extends FavouriteFragment {
      */
     @Override
     public void onFavouriteItemClick(final FavouriteRspBean favouriteRspBean) {
-        setProgressBarVisibility(true);
-        mPresenter.getContentResponseByFavourite(favouriteRspBean);
-    }
+        ContentResponseBean.SearchBean contentBean = new ContentResponseBean.SearchBean();
+        contentBean.setId(favouriteRspBean.getContent_id());
+        contentBean.setTitle(favouriteRspBean.getContent_title());
+        contentBean.setThumbnail(favouriteRspBean.getContent_thumbnail());
 
-    @Override
-    public void onContentClick(ContentResponseBean.SearchBean contentBean) {
-        super.onContentClick(contentBean);
         ContentPlayerActivity.startContentPlayActivity(getContext(), contentBean);
     }
 }

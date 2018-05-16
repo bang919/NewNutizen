@@ -3,16 +3,17 @@ package com.nutizen.nu.bean.response;
 import java.util.List;
 
 public class FavouriteRspBean {
+
     /**
-     * favor_id : 19594
-     * viewer_content_type : movie
-     * viewer_favor_createdate : 2018-04-21T10:35:53.000Z
-     * content_id : 4323
-     * content_title : KH. Abdul Wahab Chasbullah - Ulama Arif Peletak Dasar Ke Indonesiaan
-     * content_chinese_title : null
-     * content_others_title :
-     * content_thumbnail : https://vmse.nutizen.asia/api/uploads/thumbnail/20180420155626_default_img.jpg
-     * content_poster : {"vertical":[],"horizontal":[]}
+     * favor_id : 20110
+     * viewer_content_type : contributor
+     * viewer_favor_createdate : 2018-05-16T05:20:47.000Z
+     * content_id : 48289
+     * content_title : KULINER: Enaknya Pol
+     * content_chinese_title : KULINER: Enaknya Pol
+     * content_others_title : KULINER: Enaknya Pol
+     * content_thumbnail : https://vmse.nutizen.asia/api/uploads/profile/20180421110246_img.jpg
+     * content_poster : {"vertical":[{"poster_title":"","poster_url":"https://vmse.nutizen.asia/api/uploads/thumbnail/20180421110212_thumbnail_img.jpg","poster_created":"2018-04-21T04:02:12.000Z"}],"horizontal":[{"poster_title":"","poster_url":"https://vmse.nutizen.asia/api/uploads/thumbnail/20180421110212_thumbnail2_img.jpg","poster_created":"2018-04-21T04:02:13.000Z"}]}
      */
 
     private int favor_id;
@@ -98,23 +99,95 @@ public class FavouriteRspBean {
     }
 
     public static class ContentPosterBean {
-        private List<?> vertical;
-        private List<?> horizontal;
+        private List<VerticalBean> vertical;
+        private List<HorizontalBean> horizontal;
 
-        public List<?> getVertical() {
+        public List<VerticalBean> getVertical() {
             return vertical;
         }
 
-        public void setVertical(List<?> vertical) {
+        public void setVertical(List<VerticalBean> vertical) {
             this.vertical = vertical;
         }
 
-        public List<?> getHorizontal() {
+        public List<HorizontalBean> getHorizontal() {
             return horizontal;
         }
 
-        public void setHorizontal(List<?> horizontal) {
+        public void setHorizontal(List<HorizontalBean> horizontal) {
             this.horizontal = horizontal;
+        }
+
+        public static class VerticalBean {
+            /**
+             * poster_title :
+             * poster_url : https://vmse.nutizen.asia/api/uploads/thumbnail/20180421110212_thumbnail_img.jpg
+             * poster_created : 2018-04-21T04:02:12.000Z
+             */
+
+            private String poster_title;
+            private String poster_url;
+            private String poster_created;
+
+            public String getPoster_title() {
+                return poster_title;
+            }
+
+            public void setPoster_title(String poster_title) {
+                this.poster_title = poster_title;
+            }
+
+            public String getPoster_url() {
+                return poster_url;
+            }
+
+            public void setPoster_url(String poster_url) {
+                this.poster_url = poster_url;
+            }
+
+            public String getPoster_created() {
+                return poster_created;
+            }
+
+            public void setPoster_created(String poster_created) {
+                this.poster_created = poster_created;
+            }
+        }
+
+        public static class HorizontalBean {
+            /**
+             * poster_title :
+             * poster_url : https://vmse.nutizen.asia/api/uploads/thumbnail/20180421110212_thumbnail2_img.jpg
+             * poster_created : 2018-04-21T04:02:13.000Z
+             */
+
+            private String poster_title;
+            private String poster_url;
+            private String poster_created;
+
+            public String getPoster_title() {
+                return poster_title;
+            }
+
+            public void setPoster_title(String poster_title) {
+                this.poster_title = poster_title;
+            }
+
+            public String getPoster_url() {
+                return poster_url;
+            }
+
+            public void setPoster_url(String poster_url) {
+                this.poster_url = poster_url;
+            }
+
+            public String getPoster_created() {
+                return poster_created;
+            }
+
+            public void setPoster_created(String poster_created) {
+                this.poster_created = poster_created;
+            }
         }
     }
 }
