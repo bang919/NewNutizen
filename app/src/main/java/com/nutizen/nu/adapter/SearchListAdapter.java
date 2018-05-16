@@ -4,23 +4,24 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.nutizen.nu.R;
 import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.bean.response.KanalRspBean;
+import com.nutizen.nu.utils.GlideUtils;
 import com.nutizen.nu.utils.ScreenUtils;
 
 import java.util.ArrayList;
 
-public class SearchListAdapter<D> extends RecyclerView.Adapter<SearchListAdapter.TextViewHolder> {
+public class SearchListAdapter<D> extends RecyclerView.Adapter<SearchListAdapter.SearchListViewHolder> {
 
     private RecyclerView mRecyclerView;
     private View mLoadingView;
@@ -106,26 +107,31 @@ public class SearchListAdapter<D> extends RecyclerView.Adapter<SearchListAdapter
     }
 
     @Override
-    public SearchListAdapter.TextViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        TextView textView = new TextView(parent.getContext());
-        textView.setMaxLines(1);
-        textView.setTextColor(parent.getContext().getResources().getColor(R.color.colorTintWhite));
-        textView.setTextSize(ScreenUtils.dip2px(parent.getContext(), 12));
-        textView.setGravity(Gravity.CENTER_VERTICAL);
-        textView.setEllipsize(TextUtils.TruncateAt.END);
-        return new SearchListAdapter.TextViewHolder(textView);
+    public SearchListAdapter.SearchListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new SearchListViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pic_title_2text, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(SearchListAdapter.TextViewHolder holder, final int position) {
+    public void onBindViewHolder(SearchListAdapter.SearchListViewHolder holder, final int position) {
         D data = mDatas.get(position);
+        String thumbnail = "";
         String text = "";
+        String detail1 = "";
+        String detail2 = "";
         if (data instanceof ContentResponseBean.SearchBean) {
+            thumbnail = ((ContentResponseBean.SearchBean) data).getThumbnail();
             text = ((ContentResponseBean.SearchBean) data).getTitle();
+            detail1 = ((ContentResponseBean.SearchBean) data).getWritter();
         } else if (data instanceof KanalRspBean.SearchBean) {
+            thumbnail = ((KanalRspBean.SearchBean) data).getThumbnail();
             text = ((KanalRspBean.SearchBean) data).getUsername();
+            detail1 = holder.itemView.getContext().getString(R.string.videos, ((KanalRspBean.SearchBean) data).getMovie_count());
+            detail2 = holder.itemView.getContext().getString(R.string.follow, ((KanalRspBean.SearchBean) data).getFavor_count());
         }
-        ((TextView) holder.itemView).setText(text);
+        GlideUtils.loadImage(holder.mImageView, -1, thumbnail, new CenterCrop());
+        holder.mTextView.setText(text);
+        holder.mDetail1.setText(detail1);
+        holder.mDetail2.setText(detail2);
         if (mOnSearchListListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -148,10 +154,19 @@ public class SearchListAdapter<D> extends RecyclerView.Adapter<SearchListAdapter
         void onBottomShowMore();
     }
 
-    class TextViewHolder extends RecyclerView.ViewHolder {
+    public class SearchListViewHolder extends RecyclerView.ViewHolder {
 
-        public TextViewHolder(View itemView) {
+        ImageView mImageView;
+        TextView mTextView;
+        TextView mDetail1;
+        TextView mDetail2;
+
+        public SearchListViewHolder(View itemView) {
             super(itemView);
+            mImageView = itemView.findViewById(R.id.iv);
+            mTextView = itemView.findViewById(R.id.title);
+            mDetail1 = itemView.findViewById(R.id.rb_video);
+            mDetail2 = itemView.findViewById(R.id.follow);
         }
     }
 }
