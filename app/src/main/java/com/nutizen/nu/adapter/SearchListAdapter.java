@@ -9,6 +9,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.nutizen.nu.R;
@@ -21,22 +23,53 @@ import java.util.ArrayList;
 public class SearchListAdapter<D> extends RecyclerView.Adapter<SearchListAdapter.TextViewHolder> {
 
     private RecyclerView mRecyclerView;
+    private View mLoadingView;
     private SearchListAdapter mSearchListAdapter;
     private View mEmptyView;
-    private OnSearchClickListener<D> mOnSearchClickListener;
+    private OnSearchListListener<D> mOnSearchListListener;
 
     private ArrayList<D> mDatas;
 
     //public final Observable<T> doOnNext(Consumer<? super T> onNext) {
-    public void setOnSearchClickListener(OnSearchClickListener<D> listener) {
-        mOnSearchClickListener = listener;
+    public void setOnSearchListListener(OnSearchListListener<D> listener) {
+        mOnSearchListListener = listener;
     }
 
     public View initView(Context context) {
         View inflate = LayoutInflater.from(context).inflate(R.layout.pager_datas_detail, null);
         mRecyclerView = inflate.findViewById(R.id.pager_item_recycler);
         mEmptyView = inflate.findViewById(R.id.pager_item_nodata_layout);
+        mLoadingView = inflate.findViewById(R.id.loading);
         return inflate;
+    }
+
+    public void requestingMoreDataUi() {
+        mLoadingView.setVisibility(View.VISIBLE);
+        Animation animation = AnimationUtils.loadAnimation(mLoadingView.getContext(), R.anim.anim_loading_more_show);
+        mLoadingView.startAnimation(animation);
+    }
+
+    public void hideLoadingView() {
+        if (mLoadingView.getVisibility() == View.VISIBLE) {
+            Animation animation = AnimationUtils.loadAnimation(mLoadingView.getContext(), R.anim.anim_loading_more_hide);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    mLoadingView.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            mLoadingView.startAnimation(animation);
+        }
     }
 
     public void setDatas(ArrayList<D> datas) {
@@ -52,10 +85,24 @@ public class SearchListAdapter<D> extends RecyclerView.Adapter<SearchListAdapter
                     outRect.right = (int) ScreenUtils.dip2px(parent.getContext(), 5);
                 }
             });
+            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE && !mRecyclerView.canScrollVertically(1) && mDatas != null && mOnSearchListListener != null) {//到达底部，加载更多
+                        requestingMoreDataUi();
+                        mOnSearchListListener.onBottomShowMore();
+                    }
+                }
+            });
         }
         mDatas = datas;
         notifyDataSetChanged();
         mEmptyView.setVisibility(datas != null && datas.size() > 0 ? View.GONE : View.VISIBLE);
+    }
+
+    public void setMoreDatas(ArrayList<D> datas) {
+        mDatas.addAll(datas);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -79,11 +126,11 @@ public class SearchListAdapter<D> extends RecyclerView.Adapter<SearchListAdapter
             text = ((KanalRspBean.SearchBean) data).getUsername();
         }
         ((TextView) holder.itemView).setText(text);
-        if (mOnSearchClickListener != null) {
+        if (mOnSearchListListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mOnSearchClickListener.onSearchClick(mDatas.get(position), position);
+                    mOnSearchListListener.onSearchClick(mDatas.get(position), position);
                 }
             });
         }
@@ -95,8 +142,10 @@ public class SearchListAdapter<D> extends RecyclerView.Adapter<SearchListAdapter
         return mDatas != null ? mDatas.size() : 0;
     }
 
-    public interface OnSearchClickListener<D> {
+    public interface OnSearchListListener<D> {
         void onSearchClick(D data, int position);
+
+        void onBottomShowMore();
     }
 
     class TextViewHolder extends RecyclerView.ViewHolder {

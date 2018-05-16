@@ -8,6 +8,10 @@ public interface SearchView {
 
     void onKanalSearch(KanalRspBean kanalRspBean);
 
+    void noMoreContents();
+
+    void onMoreVideoSearch(ContentResponseBean contentResponseBean);
+
     void onSuccess();
 
     void onFailure(String errorMessage);

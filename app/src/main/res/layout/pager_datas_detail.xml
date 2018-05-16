@@ -34,4 +34,33 @@
             android:textSize="18sp" />
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+
+        <ProgressBar
+            android:id="@+id/loading_pb"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_centerVertical="true"
+            android:indeterminateDrawable="@drawable/bg_pb_loading_more" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/loading_pb"
+            android:text="@string/loading_more"
+            android:textColor="@color/colorWhite" />
+    </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>

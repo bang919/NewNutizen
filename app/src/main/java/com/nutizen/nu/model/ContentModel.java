@@ -125,9 +125,9 @@ public class ContentModel {
     /**
      * SearchActivity，标题搜索
      */
-    public Observable<ContentResponseBean> searchMovieByTitle(String title) {
+    public Observable<ContentResponseBean> searchMovieByTitle(String title, int page, Integer nextId) {
         return HttpClient.getApiInterface()
-                .searchMovieByTitle(title)
+                .searchMovieByTitle(title, page, nextId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

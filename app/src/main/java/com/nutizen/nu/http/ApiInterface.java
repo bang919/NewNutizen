@@ -107,7 +107,7 @@ public interface ApiInterface {
     //SearchActivity，标题搜索
     @Headers("Authorization:Bearer " + BuildConfig.server_key)
     @GET("contents/movie")
-    Observable<ContentResponseBean> searchMovieByTitle(@Query("filename") String title);
+    Observable<ContentResponseBean> searchMovieByTitle(@Query("filename") String title, @Query("limit") int limit, @Query("next") Integer nextId);
 
     // 获取content对应video id
     @GET(BuildConfig.data_hostname + "devapi/?apikey=" + BuildConfig.server_key + "&type=movie")

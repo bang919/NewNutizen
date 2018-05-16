@@ -14,6 +14,7 @@ import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.bean.response.KanalRspBean;
 import com.nutizen.nu.common.MyApplication;
 import com.nutizen.nu.fragment.KanalDetailFragment;
+import com.nutizen.nu.utils.ToastUtils;
 
 import java.util.ArrayList;
 
@@ -31,30 +32,61 @@ public class SearchResultPagerAdapter extends PagerAdapter {
         mViews = new ArrayList<>();
 
         mVideoDataAdapter = new SearchListAdapter<>();
-        mVideoDataAdapter.setOnSearchClickListener(new SearchListAdapter.OnSearchClickListener<ContentResponseBean.SearchBean>() {
+        mVideoDataAdapter.setOnSearchListListener(new SearchListAdapter.OnSearchListListener<ContentResponseBean.SearchBean>() {
             @Override
             public void onSearchClick(ContentResponseBean.SearchBean data, int position) {
                 ContentPlayerActivity.startContentPlayActivity(mContext, data);
+            }
+
+            @Override
+            public void onBottomShowMore() {
+                if (mContext instanceof SearchActivity) {
+                    ((SearchActivity) mContext).requestMoreContent();
+                }
             }
         });
         mViews.add(mVideoDataAdapter.initView(context));
 
         mKanalDataAdapter = new SearchListAdapter<>();
-        mKanalDataAdapter.setOnSearchClickListener(new SearchListAdapter.OnSearchClickListener<KanalRspBean.SearchBean>() {
+        mKanalDataAdapter.setOnSearchListListener(new SearchListAdapter.OnSearchListListener<KanalRspBean.SearchBean>() {
             @Override
             public void onSearchClick(KanalRspBean.SearchBean data, int position) {
                 KanalDetailFragment.getInstance(data).show(((SearchActivity) mContext).getSupportFragmentManager(), KanalDetailFragment.TAG);
+            }
+
+            @Override
+            public void onBottomShowMore() {
+                ToastUtils.showShort("No more kanals");
+                mKanalDataAdapter.hideLoadingView();
             }
         });
         mViews.add(mKanalDataAdapter.initView(context));
     }
 
+    /**
+     *  ------------------ Video ------------------
+     */
     public void setVideoDatas(ArrayList<ContentResponseBean.SearchBean> contentResponseBeans) {
         if (mVideoDataAdapter != null) {
             mVideoDataAdapter.setDatas(contentResponseBeans);
         }
     }
 
+    public void setMoreVieoDatas(ArrayList<ContentResponseBean.SearchBean> contentResponseBeans) {
+        if (mVideoDataAdapter != null) {
+            mVideoDataAdapter.setMoreDatas(contentResponseBeans);
+        }
+    }
+
+    public void hideVideoLoadingMore(){
+        if (mVideoDataAdapter != null) {
+            mVideoDataAdapter.hideLoadingView();
+        }
+    }
+
+    /**
+     *  ------------------ Kanal ------------------
+     */
     public void setKanalDatas(ArrayList<KanalRspBean.SearchBean> kanalDatas) {
         if (mKanalDataAdapter != null) {
             mKanalDataAdapter.setDatas(kanalDatas);

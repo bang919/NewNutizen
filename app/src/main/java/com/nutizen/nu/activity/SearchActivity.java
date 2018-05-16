@@ -114,6 +114,22 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
         mResultPagerAdapter.setKanalDatas(kanalRspBean.getSearch());
     }
 
+    public void requestMoreContent() {
+        mPresenter.searchMoreMovie();
+    }
+
+    @Override
+    public void noMoreContents() {
+        ToastUtils.showShort("No more contents");
+        mResultPagerAdapter.hideVideoLoadingMore();
+    }
+
+    @Override
+    public void onMoreVideoSearch(ContentResponseBean contentResponseBean) {
+        mResultPagerAdapter.setMoreVieoDatas(contentResponseBean.getSearch());
+        mResultPagerAdapter.hideVideoLoadingMore();
+    }
+
     @Override
     public void onSuccess() {
         setProgressbarVisibility(false);

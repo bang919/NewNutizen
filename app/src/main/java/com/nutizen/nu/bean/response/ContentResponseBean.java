@@ -13,24 +13,24 @@ public class ContentResponseBean {
      * Response : True
      */
 
-    private String totalResults;
-    private String totalCount;
+    private int totalResults;
+    private int totalCount;
     private String Response;
     private ArrayList<SearchBean> Search;
 
-    public String getTotalResults() {
+    public int getTotalResults() {
         return totalResults;
     }
 
-    public void setTotalResults(String totalResults) {
+    public void setTotalResults(int totalResults) {
         this.totalResults = totalResults;
     }
 
-    public String getTotalCount() {
+    public int getTotalCount() {
         return totalCount;
     }
 
-    public void setTotalCount(String totalCount) {
+    public void setTotalCount(int totalCount) {
         this.totalCount = totalCount;
     }
 
