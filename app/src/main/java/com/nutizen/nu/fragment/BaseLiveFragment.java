@@ -123,14 +123,14 @@ public abstract class BaseLiveFragment extends BaseMainFragment<BaseLivePresetne
     }
 
     @Override
-    protected void onViewPagerFragmentResume() {
+    public void onViewPagerFragmentResume() {
         super.onViewPagerFragmentResume();
         if (mPresenter != null)
             mPresenter.preparePlayer();
     }
 
     @Override
-    protected void onViewPagerFragmentPause() {
+    public void onViewPagerFragmentPause() {
         if (mPresenter != null)
             mPresenter.releasePlayer();
         super.onViewPagerFragmentPause();

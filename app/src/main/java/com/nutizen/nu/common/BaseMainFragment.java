@@ -26,10 +26,10 @@ public abstract class BaseMainFragment<P extends BasePresenter> extends Fragment
     private boolean hadGoneFragmentCreate;
     private boolean hadRequestData;//第一次进来，请求数据
 
-    protected void onViewPagerFragmentResume() {
+    public void onViewPagerFragmentResume() {
     }
 
-    protected void onViewPagerFragmentPause() {
+    public void onViewPagerFragmentPause() {
     }
 
     /**

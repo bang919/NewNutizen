@@ -21,6 +21,8 @@ import com.nutizen.nu.common.BaseMainFragment;
 import com.nutizen.nu.common.BasePresenter;
 import com.nutizen.nu.common.Constants;
 import com.nutizen.nu.dialog.NormalDialog;
+import com.nutizen.nu.fragment.BaseLiveFragment;
+import com.nutizen.nu.fragment.LeftFavouriteFragment;
 import com.nutizen.nu.fragment.TvFragment;
 import com.nutizen.nu.presenter.LoginPresenter;
 import com.nutizen.nu.utils.AnimUtil;
@@ -136,6 +138,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         findViewById(R.id.leftitem_help_faq).setOnClickListener(this);
         findViewById(R.id.leftitem_notification).setOnClickListener(this);
         findViewById(R.id.iv_log_out).setOnClickListener(this);
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                //切换Viewpager的时候，setRefreshing --> false
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
     }
 
     @Override
@@ -147,6 +164,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.leftitem_profile:
                 break;
             case R.id.leftitem_favourit:
+                LeftFavouriteFragment.getInstance().show(getSupportFragmentManager(), LeftFavouriteFragment.TAG);
                 break;
             case R.id.leftitem_download:
                 break;
@@ -188,16 +206,36 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         findViewById(R.id.line2).setVisibility(v);
         setRefreshEnable(!fullscreen);
         mViewPager.setScanScroll(!fullscreen);
+        mDrawerLayout.setDrawerLockMode(fullscreen ? DrawerLayout.LOCK_MODE_LOCKED_CLOSED : DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
-    public void resumeToShowIcons() {
-        AnimUtil.setViewAlphaAnim(mToolbar.getChildAt(0), true);
-        AnimUtil.setViewAlphaAnim(mSearchBtn, true);
-    }
-
-    public void pauseToHideIcons() {
+    /**
+     * 从MainActivity跳转到BaseDialogFragment
+     */
+    public void fragmentStartFromMain() {
         AnimUtil.setViewAlphaAnim(mToolbar.getChildAt(0), false);
         AnimUtil.setViewAlphaAnim(mSearchBtn, false);
+        checkPlayerChangeStatus(false);
+    }
+
+    /**
+     * 从BaseDialogFragment退出，返回MainActivity
+     */
+    public void fragmentDestroyToMain() {
+        AnimUtil.setViewAlphaAnim(mToolbar.getChildAt(0), true);
+        AnimUtil.setViewAlphaAnim(mSearchBtn, true);
+        checkPlayerChangeStatus(true);
+    }
+
+    private void checkPlayerChangeStatus(boolean play) {
+        BaseMainFragment fragment = mViewpagerAdapter.getItem(mViewPager.getCurrentItem());
+        if (fragment instanceof BaseLiveFragment) {
+            if (play) {
+                fragment.onViewPagerFragmentResume();
+            } else {
+                fragment.onViewPagerFragmentPause();
+            }
+        }
     }
 
     @Override

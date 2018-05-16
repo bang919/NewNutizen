@@ -152,6 +152,8 @@
     <string name="login_time">Last Login:</string>
     <string name="bio">Bio</string>
     <string name="edit">Edit</string>
+    <string name="done">Done</string>
+    <string name="remove">Remove</string>
     <string name="hint_bio">please enter your message</string>
     <string name="e_mail">e-mail</string>
     <string name="nu">nutizen@email.com</string>

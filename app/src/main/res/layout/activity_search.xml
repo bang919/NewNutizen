@@ -38,6 +38,7 @@
                 android:layout_centerVertical="true"
                 android:background="@android:color/transparent"
                 android:hint="Search Nutizen..."
+                android:imeOptions="actionSearch"
                 android:maxLines="1"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
@@ -101,7 +102,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_tablayout"/>
+        app:layout_constraintTop_toBottomOf="@+id/search_tablayout" />
 
     <RelativeLayout
         android:id="@+id/progress_bar_layout"

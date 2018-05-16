@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +48,8 @@ public class SearchListAdapter<D> extends RecyclerView.Adapter<SearchListAdapter
                 @Override
                 public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
                     outRect.top = (int) ScreenUtils.dip2px(parent.getContext(), 2);
+                    outRect.left = (int) ScreenUtils.dip2px(parent.getContext(), 5);
+                    outRect.right = (int) ScreenUtils.dip2px(parent.getContext(), 5);
                 }
             });
         }
@@ -62,6 +65,7 @@ public class SearchListAdapter<D> extends RecyclerView.Adapter<SearchListAdapter
         textView.setTextColor(parent.getContext().getResources().getColor(R.color.colorTintWhite));
         textView.setTextSize(ScreenUtils.dip2px(parent.getContext(), 12));
         textView.setGravity(Gravity.CENTER_VERTICAL);
+        textView.setEllipsize(TextUtils.TruncateAt.END);
         return new SearchListAdapter.TextViewHolder(textView);
     }
 

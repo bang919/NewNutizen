@@ -54,7 +54,7 @@ public class HomeFragment extends BaseMainFragment<HomeFragmentPresenter> implem
     }
 
     @Override
-    protected void onViewPagerFragmentResume() {
+    public void onViewPagerFragmentResume() {
         super.onViewPagerFragmentResume();
         setRefreshEnable(true);
     }

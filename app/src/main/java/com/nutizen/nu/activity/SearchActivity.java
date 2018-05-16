@@ -4,8 +4,11 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
 
 import com.nutizen.nu.R;
 import com.nutizen.nu.adapter.SearchResultPagerAdapter;
@@ -16,7 +19,7 @@ import com.nutizen.nu.presenter.SearchPresenter;
 import com.nutizen.nu.utils.ToastUtils;
 import com.nutizen.nu.view.SearchView;
 
-public class SearchActivity extends BaseActivity<SearchPresenter> implements SearchView, View.OnClickListener {
+public class SearchActivity extends BaseActivity<SearchPresenter> implements SearchView, View.OnClickListener, TextView.OnEditorActionListener {
 
     private View mProgressbar;
     private AutoCompleteTextView mEditText;
@@ -77,6 +80,7 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
                 mCleanBtn.setVisibility(s.length() > 0 ? View.VISIBLE : View.GONE);
             }
         });
+        mEditText.setOnEditorActionListener(this);
     }
 
     @Override
@@ -89,11 +93,15 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
                 mEditText.setText("");
                 break;
             case R.id.iv_search:
-                mPresenter.search(mEditText.getText().toString().trim());
-                hideSoftKeyboard();
-                setProgressbarVisibility(true);
+                search();
                 break;
         }
+    }
+
+    private void search() {
+        mPresenter.search(mEditText.getText().toString().trim());
+        hideSoftKeyboard();
+        setProgressbarVisibility(true);
     }
 
     @Override
@@ -119,5 +127,14 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
 
     private void setProgressbarVisibility(boolean visibility) {
         mProgressbar.setVisibility(visibility ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+            search();
+            return true;
+        }
+        return false;
     }
 }
