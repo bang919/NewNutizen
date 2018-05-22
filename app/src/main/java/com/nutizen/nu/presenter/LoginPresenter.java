@@ -10,7 +10,7 @@ import com.nutizen.nu.bean.third.RegisterFacebookRspBean;
 import com.nutizen.nu.common.BasePresenter;
 import com.nutizen.nu.common.Constants;
 import com.nutizen.nu.common.MyApplication;
-import com.nutizen.nu.model.LoginModel;
+import com.nutizen.nu.model.ViewerModel;
 import com.nutizen.nu.utils.LogUtils;
 import com.nutizen.nu.utils.SPUtils;
 import com.nutizen.nu.view.LoginView;
@@ -30,20 +30,20 @@ import io.reactivex.functions.Function;
 public class LoginPresenter extends BasePresenter<LoginView> {
 
     public final String TAG = "LoginPresenter";
-    private LoginModel mLoginModel;
+    private ViewerModel mViewerModel;
 
     public LoginPresenter(Context context, LoginView view) {
         super(context, view);
-        mLoginModel = new LoginModel();
+        mViewerModel = new ViewerModel();
     }
 
     public void login(final String usernameEmail, String password) {
         final String observerTag = getClass().getName() + "login";
-        subscribeNetworkTask(observerTag, mLoginModel.login(new LoginRequestBean(usernameEmail, password))
+        subscribeNetworkTask(observerTag, mViewerModel.login(new LoginRequestBean(usernameEmail, password))
                 .flatMap(new Function<LoginResponseBean, ObservableSource<LoginResponseBean>>() {
                     @Override
                     public ObservableSource<LoginResponseBean> apply(final LoginResponseBean loginResponseBean) throws Exception {
-                        return mLoginModel.getViewerDetail(loginResponseBean.getViewer_token()).map(new Function<LoginResponseBean.DetailBean, LoginResponseBean>() {
+                        return mViewerModel.getViewerDetail(loginResponseBean.getViewer_token()).map(new Function<LoginResponseBean.DetailBean, LoginResponseBean>() {
                             @Override
                             public LoginResponseBean apply(LoginResponseBean.DetailBean detailBean) throws Exception {
                                 loginResponseBean.setDetail(detailBean);
@@ -54,7 +54,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 }), new MyObserver<LoginResponseBean>() {
             @Override
             public void onMyNext(LoginResponseBean loginResponseBean) {
-                SPUtils.putObject(MyApplication.getMyApplicationContext(), Constants.LOGIN_BEAN, loginResponseBean);
+                updateLoginMessage(loginResponseBean);
                 SPUtils.put(MyApplication.getMyApplicationContext(), Constants.USERNAME, usernameEmail);
                 mView.loginSuccess(loginResponseBean);
             }
@@ -104,14 +104,14 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
     private void loginByFacebookAccessToken(final FacebookSdkBean facebookSdkBean) {
         final String observerTag = getClass().getName() + "loginByFacebookAccessToken";
-        Observable<LoginResponseBean> loginFacebookRspBeanObservable = mLoginModel.loginByFacebook(facebookSdkBean)
+        Observable<LoginResponseBean> loginFacebookRspBeanObservable = mViewerModel.loginByFacebook(facebookSdkBean)
                 .retryWhen(new Function<Observable<Throwable>, ObservableSource<RegisterFacebookRspBean>>() {
                     @Override
                     public ObservableSource<RegisterFacebookRspBean> apply(Observable<Throwable> throwableObservable) throws Exception {
                         return throwableObservable.flatMap(new Function<Throwable, ObservableSource<RegisterFacebookRspBean>>() {
                             @Override
                             public ObservableSource<RegisterFacebookRspBean> apply(Throwable throwable) throws Exception {
-                                return mLoginModel.registerByFacebook(facebookSdkBean);
+                                return mViewerModel.registerByFacebook(facebookSdkBean);
                             }
                         });
                     }
@@ -133,21 +133,21 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 detailBean.setViewer_email(facebookSdkBean.getEmail());
                 detailBean.setViewer_firstname(facebookSdkBean.getFirst_name());
                 detailBean.setViewer_lastname(facebookSdkBean.getLast_name());
-                detailBean.setViewer_gender(facebookSdkBean.getGender());
+                detailBean.setViewer_gender(facebookSdkBean.getGender() != null && facebookSdkBean.getGender().equals("female") ? 1 : 0);
                 detailBean.setViewer_country(facebookSdkBean.getLocale());
                 detailBean.setIs_third(1);
                 detailBean.setViewer_thumbnail(facebookSdkBean.getPicture());
-                if(!TextUtils.isEmpty(facebookSdkBean.getEmail())){
+                if (!TextUtils.isEmpty(facebookSdkBean.getEmail())) {
                     String email = facebookSdkBean.getEmail();
                     detailBean.setViewer_nickname(email.split("@")[0]);
-                }else if(!TextUtils.isEmpty(facebookSdkBean.getName())){
+                } else if (!TextUtils.isEmpty(facebookSdkBean.getName())) {
                     detailBean.setViewer_nickname(facebookSdkBean.getName());
-                }else {
+                } else {
                     detailBean.setViewer_nickname(facebookSdkBean.getFirst_name() + " " + facebookSdkBean.getLast_name());
                 }
 
                 loginResponseBean.setDetail(detailBean);
-                SPUtils.putObject(MyApplication.getMyApplicationContext(), Constants.LOGIN_BEAN, loginResponseBean);
+                updateLoginMessage(loginResponseBean);
                 mView.loginSuccess(loginResponseBean);
             }
 
@@ -156,6 +156,13 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 mView.loginFailure(errorMessage);
             }
         });
+    }
+
+    /**
+     * Save login message
+     */
+    public static void updateLoginMessage(LoginResponseBean loginResponseBean) {
+        SPUtils.putObject(MyApplication.getMyApplicationContext(), Constants.LOGIN_BEAN, loginResponseBean);
     }
 
     /**

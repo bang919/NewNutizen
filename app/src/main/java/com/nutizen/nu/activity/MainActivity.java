@@ -23,6 +23,7 @@ import com.nutizen.nu.common.Constants;
 import com.nutizen.nu.dialog.NormalDialog;
 import com.nutizen.nu.fragment.BaseLiveFragment;
 import com.nutizen.nu.fragment.LeftFavouriteFragment;
+import com.nutizen.nu.fragment.ProfilFragment;
 import com.nutizen.nu.fragment.TvFragment;
 import com.nutizen.nu.presenter.LoginPresenter;
 import com.nutizen.nu.utils.AnimUtil;
@@ -162,6 +163,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 jumpToActivity(SearchActivity.class);
                 break;
             case R.id.leftitem_profile:
+                ProfilFragment.getInstance().show(getSupportFragmentManager(), ProfilFragment.TAG);
                 break;
             case R.id.leftitem_favourit:
                 LeftFavouriteFragment.getInstance().show(getSupportFragmentManager(), LeftFavouriteFragment.TAG);

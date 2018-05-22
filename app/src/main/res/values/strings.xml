@@ -152,6 +152,7 @@
     <string name="login_time">Last Login:</string>
     <string name="bio">Bio</string>
     <string name="edit">Edit</string>
+    <string name="save">Save</string>
     <string name="done">Done</string>
     <string name="remove">Remove</string>
     <string name="hint_bio">please enter your message</string>
@@ -269,4 +270,7 @@
     <string name="dynamic_link_error">Error: Request dynamic link error.</string>
     <string name="share_success">Share success.</string>
     <string name="jump_to_twitter_share">Jump to Twitter .</string>
+    <string name="unselected">unselected</string>
+    <string name="no_permission_for_camera">The permission of CAMERA is disable, please turn it on.</string>
+    <string name="please_choose_your_new_portrait">Please choose your new portrait before update.</string>
 </resources>

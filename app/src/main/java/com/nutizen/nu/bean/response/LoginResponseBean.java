@@ -114,7 +114,7 @@ public class LoginResponseBean implements Serializable {
         private String viewer_postcode;
         private String viewer_country;
         private String viewer_birthdate;
-        private String viewer_gender;
+        private int viewer_gender;
         private String viewer_nickname;
         private String marital;
         private int is_third;
@@ -194,11 +194,11 @@ public class LoginResponseBean implements Serializable {
             this.viewer_birthdate = viewer_birthdate;
         }
 
-        public String getViewer_gender() {
+        public int getViewer_gender() {
             return viewer_gender;
         }
 
-        public void setViewer_gender(String viewer_gender) {
+        public void setViewer_gender(int viewer_gender) {
             this.viewer_gender = viewer_gender;
         }
 

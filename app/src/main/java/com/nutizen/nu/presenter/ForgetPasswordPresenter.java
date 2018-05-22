@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import com.nutizen.nu.bean.response.ForgetPasswordResponse;
 import com.nutizen.nu.bean.response.ResetPasswordResonseBean;
 import com.nutizen.nu.common.BasePresenter;
-import com.nutizen.nu.model.LoginModel;
+import com.nutizen.nu.model.ViewerModel;
 import com.nutizen.nu.view.NormalView;
 
 /**
@@ -15,16 +15,16 @@ import com.nutizen.nu.view.NormalView;
 
 public class ForgetPasswordPresenter extends BasePresenter<NormalView> {
 
-    private LoginModel mLoginModel;
+    private ViewerModel mViewerModel;
 
     public ForgetPasswordPresenter(Context context, NormalView view) {
         super(context, view);
-        mLoginModel = new LoginModel();
+        mViewerModel = new ViewerModel();
     }
 
     public void searchEmailToRestPassword(String email) {
         final String observerTag = getClass().getName() + "searchEmailToRestPassword";
-        subscribeNetworkTask(observerTag, mLoginModel.searchEmailToRestPassword(email), new MyObserver<ResetPasswordResonseBean>() {
+        subscribeNetworkTask(observerTag, mViewerModel.searchEmailToRestPassword(email), new MyObserver<ResetPasswordResonseBean>() {
             @Override
             public void onMyNext(ResetPasswordResonseBean resetPasswordResonseBean) {
                 if (resetPasswordResonseBean.status && resetPasswordResonseBean.err == null) {
@@ -48,7 +48,7 @@ public class ForgetPasswordPresenter extends BasePresenter<NormalView> {
 
     public void resetPassword(String password, String digit) {
         final String observerTag = getClass().getName() + "searchEmailToRestPassword";
-        subscribeNetworkTask(observerTag, mLoginModel.resetPassword(password, digit), new MyObserver<ForgetPasswordResponse>() {
+        subscribeNetworkTask(observerTag, mViewerModel.resetPassword(password, digit), new MyObserver<ForgetPasswordResponse>() {
             @Override
             public void onMyNext(ForgetPasswordResponse forgetPasswordResponse) {
                 if (forgetPasswordResponse.status && forgetPasswordResponse.err == null) {

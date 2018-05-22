@@ -10,6 +10,10 @@ import android.widget.TextView;
 import com.nutizen.nu.R;
 
 public class AnimUtil {
+
+    /**
+     * 按向下按钮显示详情
+     */
     public static void switchDownArrow(final View downArrowIv, final TextView changeHeighView) {
 
         Paint textViewPaint = changeHeighView.getPaint();
@@ -43,6 +47,9 @@ public class AnimUtil {
         valueAnimator.start();
     }
 
+    /**
+     * MainActivity显示/隐藏按钮
+     */
     public static void setViewAlphaAnim(View view, boolean appear) {
         setViewAlphaAnim(view, appear, -1);
     }
