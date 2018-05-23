@@ -23,7 +23,6 @@ public class PortraitEditFragment extends BaseDialogFragment<PortraitEditPresent
 
     private View mProgress;
     private ImageView mPortraitIv;
-    private View mDoneBtn;
     private String mChoosePortraitDeletePath;
 
     private ProfileEditSaveListener mSaveListener;
@@ -66,8 +65,6 @@ public class PortraitEditFragment extends BaseDialogFragment<PortraitEditPresent
         rootView.findViewById(R.id.btn_take_photo).setOnClickListener(this);
         rootView.findViewById(R.id.btn_choose_library).setOnClickListener(this);
         rootView.findViewById(R.id.btn_cancel).setOnClickListener(this);
-        mDoneBtn = rootView.findViewById(R.id.btn_edit);
-        mDoneBtn.setOnClickListener(this);
     }
 
     @Override
@@ -87,10 +84,6 @@ public class PortraitEditFragment extends BaseDialogFragment<PortraitEditPresent
                 break;
             case R.id.btn_cancel:
                 dismiss();
-                break;
-            case R.id.btn_edit:
-                mProgress.setVisibility(View.VISIBLE);
-                mPresenter.savePortrait();
                 break;
         }
     }
@@ -115,10 +108,10 @@ public class PortraitEditFragment extends BaseDialogFragment<PortraitEditPresent
 
     @Override
     public void onLuBanSuccess(File picFile) {//这里返回的是LubanCache的图片，至于裁剪的图片已经被删了
-        mProgress.setVisibility(View.GONE);
         mChoosePortraitDeletePath = picFile.getPath();
         GlideUtils.loadImage(mPortraitIv, R.mipmap.portrait, picFile.getPath(), new CenterCrop());
-        mDoneBtn.setVisibility(View.VISIBLE);
+        mProgress.setVisibility(View.VISIBLE);
+        mPresenter.savePortrait();
     }
 
     @Override
