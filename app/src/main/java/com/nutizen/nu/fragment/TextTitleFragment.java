@@ -82,11 +82,19 @@ public abstract class TextTitleFragment<P extends BasePresenter> extends BaseDia
         LayoutInflater.from(rootView.getContext()).inflate(getBodyLayout(), include, true);
         mBackBtn = rootView.findViewById(R.id.back);
         mTitleTv = rootView.findViewById(R.id.title_text_title_fragment);
-        if (mTitleTv != null) {
+        if (setNoTitleBackgroundColorSource() != -1) {
+            int color = getContext().getResources().getColor(setNoTitleBackgroundColorSource());
+            mTitleTv.setBackgroundColor(color);
+            rootView.findViewById(R.id.line).setBackgroundColor(color);
+        } else if (mTitleTv != null) {
             mTitleTv.setText(setTitle());
         }
         mBackBtn.setOnClickListener(this);
         initBodyView(rootView);
+    }
+
+    protected int setNoTitleBackgroundColorSource() {//设置后不会显示标题
+        return -1;
     }
 
     protected String setTitle() {

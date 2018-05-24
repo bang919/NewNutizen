@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.nutizen.nu.R;
 import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.listener.ProfileEditSaveListener;
@@ -27,8 +28,8 @@ public class ProfilFragment extends TextTitleFragment<ProfilPresenter> implement
     }
 
     @Override
-    protected String setTitle() {
-        return getString(R.string.profile);
+    protected int setNoTitleBackgroundColorSource() {
+        return R.color.colorBlack;
     }
 
     @Override
@@ -54,7 +55,7 @@ public class ProfilFragment extends TextTitleFragment<ProfilPresenter> implement
     private void refreshProfileMessage() {
         mDetailBean = LoginPresenter.getAccountMessage().getDetail();
 
-        GlideUtils.loadImage(mPortrait, R.mipmap.portrait, mDetailBean.getViewer_thumbnail(), new CenterCrop());
+        GlideUtils.loadImage(mPortrait, R.mipmap.portrait, mDetailBean.getViewer_thumbnail(), new CenterCrop(), new CircleCrop());
 
         mNameTv.setText(mDetailBean.getViewer_username());
 
