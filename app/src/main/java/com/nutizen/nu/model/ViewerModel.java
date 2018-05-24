@@ -55,7 +55,7 @@ public class ViewerModel {
                             accountMessageDetail.setViewer_birthdate(viewDetailReqBean.getBirthdate());
                         }
                         if (viewDetailReqBean.getGender() != null) {
-                            accountMessageDetail.setGender(viewDetailReqBean.getGender());
+                            accountMessageDetail.setViewer_gender(viewDetailReqBean.getGender());
                         }
                         LoginPresenter.updateLoginMessage(accountMessage);
                     }
