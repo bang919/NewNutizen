@@ -106,7 +106,7 @@ android {
 }
 
 ext {
-    supportVersion = "27.0.2"
+    supportVersion = "27.1.0"
 }
 
 
@@ -132,6 +132,8 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.4.0'
     //Exoplayer
     implementation 'com.google.android.exoplayer:exoplayer:r2.5.4'
+    //Crop
+    implementation 'com.github.yalantis:ucrop:2.2.2'
     //Luban
     implementation 'top.zibin:Luban:1.1.1'
     //Firebase

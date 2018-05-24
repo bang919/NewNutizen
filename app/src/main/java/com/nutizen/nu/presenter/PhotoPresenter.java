@@ -12,13 +12,13 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.nutizen.nu.R;
 import com.nutizen.nu.common.BasePresenter;
 import com.nutizen.nu.utils.TakePhotoUtil;
 import com.nutizen.nu.utils.ToastUtils;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -39,7 +39,6 @@ public abstract class PhotoPresenter<V> extends BasePresenter<V> {
     private final int REQUEST_PERMISSION = 0x9;
     private final int REQUEST_CAMERA = 0x10;
     private final int REQUEST_ALBUM = 0x11;
-    private final int REQUEST_CROP = 0x12;
 
     private Uri mPhotoUri;
 
@@ -113,6 +112,10 @@ public abstract class PhotoPresenter<V> extends BasePresenter<V> {
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_OK) {
+            if (mPhotoUri != null) {//如果是camera take photo的，但是出错了哦，删去照相的图片
+                deletePhotoFile(mPhotoUri);
+                mPhotoUri = null;
+            }
             return;
         }
         switch (requestCode) {
@@ -130,35 +133,29 @@ public abstract class PhotoPresenter<V> extends BasePresenter<V> {
                 Uri uriAlbum = data.getData();
                 startPhotoZoom(uriAlbum);
                 break;
-            case REQUEST_CROP:
+            case UCrop.REQUEST_CROP://UCrop库
                 if (mPhotoUri != null) {//如果是camera take photo的，删去照相的图片
                     deletePhotoFile(mPhotoUri);
+                    mPhotoUri = null;
                 }
-                Uri uriCrop = data.getData();
+                Uri uriCrop = UCrop.getOutput(data);
                 jumpToLuban(uriCrop, true);
                 break;
         }
     }
 
     public void startPhotoZoom(Uri uri) {
-
         //看看要不要旋转
         TakePhotoUtil.doRotateImageAndSaveStrategy(TakePhotoUtil.getRealPathFromUri(mContext, uri));
 
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
-        // 设置裁剪
-        intent.putExtra("crop", "true");
-        // aspectX aspectY 是宽高的比例
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        // outputX outputY 是裁剪图片宽高
-        intent.putExtra("outputX", 340);
-        intent.putExtra("outputY", 340);
-        intent.putExtra("return-data", false);//如果这里设置true，就会返回bitmap = data.getExtras().getParcelable("data")
-        mFragment.startActivityForResult(intent, REQUEST_CROP);
+        //用UCrop裁剪图片
+        String realPathFromUri = TakePhotoUtil.getRealPathFromUri(mContext, uri);
+        UCrop.of(Uri.fromFile(new File(realPathFromUri)), Uri.fromFile(new File(realPathFromUri.substring(0, realPathFromUri.lastIndexOf("/")).concat("nutemp.jpg"))))
+                .withAspectRatio(1, 1)
+                .start(mContext, mFragment, UCrop.REQUEST_CROP);
     }
 
+    //用Luban压缩图片
     private void jumpToLuban(final Uri photoUri, final boolean deleteSource) {
         String path = TakePhotoUtil.getRealPathFromUri(mFragment.getContext(), photoUri);
         Observable.just(path)
@@ -211,21 +208,16 @@ public abstract class PhotoPresenter<V> extends BasePresenter<V> {
     }
 
     public void deletePhotoFile(String filePath) {
-        if (TextUtils.isEmpty(filePath)) {
-            return;
-        }
         File file = new File(filePath);
+        Uri uri = Uri.fromFile(file);
         if (file.exists()) {
-            File[] childfiles = file.listFiles();
-            if (childfiles == null || childfiles.length == 0) {
-                file.delete();
-            } else {
-                for (int i = 0; i < childfiles.length; i++) {
-                    childfiles[i].delete();
-                }
-                file.delete();
-            }
+            file.delete();
         }
+
+        //发送广播更新相册
+        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        intent.setData(uri);
+        mFragment.getContext().sendBroadcast(intent);
     }
 
     public abstract void onLuBanError(Throwable e);

@@ -6,6 +6,8 @@
 
     <color name="colorBlack">#000000</color>
     <color name="colorBlack2">#333333</color>
+    <color name="colorBlack3">#222222</color>
+    <color name="colorBlack4">#444444</color>
     <color name="colorHalfBlack">#70000000</color>
     <color name="colorDeepHalfBlack">#C0000000</color>
     <color name="colorGray2">#7E7E7E</color>

@@ -22,6 +22,9 @@ public class TakePhotoUtil {
      * @return /storage/emulated/0/DCIM/Camera/IMG_20160807_.jpg 路径
      */
     public static String getRealPathFromUri(Context context, Uri contentUri) {
+        if (!contentUri.toString().startsWith("content")) {
+            return contentUri.getPath();
+        }
         Cursor cursor = null;
         try {
             String[] proj = {MediaStore.Images.Media.DATA};
@@ -73,8 +76,6 @@ public class TakePhotoUtil {
             //保存bitmap到文件（覆盖原始图片）
             saveImageToSDCard(destBitmap, 100, filePath);
             destBitmap.recycle();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (OutOfMemoryError error) {
