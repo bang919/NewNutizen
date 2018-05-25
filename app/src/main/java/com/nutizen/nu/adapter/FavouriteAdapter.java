@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.nutizen.nu.R;
 import com.nutizen.nu.bean.response.FavouriteRspBean;
+import com.nutizen.nu.utils.AnimUtil;
 import com.nutizen.nu.utils.GlideUtils;
 
 import java.util.ArrayList;
@@ -50,14 +51,16 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
 
     @Override
     public FavouriteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new FavouriteViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_favourite, parent, false));
+        View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_favourite, parent, false);
+        inflate.findViewById(R.id.cb_select).getLayoutParams().width = 0;//默认隐藏
+        return new FavouriteViewHolder(inflate);
     }
 
     @Override
     public void onBindViewHolder(FavouriteViewHolder holder, final int position) {
         final FavouriteRspBean data = mDataList.get(position);
         holder.mCheckBox.setChecked(mSelectMap.get(position) != null);
-        holder.mCheckBox.setVisibility(mEditing ? View.VISIBLE : View.GONE);
+        AnimUtil.setEditFavouriteButton(holder.mCheckBox, mEditing);
         GlideUtils.loadImage(holder.mImageView, -1, data.getContent_thumbnail(), new CenterCrop());
         holder.mTitle.setText(data.getContent_title());
         if (mEditing) {

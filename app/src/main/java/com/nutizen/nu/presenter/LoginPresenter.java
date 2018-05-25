@@ -43,13 +43,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 .flatMap(new Function<LoginResponseBean, ObservableSource<LoginResponseBean>>() {
                     @Override
                     public ObservableSource<LoginResponseBean> apply(final LoginResponseBean loginResponseBean) throws Exception {
-                        return mViewerModel.getViewerDetail(loginResponseBean.getViewer_token()).map(new Function<LoginResponseBean.DetailBean, LoginResponseBean>() {
-                            @Override
-                            public LoginResponseBean apply(LoginResponseBean.DetailBean detailBean) throws Exception {
-                                loginResponseBean.setDetail(detailBean);
-                                return loginResponseBean;
-                            }
-                        });
+                        return mViewerModel.getViewerDetail(loginResponseBean);
                     }
                 }), new MyObserver<LoginResponseBean>() {
             @Override
@@ -111,42 +105,29 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                         return throwableObservable.flatMap(new Function<Throwable, ObservableSource<RegisterFacebookRspBean>>() {
                             @Override
                             public ObservableSource<RegisterFacebookRspBean> apply(Throwable throwable) throws Exception {
-                                return mViewerModel.registerByFacebook(facebookSdkBean);
+                                return mViewerModel.registerByFacebook(facebookSdkBean);//这里应该初始化信息
                             }
                         });
                     }
+                })
+                .flatMap(new Function<LoginResponseBean, ObservableSource<LoginResponseBean>>() {
+                    @Override
+                    public ObservableSource<LoginResponseBean> apply(LoginResponseBean loginResponseBean) throws Exception {
+                        return mViewerModel.getViewerDetail(loginResponseBean);
+                    }
                 });
+
         subscribeNetworkTask(observerTag, loginFacebookRspBeanObservable, new MyObserver<LoginResponseBean>() {
             @Override
-            public void onMyNext(LoginResponseBean loginFacebookRspBean) {
-                LoginResponseBean loginResponseBean = new LoginResponseBean();
-                LoginResponseBean.DetailBean detailBean = new LoginResponseBean.DetailBean();
-
-                loginResponseBean.setStatus(loginFacebookRspBean.isStatus());
-                loginResponseBean.setViewer_id(loginFacebookRspBean.getViewer_id());
-                loginResponseBean.setViewer_token(loginFacebookRspBean.getViewer_token());
-                loginResponseBean.setViewer_token_expiry_date(loginFacebookRspBean.getViewer_token_expiry_date());
-                loginResponseBean.setViewer_static_token(loginFacebookRspBean.getViewer_static_token());
-                loginResponseBean.setIs_contributor(false);
-
-                detailBean.setViewer_username(facebookSdkBean.getName());
-                detailBean.setViewer_email(facebookSdkBean.getEmail());
-                detailBean.setViewer_firstname(facebookSdkBean.getFirst_name());
-                detailBean.setViewer_lastname(facebookSdkBean.getLast_name());
-                detailBean.setViewer_gender(facebookSdkBean.getGender() != null && facebookSdkBean.getGender().equals("female") ? 1 : 0);
-                detailBean.setViewer_country(facebookSdkBean.getLocale());
-                detailBean.setIs_third(1);
-                detailBean.setViewer_thumbnail(facebookSdkBean.getPicture());
-                if (!TextUtils.isEmpty(facebookSdkBean.getEmail())) {
-                    String email = facebookSdkBean.getEmail();
-                    detailBean.setViewer_nickname(email.split("@")[0]);
-                } else if (!TextUtils.isEmpty(facebookSdkBean.getName())) {
-                    detailBean.setViewer_nickname(facebookSdkBean.getName());
-                } else {
-                    detailBean.setViewer_nickname(facebookSdkBean.getFirst_name() + " " + facebookSdkBean.getLast_name());
+            public void onMyNext(LoginResponseBean loginResponseBean) {
+                LoginResponseBean.DetailBean detail = loginResponseBean.getDetail();
+                //没有图片就先显示facebook图片吧
+                if (TextUtils.isEmpty(detail.getViewer_thumbnail())) {
+                    detail.setViewer_thumbnail(facebookSdkBean.getPicture());
                 }
-
-                loginResponseBean.setDetail(detailBean);
+                detail.setViewer_email(facebookSdkBean.getEmail());
+                detail.setIs_third(1);
+                loginResponseBean.setDetail(detail);
                 updateLoginMessage(loginResponseBean);
                 mView.loginSuccess(loginResponseBean);
             }

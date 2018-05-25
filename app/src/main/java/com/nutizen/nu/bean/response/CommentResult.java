@@ -224,21 +224,23 @@ public class CommentResult {
             this.viewer_id = viewer_id;
         }
 
-        public String getCommentNameShow(){
+        public String getCommentNameShow() {
             String showName;
 //            if (TextUtils.isEmpty(viewer_username) || (viewer_username.length() >= 15 && PhoneUtils.isNumeric(viewer_username))) {//第三方登录
             if (is_third == 1) {//第三方登录
-                if(!TextUtils.isEmpty(viewer_email)){
-                    showName = viewer_email.split("@")[0];
-                }else {
+                if (!TextUtils.isEmpty(viewer_nickname)) {
                     showName = viewer_nickname;
-                }
-            }else {//不是第三方登录
-                if (!TextUtils.isEmpty(viewer_username)){
-                    showName = viewer_username.split("@")[0];
-                }else if(!TextUtils.isEmpty(viewer_email)) {
+                } else if (!TextUtils.isEmpty(viewer_email)) {
                     showName = viewer_email.split("@")[0];
-                }else {
+                } else {
+                    showName = String.valueOf(viewer_id);
+                }
+            } else {//不是第三方登录
+                if (!TextUtils.isEmpty(viewer_username)) {
+                    showName = viewer_username.split("@")[0];
+                } else if (!TextUtils.isEmpty(viewer_email)) {
+                    showName = viewer_email.split("@")[0];
+                } else {
                     showName = viewer_nickname;
                 }
             }

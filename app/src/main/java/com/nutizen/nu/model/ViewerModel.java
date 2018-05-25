@@ -14,6 +14,7 @@ import com.nutizen.nu.presenter.LoginPresenter;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -31,10 +32,17 @@ public class ViewerModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<LoginResponseBean.DetailBean> getViewerDetail(String token) {
+    public Observable<LoginResponseBean> getViewerDetail(final LoginResponseBean loginResponseBean) {
         return HttpClient.getApiInterface()
-                .getViewerDetail("bearer " + token)
+                .getViewerDetail("bearer " + loginResponseBean.getViewer_token())
                 .subscribeOn(Schedulers.io())
+                .map(new Function<LoginResponseBean.DetailBean, LoginResponseBean>() {
+                    @Override
+                    public LoginResponseBean apply(LoginResponseBean.DetailBean detailBean) throws Exception {
+                        loginResponseBean.setDetail(detailBean);
+                        return loginResponseBean;
+                    }
+                })
                 .observeOn(AndroidSchedulers.mainThread());
     }
 

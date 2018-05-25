@@ -61,7 +61,7 @@ public class ProfilFragment extends TextTitleFragment<ProfilPresenter> implement
             GlideUtils.loadImage(mPortrait, R.drawable.glide_trans_bg, mDetailBean.getViewer_thumbnail(), new CenterCrop(), new CircleCrop());
         }
 
-        mNameTv.setText(mDetailBean.getViewer_username());
+        mNameTv.setText(mDetailBean.getViewer_nickname());
 
         if (!TextUtils.isEmpty(mDetailBean.getViewer_email())) {
             mEmailDes.setText(mDetailBean.getViewer_email());

@@ -116,7 +116,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mSwipeRefreshLayout.setRefreshing(true);
         LoginResponseBean accountMessage = LoginPresenter.getAccountMessage();
         if (accountMessage != null) {
-            ((TextView) findViewById(R.id.tv_left_menu_name)).setText(accountMessage.getDetail().getViewer_username());
+            ((TextView) findViewById(R.id.tv_left_menu_name)).setText(accountMessage.getDetail().getViewer_nickname());
         }
     }
 

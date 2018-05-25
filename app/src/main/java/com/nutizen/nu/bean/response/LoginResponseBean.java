@@ -1,5 +1,7 @@
 package com.nutizen.nu.bean.response;
 
+import android.text.TextUtils;
+
 import java.io.Serializable;
 
 /**
@@ -134,6 +136,11 @@ public class LoginResponseBean implements Serializable {
             return viewer_email;
         }
 
+        //emailName: 如果email是bang@gmail.com，则emailName = bang
+        public String getEmailName() {
+            return TextUtils.isEmpty(getViewer_email()) ? "" : getViewer_email().split("@")[0];
+        }
+
         public void setViewer_email(String viewer_email) {
             this.viewer_email = viewer_email;
         }
@@ -203,7 +210,15 @@ public class LoginResponseBean implements Serializable {
         }
 
         public String getViewer_nickname() {
-            return viewer_nickname;
+
+
+            //一般用getViewer_nickname做显示名字。
+            //1.优先nickname，这个是facebook传过来的
+            return !TextUtils.isEmpty(viewer_nickname) ? viewer_nickname :
+                    //2.然后是emailname，是facebook传过来的
+                    !TextUtils.isEmpty(getEmailName()) ? getEmailName() :
+                            //3.最后是username，这个是账号密码登录的那个账号
+                            viewer_username;
         }
 
         public void setViewer_nickname(String viewer_nickname) {

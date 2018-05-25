@@ -1,8 +1,15 @@
 package com.nutizen.nu.fragment;
 
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nutizen.nu.R;
@@ -24,6 +31,23 @@ public abstract class FavouriteFragment extends BaseDialogFragment<FavouritePres
     private TextView mTitleTv;
     private TextView mCancelBtn, mEditBtn, mDoneBtn;
     private View mProgressBar;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getDialog().setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                //如果按退出键的时候是Editing状态，取消Editing状态
+                if ((keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE) && event.getAction() == KeyEvent.ACTION_DOWN && mCancelBtn.getVisibility() == View.VISIBLE) {
+                    setEditStatus(false);
+                    return true;
+                }
+                return false;
+            }
+        });
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
 
     @Override
     protected int getLayout() {
@@ -121,8 +145,12 @@ public abstract class FavouriteFragment extends BaseDialogFragment<FavouritePres
 
     private void removeFavouriteSelected() {
         ArrayList<FavouriteRspBean> selectFavourites = mFavouriteAdapter.getSelectFavourite();
-        setProgressBarVisibility(true);
-        mPresenter.removeFavourites(selectFavourites);
+        if (selectFavourites.size() > 0) {
+            setProgressBarVisibility(true);
+            mPresenter.removeFavourites(selectFavourites);
+        } else {
+            setEditStatus(false);
+        }
     }
 
 }

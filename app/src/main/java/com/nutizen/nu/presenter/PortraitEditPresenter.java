@@ -46,25 +46,24 @@ public class PortraitEditPresenter extends PhotoPresenter<PortraitEditView> {
         }
         final LoginResponseBean accountMessage = LoginPresenter.getAccountMessage();
         RequestBody requestBody = MultipartBody.create(MediaType.parse("application/x-jpg"), portraitFile);
-        MultipartBody.Part part = MultipartBody.Part.createFormData("picture", System.currentTimeMillis() + accountMessage.getDetail().getViewer_username() + ".jpg", requestBody);
+        MultipartBody.Part part = MultipartBody.Part.createFormData("picture", System.currentTimeMillis() + accountMessage.getDetail().getViewer_nickname() + ".jpg", requestBody);
 
-        Observable<LoginResponseBean.DetailBean> updatePortraitObser = mViewerModel.updatePortrait(part, accountMessage.getViewer_token())
-                .flatMap(new Function<NormalResBean, ObservableSource<LoginResponseBean.DetailBean>>() {
+        Observable<LoginResponseBean> updatePortraitObser = mViewerModel.updatePortrait(part, accountMessage.getViewer_token())
+                .flatMap(new Function<NormalResBean, ObservableSource<LoginResponseBean>>() {
                     @Override
-                    public ObservableSource<LoginResponseBean.DetailBean> apply(NormalResBean normalResBean) throws Exception {
-                        return mViewerModel.getViewerDetail(accountMessage.getViewer_token())
-                                .doOnNext(new Consumer<LoginResponseBean.DetailBean>() {
+                    public ObservableSource<LoginResponseBean> apply(NormalResBean normalResBean) throws Exception {
+                        return mViewerModel.getViewerDetail(accountMessage)
+                                .doOnNext(new Consumer<LoginResponseBean>() {
                                     @Override
-                                    public void accept(LoginResponseBean.DetailBean detailBean) throws Exception {
-                                        accountMessage.setDetail(detailBean);
+                                    public void accept(LoginResponseBean loginResponseBean) throws Exception {
                                         LoginPresenter.updateLoginMessage(accountMessage);
                                     }
                                 });
                     }
                 });
-        subscribeNetworkTask(getClass().getName().concat("savePortrait"), updatePortraitObser, new MyObserver<LoginResponseBean.DetailBean>() {
+        subscribeNetworkTask(getClass().getName().concat("savePortrait"), updatePortraitObser, new MyObserver<LoginResponseBean>() {
             @Override
-            public void onMyNext(LoginResponseBean.DetailBean detailBean) {
+            public void onMyNext(LoginResponseBean loginResponseBean) {
                 mView.onUpdatePortraitSuccess();
             }
 
