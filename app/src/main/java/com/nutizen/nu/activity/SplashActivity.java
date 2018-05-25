@@ -72,7 +72,7 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
         mHandler.sendEmptyMessageDelayed(mTargetAct, SPLASH_WAIT_DURATION);
     }
 
-    private boolean checkLogin() {
+    protected boolean checkLogin() {
         LoginResponseBean accountMessage = LoginPresenter.getAccountMessage();
         return accountMessage != null;
     }

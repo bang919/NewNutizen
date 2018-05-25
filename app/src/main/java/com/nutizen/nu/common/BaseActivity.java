@@ -20,7 +20,9 @@ import android.widget.FrameLayout;
 
 import com.nutizen.nu.R;
 import com.nutizen.nu.activity.LoginActivity;
+import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.presenter.LoginPresenter;
+import com.nutizen.nu.utils.DialogUtils;
 
 import java.util.Map;
 
@@ -228,6 +230,15 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         super.onDestroy();
         if (mPresenter != null)
             mPresenter.destroy();
+    }
+
+    protected boolean checkLogin() {
+        LoginResponseBean accountMessage = LoginPresenter.getAccountMessage();
+        if (accountMessage == null) {
+            DialogUtils.getAskLoginDialog(this).show();
+            return false;
+        }
+        return true;
     }
 
     public void logout() {

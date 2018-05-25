@@ -163,12 +163,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 jumpToActivity(SearchActivity.class);
                 break;
             case R.id.leftitem_profile:
-                ProfilFragment.getInstance().show(getSupportFragmentManager(), ProfilFragment.TAG);
+                if (checkLogin()) {
+                    ProfilFragment.getInstance().show(getSupportFragmentManager(), ProfilFragment.TAG);
+                }
                 break;
             case R.id.leftitem_favourit:
-                LeftFavouriteFragment.getInstance().show(getSupportFragmentManager(), LeftFavouriteFragment.TAG);
+                if (checkLogin()) {
+                    LeftFavouriteFragment.getInstance().show(getSupportFragmentManager(), LeftFavouriteFragment.TAG);
+                }
                 break;
             case R.id.leftitem_download:
+                if (checkLogin()) {
+
+                }
                 break;
             case R.id.leftitem_help_faq:
                 break;
