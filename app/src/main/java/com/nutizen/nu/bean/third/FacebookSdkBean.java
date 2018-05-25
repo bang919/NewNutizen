@@ -11,7 +11,8 @@ public class FacebookSdkBean {
     public FacebookSdkBean(HashMap<String, Object> hashMap,String token) {
         third_party_id = (String) hashMap.get("third_party_id");
         id = (String) hashMap.get("id");
-        picture = (String)((HashMap)((HashMap)hashMap.get("picture")).get("data")).get("url");
+//        picture = (String)((HashMap)((HashMap)hashMap.get("picture")).get("data")).get("url");
+        picture = "http://graph.facebook.com/" + id + "/picture?type=large";
         name = (String) hashMap.get("name");
         last_name = (String) hashMap.get("last_name");
         first_name = (String) hashMap.get("first_name");
