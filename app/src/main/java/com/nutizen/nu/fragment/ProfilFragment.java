@@ -55,7 +55,11 @@ public class ProfilFragment extends TextTitleFragment<ProfilPresenter> implement
     private void refreshProfileMessage() {
         mDetailBean = LoginPresenter.getAccountMessage().getDetail();
 
-        GlideUtils.loadImage(mPortrait, R.mipmap.portrait, mDetailBean.getViewer_thumbnail(), new CenterCrop(), new CircleCrop());
+        if (TextUtils.isEmpty(mDetailBean.getViewer_thumbnail())) {
+            GlideUtils.loadImage(mPortrait, R.drawable.glide_trans_bg, R.mipmap.portrait, new CenterCrop(), new CircleCrop());
+        } else {
+            GlideUtils.loadImage(mPortrait, R.drawable.glide_trans_bg, mDetailBean.getViewer_thumbnail(), new CenterCrop(), new CircleCrop());
+        }
 
         mNameTv.setText(mDetailBean.getViewer_username());
 

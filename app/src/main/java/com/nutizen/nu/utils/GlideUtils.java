@@ -21,40 +21,32 @@ public class GlideUtils {
      * @param transformation   CenterCrop/CircleCrop/FitCenterCenterInside/...
      */
     public static void loadImage(ImageView imageView, int imgDefaultSource, int imgSource, BitmapTransformation... transformation) {
-        if (imgSource != 0) {
-            RequestBuilder<Drawable> requestBuilder = Glide.with(imageView.getContext()).load(imgSource);
-            RequestOptions requestOptions = new RequestOptions();
-            if (transformation.length != 0) {
-                requestOptions.transforms(transformation);
-            }
-            if (imgDefaultSource != 0 && imgDefaultSource != -1) {
-                requestOptions.placeholder(imgDefaultSource);
-            } else {
-                requestOptions.placeholder(R.drawable.glide_default_bg);
-            }
-            requestBuilder.apply(requestOptions);
-            requestBuilder.into(imageView);
-        } else {
-            Glide.with(imageView.getContext()).load(imgDefaultSource != 1 ? imgDefaultSource : R.drawable.glide_default_bg).into(imageView);
+        RequestBuilder<Drawable> requestBuilder = Glide.with(imageView.getContext()).load(imgSource != 0 ? imgSource : imgDefaultSource != 1 ? imgDefaultSource : R.drawable.glide_default_bg);
+        RequestOptions requestOptions = new RequestOptions();
+        if (transformation.length != 0) {
+            requestOptions.transforms(transformation);
         }
+        if (imgDefaultSource != 0 && imgDefaultSource != -1) {
+            requestOptions.placeholder(imgDefaultSource);
+        } else {
+            requestOptions.placeholder(R.drawable.glide_default_bg);
+        }
+        requestBuilder.apply(requestOptions);
+        requestBuilder.into(imageView);
     }
 
     public static void loadImage(ImageView imageView, int imgDefaultSource, String imgUrl, BitmapTransformation... transformation) {
-        if (!TextUtils.isEmpty(imgUrl)) {
-            RequestBuilder<Drawable> requestBuilder = Glide.with(imageView.getContext()).load(imgUrl);
-            RequestOptions requestOptions = new RequestOptions();
-            if (transformation.length != 0) {
-                requestOptions.transforms(transformation);
-            }
-            if (imgDefaultSource != 0 && imgDefaultSource != -1) {
-                requestOptions.placeholder(imgDefaultSource);
-            } else {
-                requestOptions.placeholder(R.drawable.glide_default_bg);
-            }
-            requestBuilder.apply(requestOptions);
-            requestBuilder.into(imageView);
-        } else {
-            Glide.with(imageView.getContext()).load(imgDefaultSource != 1 ? imgDefaultSource : R.drawable.glide_default_bg).into(imageView);
+        RequestBuilder<Drawable> requestBuilder = Glide.with(imageView.getContext()).load(!TextUtils.isEmpty(imgUrl) ? imgUrl : imgDefaultSource != 1 ? imgDefaultSource : R.drawable.glide_default_bg);
+        RequestOptions requestOptions = new RequestOptions();
+        if (transformation.length != 0) {
+            requestOptions.transforms(transformation);
         }
+        if (imgDefaultSource != 0 && imgDefaultSource != -1) {
+            requestOptions.placeholder(imgDefaultSource);
+        } else {
+            requestOptions.placeholder(R.drawable.glide_default_bg);
+        }
+        requestBuilder.apply(requestOptions);
+        requestBuilder.into(imageView);
     }
 }
