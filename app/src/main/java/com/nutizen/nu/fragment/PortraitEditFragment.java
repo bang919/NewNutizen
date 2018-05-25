@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.nutizen.nu.R;
 import com.nutizen.nu.listener.ProfileEditSaveListener;
+import com.nutizen.nu.presenter.PhotoPresenter;
 import com.nutizen.nu.presenter.PortraitEditPresenter;
 import com.nutizen.nu.utils.GlideUtils;
 import com.nutizen.nu.utils.ToastUtils;
@@ -77,10 +78,10 @@ public class PortraitEditFragment extends BaseDialogFragment<PortraitEditPresent
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_take_photo:
-                mPresenter.selectTakePhoto();
+                mPresenter.requestPermissionTodo(PhotoPresenter.REQUEST_PERMISSION_CAMERA);
                 break;
             case R.id.btn_choose_library:
-                mPresenter.selectAlbum();
+                mPresenter.requestPermissionTodo(PhotoPresenter.REQUEST_PERMISSION_ALBUM);
                 break;
             case R.id.btn_cancel:
                 dismiss();

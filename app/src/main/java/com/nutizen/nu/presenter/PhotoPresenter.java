@@ -36,9 +36,10 @@ public abstract class PhotoPresenter<V> extends BasePresenter<V> {
 
     private Fragment mFragment;
 
-    private final int REQUEST_PERMISSION = 0x9;
-    private final int REQUEST_CAMERA = 0x10;
-    private final int REQUEST_ALBUM = 0x11;
+    public static final int REQUEST_PERMISSION_CAMERA = 0x9;
+    public static final int REQUEST_PERMISSION_ALBUM = 0x10;
+    private final int REQUEST_CAMERA = 0x11;
+    private final int REQUEST_ALBUM = 0x12;
 
     private Uri mPhotoUri;
 
@@ -52,18 +53,28 @@ public abstract class PhotoPresenter<V> extends BasePresenter<V> {
     /**
      * 启动照相机照相
      */
-    public void selectTakePhoto() {
+    public void requestPermissionTodo(int requestPermissionCode) {
         if (Build.VERSION.SDK_INT >= 23) {
             int checkCallPhonePermission = ContextCompat.checkSelfPermission(mFragment.getContext(), Manifest.permission.CAMERA);
             int checkCallPhonePermission2 = ContextCompat.checkSelfPermission(mFragment.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
             if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED || checkCallPhonePermission2 != PackageManager.PERMISSION_GRANTED) {
-                mFragment.requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSION);
-                return;
+                mFragment.requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, requestPermissionCode);
             } else {
-                takePhoto();
+                jumpToPermissionCodeFunction(requestPermissionCode);
             }
         } else {
-            takePhoto();
+            jumpToPermissionCodeFunction(requestPermissionCode);
+        }
+    }
+
+    public void jumpToPermissionCodeFunction(int requestPermissionCode) {
+        switch (requestPermissionCode) {
+            case REQUEST_PERMISSION_CAMERA:
+                takePhoto();
+                break;
+            case REQUEST_PERMISSION_ALBUM:
+                selectAlbum();
+                break;
         }
     }
 
@@ -115,6 +126,13 @@ public abstract class PhotoPresenter<V> extends BasePresenter<V> {
             if (mPhotoUri != null) {//如果是camera take photo的，但是出错了哦，删去照相的图片
                 deletePhotoFile(mPhotoUri);
                 mPhotoUri = null;
+            }
+            //看看是不是Ucrop返回的错误
+            if (requestCode == UCrop.REQUEST_CROP && data != null) {
+                Throwable error = UCrop.getError(data);
+                if (error != null) {
+                    ToastUtils.showShort(error.getLocalizedMessage());
+                }
             }
             return;
         }
@@ -229,9 +247,10 @@ public abstract class PhotoPresenter<V> extends BasePresenter<V> {
      */
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case REQUEST_PERMISSION:
+            case REQUEST_PERMISSION_CAMERA:
+            case REQUEST_PERMISSION_ALBUM:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    takePhoto();
+                    jumpToPermissionCodeFunction(requestCode);
                 } else {
                     Toast.makeText(mFragment.getContext(), mFragment.getString(R.string.no_permission_for_camera), Toast.LENGTH_SHORT).show();
                 }
