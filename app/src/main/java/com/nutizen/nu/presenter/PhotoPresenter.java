@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.nutizen.nu.R;
 import com.nutizen.nu.common.BasePresenter;
+import com.nutizen.nu.common.MyApplication;
+import com.nutizen.nu.utils.FileUtils;
 import com.nutizen.nu.utils.TakePhotoUtil;
 import com.nutizen.nu.utils.ToastUtils;
 import com.yalantis.ucrop.UCrop;
@@ -168,7 +170,9 @@ public abstract class PhotoPresenter<V> extends BasePresenter<V> {
 
         //用UCrop裁剪图片
         String realPathFromUri = TakePhotoUtil.getRealPathFromUri(mContext, uri);
-        UCrop.of(Uri.fromFile(new File(realPathFromUri)), Uri.fromFile(new File(realPathFromUri.substring(0, realPathFromUri.lastIndexOf("/")).concat("nutemp.jpg"))))
+        String diskCacheDir = FileUtils.getDiskCacheDir(MyApplication.getMyApplicationContext());
+        File uCropFile = new File(diskCacheDir.concat("/ucrop_temp.jpg"));
+        UCrop.of(Uri.fromFile(new File(realPathFromUri)), Uri.fromFile(uCropFile))
                 .withAspectRatio(1, 1)
                 .start(mContext, mFragment, UCrop.REQUEST_CROP);
     }
