@@ -23,6 +23,8 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
     private TreeMap<Integer, FavouriteRspBean> mSelectMap;
     private OnFavouriteItemClickListener mOnFavouriteItemClickListener;
     private boolean mEditing;
+    private int mFirstVisibleItemPosition = -1, mLasttVisibleItemPosition = -1;//用于记录可见范围，只有可见范围的checkbox才出现动画
+    private int mSelectViewWidth;
 
     public FavouriteAdapter() {
         mSelectMap = new TreeMap<>();
@@ -37,8 +39,10 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
         notifyDataSetChanged();
     }
 
-    public void changeEditStatus(boolean edit) {
+    public void changeEditStatus(boolean edit, int firstVisibleItemPosition, int lastVisibleItemPosition) {
         mEditing = edit;
+        mFirstVisibleItemPosition = firstVisibleItemPosition;
+        mLasttVisibleItemPosition = lastVisibleItemPosition;
         if (mEditing) {
             mSelectMap.clear();
         }
@@ -52,7 +56,12 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
     @Override
     public FavouriteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_favourite, parent, false);
-        inflate.findViewById(R.id.cb_select).getLayoutParams().width = 0;//默认隐藏
+
+        if (mSelectViewWidth == 0) {
+            View selectView = inflate.findViewById(R.id.cb_select);
+            selectView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), 0);
+            mSelectViewWidth = selectView.getMeasuredWidth();
+        }
         return new FavouriteViewHolder(inflate);
     }
 
@@ -60,7 +69,13 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
     public void onBindViewHolder(FavouriteViewHolder holder, final int position) {
         final FavouriteRspBean data = mDataList.get(position);
         holder.mCheckBox.setChecked(mSelectMap.get(position) != null);
-        AnimUtil.setEditFavouriteButton(holder.mCheckBox, mEditing);
+
+        if (position >= mFirstVisibleItemPosition && position <= mLasttVisibleItemPosition) {//如果对用户可见，则启动动画，否则直接设置width
+            AnimUtil.setEditFavouriteButton(holder.mCheckBox, mEditing);
+        } else {
+            holder.mCheckBox.getLayoutParams().width = mEditing ? mSelectViewWidth : 0;
+        }
+
         GlideUtils.loadImage(holder.mImageView, -1, data.getContent_thumbnail(), new CenterCrop());
         holder.mTitle.setText(data.getContent_title());
         if (mEditing) {

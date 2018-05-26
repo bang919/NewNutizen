@@ -68,9 +68,6 @@ public class AnimUtil {
     public static void setEditFavouriteButton(final View button, boolean appear) {
         button.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), 0);
         int width = button.getMeasuredWidth();
-        if ((button.getLayoutParams().width != width && !appear) || (button.getLayoutParams().width == width && appear)) {
-            return;
-        }
         ValueAnimator valueAnimator = appear ? ValueAnimator.ofInt(0, width) : ValueAnimator.ofInt(width, 0);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override

@@ -136,7 +136,8 @@ public abstract class FavouriteFragment extends BaseDialogFragment<FavouritePres
     }
 
     private void setEditStatus(boolean edit) {
-        mFavouriteAdapter.changeEditStatus(edit);
+        LinearLayoutManager layoutManager = (LinearLayoutManager) mFavouriteRv.getLayoutManager();
+        mFavouriteAdapter.changeEditStatus(edit, layoutManager.findFirstVisibleItemPosition(), layoutManager.findLastVisibleItemPosition());
         mCancelBtn.setVisibility(edit ? View.VISIBLE : View.GONE);
         mDoneBtn.setVisibility(edit ? View.VISIBLE : View.GONE);
         mEditBtn.setVisibility(edit ? View.GONE : View.VISIBLE);
