@@ -15,6 +15,7 @@ import com.nutizen.nu.bean.response.ContentPlaybackBean;
 import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.presenter.ContentPlayerActivityPresenter;
 import com.nutizen.nu.utils.DownloadDatabaseUtil;
+import com.nutizen.nu.utils.FileUtils;
 import com.nutizen.nu.view.ContentPlayerActivityView;
 
 import java.text.SimpleDateFormat;
@@ -26,8 +27,10 @@ public class ContentPlayerActivity extends PlayerActivity<ContentResponseBean.Se
     private ContentPlaybackBean mContentPlaybackBean;
 
     private View mDownloadBtn;
+    private View mSettingsBtn;
     private RecyclerView mProfileSettingRv;
     private ProfileSettingAdapter mProfileSettingAdapter;
+    private boolean fromDownload;//是否从download按进来的
 
     private SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private String mStartTime;//用于addWatchCount
@@ -48,11 +51,11 @@ public class ContentPlayerActivity extends PlayerActivity<ContentResponseBean.Se
         super.initView();
         mProfileSettingRv = findViewById(R.id.rv_profile_settings);
         mDownloadBtn = mSimpleExoPlayerView.findViewById(R.id.iv_download);
-        View settingsBtn = mSimpleExoPlayerView.findViewById(R.id.iv_settings);
+        mSettingsBtn = mSimpleExoPlayerView.findViewById(R.id.iv_settings);
         mDownloadBtn.setVisibility(View.VISIBLE);
-        settingsBtn.setVisibility(View.VISIBLE);
+        mSettingsBtn.setVisibility(View.VISIBLE);
         mDownloadBtn.setOnClickListener(this);
-        settingsBtn.setOnClickListener(this);
+        mSettingsBtn.setOnClickListener(this);
     }
 
     @Override
@@ -67,7 +70,9 @@ public class ContentPlayerActivity extends PlayerActivity<ContentResponseBean.Se
 
     @Override
     protected ContentResponseBean.SearchBean setDataBean() {
-        return (ContentResponseBean.SearchBean) getIntent().getSerializableExtra(DATA_BEAN);
+        ContentResponseBean.SearchBean searchBean = (ContentResponseBean.SearchBean) getIntent().getSerializableExtra(DATA_BEAN);
+        searchBean.setTitle(getString(R.string.playing_download_file).concat(searchBean.getTitle()));
+        return searchBean;
     }
 
     @Override
@@ -88,7 +93,7 @@ public class ContentPlayerActivity extends PlayerActivity<ContentResponseBean.Se
 
     @Override
     protected View setFavouriteBtn() {
-        return findViewById(R.id.iv_favourite);
+        return fromDownload ? null : findViewById(R.id.iv_favourite);
     }
 
     @Override
@@ -107,6 +112,22 @@ public class ContentPlayerActivity extends PlayerActivity<ContentResponseBean.Se
         mDownloadBtn.setSelected(DownloadDatabaseUtil.checkDownloaded(this, contentPlaybackBean));
         mPresenter.setTitleAndUrl(contentResponseBean.getTitle(), profiles.get(0).getUrl_http());
         mPresenter.preparePlayer();
+    }
+
+    //从download里面按进来
+    @Override
+    public void onDownloadPlay(ContentResponseBean.SearchBean contentResponseBean) {
+        fromDownload = true;
+        //隐藏按钮
+        mDownloadBtn.setVisibility(View.GONE);
+        mSettingsBtn.setVisibility(View.GONE);
+        mSimpleExoPlayerView.findViewById(R.id.iv_share).setVisibility(View.GONE);
+        mSimpleExoPlayerView.findViewById(R.id.iv_favourite).setVisibility(View.GONE);
+        //播放下载
+        mStartTime = sDateFormat.format(new Date());
+        mPresenter.setTitleAndUrl(contentResponseBean.getTitle(), FileUtils.getFileDownloaderFilePath(this, contentResponseBean.getDownloadFileName()));
+        mPresenter.preparePlayer(true);
+        setLoadingVisibility(false);
     }
 
     @Override

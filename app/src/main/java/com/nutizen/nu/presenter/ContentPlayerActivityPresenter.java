@@ -35,6 +35,10 @@ public class ContentPlayerActivityPresenter extends PlayerActivityPresenter<Cont
 
     @Override
     public void getDatas(final ContentResponseBean.SearchBean contentBean) {
+        if (contentBean.getStoreDownloadUrl() != null) {
+            mView.onDownloadPlay(contentBean);
+            return;
+        }
         Observable<ContentPlaybackBean> contentPlaybackBeanObservable = mContentModel.getVideoIdByContentId(contentBean.getId())
                 .flatMap(new Function<ContentResponseBean, ObservableSource<ContentPlaybackBean>>() {
                     @Override

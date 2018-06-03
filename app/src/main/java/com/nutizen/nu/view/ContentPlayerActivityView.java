@@ -7,6 +7,8 @@ public interface ContentPlayerActivityView extends  BasePlayerActivityView{
 
     void onContentPlaybackResponse(ContentResponseBean.SearchBean contentResponseBean, ContentPlaybackBean contentPlaybackBean);
 
+    void onDownloadPlay(ContentResponseBean.SearchBean contentResponseBean);
+
     void onWatchHistoryCount(int count);
 
     void isFavourite(boolean favourite);

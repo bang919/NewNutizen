@@ -19,6 +19,8 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
@@ -113,7 +115,12 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
         mListener = new ComponentListener();
         mSimpleExoPlayer.addListener(mListener);
         mSimpleExoPlayerView.setPlayer(mSimpleExoPlayer);
-        MediaSource mediaSource = new HlsMediaSource(Uri.parse(mUrl), mediaDataSourceFactory, null, null);
+        MediaSource mediaSource;
+        if (mUrl.endsWith(".m3u8")) {
+            mediaSource = new HlsMediaSource(Uri.parse(mUrl), mediaDataSourceFactory, null, null);
+        } else {//从download里面按进来的
+            mediaSource = new ExtractorMediaSource(Uri.parse(mUrl), mediaDataSourceFactory, new DefaultExtractorsFactory(), null, null);
+        }
         mSimpleExoPlayer.prepare(mediaSource, true, false);
         mSimpleExoPlayer.setPlayWhenReady(playWhenReady);
         mSimpleExoPlayer.seekTo(continuePlay && lastPosition != -1 ? lastPosition : 0);

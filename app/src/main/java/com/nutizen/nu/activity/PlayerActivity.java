@@ -32,7 +32,7 @@ public abstract class PlayerActivity<D, P extends PlayerActivityPresenter> exten
     private View mFavouriteBtn;
     private View mProgressBar;
     private View mTopHeadView;
-    private RecyclerView mMessageAndCommentRv;
+    protected RecyclerView mMessageAndCommentRv;
     protected SimpleExoPlayerView mSimpleExoPlayerView;
     protected BasePlayerAdapter mBasePlayerAdapter;
 
@@ -83,7 +83,7 @@ public abstract class PlayerActivity<D, P extends PlayerActivityPresenter> exten
             @Override
             public void run() {
                 LoginResponseBean accountMessage = LoginPresenter.getAccountMessage();
-                boolean isSelected = mFavouriteBtn.isSelected();
+                boolean isSelected = mFavouriteBtn != null && mFavouriteBtn.isSelected();
                 if (accountMessage != null && initFavourite != isSelected) {
                     initFavourite = isSelected;
                     EditFavouriteReqBean editFavouriteReqBean = new EditFavouriteReqBean();
@@ -109,9 +109,11 @@ public abstract class PlayerActivity<D, P extends PlayerActivityPresenter> exten
 
     private void initFavouriteBtn() {
         mFavouriteBtn = setFavouriteBtn();
-        mFavouriteBtn.setVisibility(View.VISIBLE);
-        mFavouriteBtn.setOnClickListener(PlayerActivity.this);
-        mFavouriteBtn.setSelected(initFavourite);
+        if (mFavouriteBtn != null) {
+            mFavouriteBtn.setVisibility(View.VISIBLE);
+            mFavouriteBtn.setOnClickListener(PlayerActivity.this);
+            mFavouriteBtn.setSelected(initFavourite);
+        }
     }
 
     @Override
