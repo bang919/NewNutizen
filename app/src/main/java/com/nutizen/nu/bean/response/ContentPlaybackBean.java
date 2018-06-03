@@ -41,6 +41,11 @@ public class ContentPlaybackBean {
         return uuid;
     }
 
+    //下载文件的名字
+    public String getDownloadFileName(){
+        return getUuid().concat(String.valueOf(getVideo_id()));
+    }
+
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }

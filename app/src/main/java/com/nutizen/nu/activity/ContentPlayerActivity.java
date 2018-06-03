@@ -14,15 +14,18 @@ import com.nutizen.nu.bean.request.WatchHistoryCountBody;
 import com.nutizen.nu.bean.response.ContentPlaybackBean;
 import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.presenter.ContentPlayerActivityPresenter;
+import com.nutizen.nu.utils.DownloadDatabaseUtil;
 import com.nutizen.nu.view.ContentPlayerActivityView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ContentPlayerActivity extends PlayerActivity<ContentResponseBean.SearchBean, ContentPlayerActivityPresenter> implements ContentPlayerActivityView, ProfileSettingAdapter.OnProfileSelectListener {
 
     private ContentPlaybackBean mContentPlaybackBean;
 
+    private View mDownloadBtn;
     private RecyclerView mProfileSettingRv;
     private ProfileSettingAdapter mProfileSettingAdapter;
 
@@ -44,11 +47,11 @@ public class ContentPlayerActivity extends PlayerActivity<ContentResponseBean.Se
     protected void initView() {
         super.initView();
         mProfileSettingRv = findViewById(R.id.rv_profile_settings);
-        View downloadBtn = mSimpleExoPlayerView.findViewById(R.id.iv_download);
+        mDownloadBtn = mSimpleExoPlayerView.findViewById(R.id.iv_download);
         View settingsBtn = mSimpleExoPlayerView.findViewById(R.id.iv_settings);
-        downloadBtn.setVisibility(View.VISIBLE);
+        mDownloadBtn.setVisibility(View.VISIBLE);
         settingsBtn.setVisibility(View.VISIBLE);
-        downloadBtn.setOnClickListener(this);
+        mDownloadBtn.setOnClickListener(this);
         settingsBtn.setOnClickListener(this);
     }
 
@@ -99,7 +102,10 @@ public class ContentPlayerActivity extends PlayerActivity<ContentResponseBean.Se
         mContentPlaybackBean = contentPlaybackBean;
         ((ContentPlayerAdapter) mBasePlayerAdapter).setWritter(contentResponseBean.getWritter());
         mProfileSettingAdapter.setVideoProfile(contentPlaybackBean.getVideo_profile());
-        mPresenter.setTitleAndUrl(contentResponseBean.getTitle(), contentPlaybackBean.getVideo_profile().get(0).getUrl_http());
+        ArrayList<ContentPlaybackBean.VideoProfileBean> profiles = contentPlaybackBean.getVideo_profile();
+        //是否在下载
+        mDownloadBtn.setSelected(DownloadDatabaseUtil.checkDownloaded(this, contentPlaybackBean));
+        mPresenter.setTitleAndUrl(contentResponseBean.getTitle(), profiles.get(0).getUrl_http());
         mPresenter.preparePlayer();
     }
 
@@ -142,9 +148,8 @@ public class ContentPlayerActivity extends PlayerActivity<ContentResponseBean.Se
         super.onClick(v);
         switch (v.getId()) {
             case R.id.iv_download:
-                if (checkLogin()) {
-
-                }
+                boolean isDownload = mPresenter.switchDownloading(mPresenter.getCurrentUrl(), mContentPlaybackBean, getDataBean());
+                mDownloadBtn.setSelected(isDownload);
                 break;
             case R.id.iv_settings:
                 mProfileSettingRv.setVisibility(mProfileSettingRv.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);

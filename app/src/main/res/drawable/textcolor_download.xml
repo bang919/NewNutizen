@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"><!-- 没有焦点时的背景图片 -->
+    <item android:color="@color/colorGreen" android:state_selected="true"/>
+    <item android:color="@color/colorGray2"/>
+</selector>

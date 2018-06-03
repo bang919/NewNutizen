@@ -66,7 +66,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
     }
 
     @Override
-    public void onBindViewHolder(FavouriteViewHolder holder, final int position) {
+    public void onBindViewHolder(final FavouriteViewHolder holder, final int position) {
         final FavouriteRspBean data = mDataList.get(position);
         holder.mCheckBox.setChecked(mSelectMap.get(position) != null);
 
@@ -87,7 +87,8 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
                     } else {
                         mSelectMap.put(position, data);
                     }
-                    notifyDataSetChanged();
+                    holder.mCheckBox.setChecked(mSelectMap.get(position) != null);
+                    holder.mCheckBox.getLayoutParams().width = mEditing ? mSelectViewWidth : 0;
                 }
             });
         } else if (mOnFavouriteItemClickListener != null) {

@@ -273,4 +273,8 @@
     <string name="unselected">unselected</string>
     <string name="no_permission_for_camera">The permission of CAMERA is disable, please turn it on.</string>
     <string name="please_choose_your_new_portrait">Please choose your new portrait before update.</string>
+    <string name="download_url_error">Download url error: can\'t download this content.</string>
+    <string name="downloading">Downloading</string>
+    <string name="downloaded">Downloaded</string>
+    <string name="waiting">waiting...</string>
 </resources>

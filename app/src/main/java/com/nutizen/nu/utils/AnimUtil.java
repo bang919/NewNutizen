@@ -2,6 +2,8 @@ package com.nutizen.nu.utils;
 
 import android.animation.ValueAnimator;
 import android.graphics.Paint;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.Guideline;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -68,13 +70,33 @@ public class AnimUtil {
     public static void setEditFavouriteButton(final View button, boolean appear) {
         button.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), 0);
         int width = button.getMeasuredWidth();
-        ValueAnimator valueAnimator = appear ? ValueAnimator.ofInt(0, width) : ValueAnimator.ofInt(width, 0);
+        ValueAnimator valueAnimator = appear ? ValueAnimator.ofInt(1, width) : ValueAnimator.ofInt(width, 1);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 int w = (int) animation.getAnimatedValue();
                 button.getLayoutParams().width = w;
                 button.requestLayout();
+            }
+        });
+        valueAnimator.setDuration(200);
+        valueAnimator.start();
+    }
+
+    /**
+     * DownloadListAdapter绿色按钮弹出
+     */
+    public static void setEditDownloadButton(final View checkBox, final Guideline guideline, boolean appear) {
+        checkBox.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), 0);
+        final int width = checkBox.getMeasuredWidth();
+        ValueAnimator valueAnimator = appear ? ValueAnimator.ofInt(1, width) : ValueAnimator.ofInt(width, 1);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int w = (int) animation.getAnimatedValue();
+                checkBox.getLayoutParams().width = w;
+                ((ConstraintLayout.LayoutParams) guideline.getLayoutParams()).guideEnd = width - w != 0 ? (int) ((width - w) * 1.3) : 1;
+                checkBox.requestLayout();
             }
         });
         valueAnimator.setDuration(200);

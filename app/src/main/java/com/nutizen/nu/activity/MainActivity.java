@@ -22,6 +22,7 @@ import com.nutizen.nu.common.BasePresenter;
 import com.nutizen.nu.common.Constants;
 import com.nutizen.nu.dialog.NormalDialog;
 import com.nutizen.nu.fragment.BaseLiveFragment;
+import com.nutizen.nu.fragment.DownloadFragment;
 import com.nutizen.nu.fragment.HelpFaqFragment;
 import com.nutizen.nu.fragment.LeftFavouriteFragment;
 import com.nutizen.nu.fragment.ProfilFragment;
@@ -174,9 +175,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case R.id.leftitem_download:
-                if (checkLogin()) {
-
-                }
+                DownloadFragment.getInstance().show(getSupportFragmentManager(), DownloadFragment.TAG);
                 break;
             case R.id.leftitem_help_faq:
                 HelpFaqFragment.getInstance().show(getSupportFragmentManager(), HelpFaqFragment.TAG);

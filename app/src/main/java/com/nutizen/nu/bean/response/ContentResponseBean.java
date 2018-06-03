@@ -104,6 +104,8 @@ public class ContentResponseBean {
         private List<String> poster;
         private List<String> trailer;
         private String writter;//目前writers为空，Nu做法是在genres用"-"标志标记的writter，需手动解析
+        private String storeDownloadUrl;//下载的时候记录住下载的地址，只有下载记录的bean才有
+        private String downloadFileName;//下载的时候记录fileName，只有下载记录的bean才有
 
         public String getWritter() {
             return writter;
@@ -291,6 +293,22 @@ public class ContentResponseBean {
 
         public void setTrailer(List<String> trailer) {
             this.trailer = trailer;
+        }
+
+        public String getStoreDownloadUrl() {
+            return storeDownloadUrl;
+        }
+
+        public void setStoreDownloadUrl(String storeDownloadUrl) {
+            this.storeDownloadUrl = storeDownloadUrl;
+        }
+
+        public String getDownloadFileName() {
+            return downloadFileName;
+        }
+
+        public void setDownloadFileName(String downloadFileName) {
+            this.downloadFileName = downloadFileName;
         }
     }
 }

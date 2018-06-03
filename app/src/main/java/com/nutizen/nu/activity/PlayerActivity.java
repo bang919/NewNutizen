@@ -259,6 +259,10 @@ public abstract class PlayerActivity<D, P extends PlayerActivityPresenter> exten
 
     protected abstract D setDataBean();
 
+    protected D getDataBean() {
+        return mData;
+    }
+
     protected abstract BasePlayerAdapter createBasePlayerAdapter();
 
     protected abstract String returnCommentType();

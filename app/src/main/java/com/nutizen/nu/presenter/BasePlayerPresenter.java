@@ -32,10 +32,17 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.liulishuo.filedownloader.FileDownloader;
+import com.liulishuo.filedownloader.model.FileDownloadStatus;
 import com.nutizen.nu.R;
+import com.nutizen.nu.bean.response.ContentPlaybackBean;
+import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.common.BaseActivity;
 import com.nutizen.nu.common.BasePresenter;
+import com.nutizen.nu.utils.DownloadDatabaseUtil;
+import com.nutizen.nu.utils.FileUtils;
 import com.nutizen.nu.utils.LogUtils;
+import com.nutizen.nu.utils.ToastUtils;
 
 import java.lang.ref.WeakReference;
 
@@ -76,6 +83,10 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
     public void setTitleAndUrl(String title, String url) {
         this.mTitle = title;
         this.mUrl = url;
+    }
+
+    public String getCurrentUrl() {
+        return mUrl;
     }
 
     public void preparePlayer() {
@@ -261,6 +272,31 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
             layoutParams.height = width;
             mSimpleExoPlayerView.setLayoutParams(layoutParams);
             mSimpleExoPlayerView.requestLayout();
+        }
+    }
+
+
+    /**
+     * 开启/停止 下载
+     */
+    public boolean switchDownloading(String playbackUrl, ContentPlaybackBean contentPlaybackBean, ContentResponseBean.SearchBean dataBean) {
+        String downloadUrl = DownloadDatabaseUtil.getDownloadUrl(playbackUrl);
+        String downloadFileName = contentPlaybackBean.getDownloadFileName();
+        String downloadPath = FileUtils.getFileDownloaderFilePath(mContext, downloadFileName);
+        int status = FileDownloader.getImpl().getStatus(downloadUrl, downloadPath);
+        if (status == FileDownloadStatus.error) {//下载链接有错，不能下载
+            ToastUtils.showShort(R.string.download_url_error);
+            return false;
+        }
+
+        ContentResponseBean.SearchBean bean = DownloadDatabaseUtil.searchDownloadBeanByDownloadFileName(mContext, downloadFileName);
+        if (bean != null) {//之前有下载过，删除
+            DownloadDatabaseUtil.removeDownloadBeanByDownloadFileName(mContext, downloadFileName);
+            return false;
+        } else {
+            //bean == null, 之前没下载过，开始下载
+            DownloadDatabaseUtil.addDownloadContent(mContext, dataBean, downloadUrl, downloadFileName);
+            return true;
         }
     }
 }

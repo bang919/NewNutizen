@@ -3,6 +3,7 @@ package com.nutizen.nu.common;
 import android.app.Application;
 import android.content.Context;
 
+import com.liulishuo.filedownloader.FileDownloader;
 import com.mob.MobSDK;
 import com.nutizen.nu.utils.LogUtils;
 
@@ -18,9 +19,16 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        LogUtils.isDebug = true;
-        MobSDK.init(this);
+        initModules();
         mApplicationContext = getApplicationContext();
+    }
+
+    private void initModules() {
+        LogUtils.isDebug = true;
+        //ShareSdk
+        MobSDK.init(this);
+        //FileDownloader
+        FileDownloader.setup(getApplicationContext());
     }
 
     public static Context getMyApplicationContext() {

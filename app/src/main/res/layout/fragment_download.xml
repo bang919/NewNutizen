@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBlack2">
+
+    <TextView
+        android:id="@+id/title_text_title_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorBlack"
+        android:gravity="center"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp" />
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="2dp"
+        android:scaleType="center"
+        android:src="@mipmap/btn_back" />
+
+    <TextView
+        android:id="@+id/btn_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="@string/cancel"
+        android:textColor="@color/colorGreen"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/title_text_title_fragment"
+        app:layout_constraintLeft_toLeftOf="@+id/back"
+        app:layout_constraintTop_toTopOf="@id/title_text_title_fragment" />
+
+    <TextView
+        android:id="@+id/btn_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginRight="5dp"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="@string/edit"
+        android:textColor="@color/colorGreen"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/title_text_title_fragment"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/title_text_title_fragment" />
+
+    <TextView
+        android:id="@+id/btn_remove"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginRight="5dp"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="@string/remove"
+        android:textColor="@color/colorGreen"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/title_text_title_fragment"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/title_text_title_fragment" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorGreen"
+        app:layout_constraintTop_toBottomOf="@id/title_text_title_fragment" />
+
+    <include
+        android:id="@+id/layout_downloading"
+        layout="@layout/include_download_subtitle"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/layout_downloaded"
+        app:layout_constraintTop_toBottomOf="@id/line" />
+
+    <include
+        android:id="@+id/layout_downloaded"
+        layout="@layout/include_download_subtitle"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        app:layout_constraintLeft_toRightOf="@+id/layout_downloading"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/line" />
+
+    <com.nutizen.nu.widget.CustomViewPager
+        android:id="@+id/download_viewpager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fadingEdge="none"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_downloading" />
+
+    <RelativeLayout
+        android:id="@+id/progress_bar_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorDeepHalfBlack"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminateDrawable="@drawable/bg_pb_loading" />
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

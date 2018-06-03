@@ -24,7 +24,7 @@ import okhttp3.ResponseBody;
 public class FileUtils {
 
     public static String getDiskCacheDir(Context context) {
-        String cachePath = null;
+        String cachePath;
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
                 || !Environment.isExternalStorageRemovable()) {
             cachePath = context.getExternalCacheDir().getPath();
@@ -32,6 +32,23 @@ public class FileUtils {
             cachePath = context.getCacheDir().getPath();
         }
         return cachePath;
+    }
+
+    public static String getFileDownloaderDir(Context context) {
+        ///storage/emulated/0/Android/data/com.nutizen.nu3/files/filedownloader/SMDWLhB4XcDW30325
+        String filePath;
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
+                || !Environment.isExternalStorageRemovable()) {
+            filePath = context.getExternalFilesDir("filedownloader").getPath();
+        } else {
+            filePath = context.getFilesDir().getPath().concat("/filedownloader");
+        }
+        return filePath;
+    }
+
+    public static String getFileDownloaderFilePath(Context context, String downloadFileName) {
+        String filePath = getFileDownloaderDir(context);
+        return filePath.concat("/").concat(downloadFileName);
     }
 
     // Drawable转换成Bitmap
