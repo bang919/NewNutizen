@@ -51,7 +51,7 @@ public class KanalDetailPresenter extends BasePresenter<KanalDetailView> {
                     }
                 });
 
-        Observable<Boolean> checkFollowObservable = mFavouriteModel.checkFollow(kanalBean.getType(), kanalBean.getViewer_id()).doOnNext(new Consumer<Boolean>() {
+        Observable<Boolean> checkFollowObservable = mFavouriteModel.checkFollow(kanalBean.getViewer_id()).doOnNext(new Consumer<Boolean>() {
             @Override
             public void accept(Boolean isFavourite) throws Exception {
                 mView.isFollow(isFavourite);
@@ -92,6 +92,6 @@ public class KanalDetailPresenter extends BasePresenter<KanalDetailView> {
      * 更改喜爱
      */
     public void editFavourite(EditFavouriteReqBean editFavouriteReqBean) {
-        subscribeNetworkTask(mFavouriteModel.editFavourite(editFavouriteReqBean));
+        subscribeNetworkTask(mFavouriteModel.editFavourite(mContext, editFavouriteReqBean));
     }
 }

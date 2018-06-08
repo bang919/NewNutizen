@@ -27,7 +27,6 @@ import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlaybackControlView;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -69,7 +68,7 @@ public class BasePlayerPresenter<V> extends BasePresenter<V> {
 
     public void setSimpleExoPlayerView(SimpleExoPlayerView simpleExoPlayerView) {
         mSimpleExoPlayerView = simpleExoPlayerView;
-        mSimpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);//满屏
+//        mSimpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);//满屏
         mTitleTextView = mSimpleExoPlayerView.findViewById(R.id.tv_content_title);
         mSimpleExoPlayerView.setControllerVisibilityListener(new PlaybackControlView.VisibilityListener() {
             @Override

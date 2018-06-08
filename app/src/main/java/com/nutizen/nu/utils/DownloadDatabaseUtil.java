@@ -70,20 +70,19 @@ public class DownloadDatabaseUtil {
 
     public static ArrayList<ContentResponseBean.SearchBean> listDownloadContents(Context context) {
         try {
-            return SPUtils.getObject(context, DOWNLOAD_CONTENTS);
+            ArrayList<ContentResponseBean.SearchBean> searchBeans = SPUtils.getObject(context, DOWNLOAD_CONTENTS);
+            return searchBeans != null ? searchBeans : new ArrayList<ContentResponseBean.SearchBean>();
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return new ArrayList<>();
         }
     }
 
     public static ContentResponseBean.SearchBean searchDownloadBeanByDownloadFileName(Context context, String downloadFileName) {
         ArrayList<ContentResponseBean.SearchBean> beans = listDownloadContents(context);
-        if (beans != null) {
-            for (ContentResponseBean.SearchBean bean : beans) {
-                if (bean.getDownloadFileName().equals(downloadFileName)) {
-                    return bean;
-                }
+        for (ContentResponseBean.SearchBean bean : beans) {
+            if (bean.getDownloadFileName().equals(downloadFileName)) {
+                return bean;
             }
         }
         return null;

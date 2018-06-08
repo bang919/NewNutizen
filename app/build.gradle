@@ -35,7 +35,7 @@ def releaseTime() {
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.nutizen.nu3"
+        applicationId "com.nutizen.nu"
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
@@ -139,6 +139,7 @@ dependencies {
     //Firebase
     implementation 'com.google.firebase:firebase-core:11.8.0'
     implementation 'com.google.firebase:firebase-invites:11.8.0'
+    compile 'com.google.firebase:firebase-messaging:11.8.0'
     //Twitter
     implementation('com.twitter.sdk.android:tweet-composer:3.1.1@aar') {
         transitive = true

@@ -27,7 +27,7 @@ public class LivePlayerActivityPresenter extends PlayerActivityPresenter<LiveRes
     @Override
     public void getDatas(LiveResponseBean liveResponseBean) {
         Observable<ArrayList<CommentResult>> commentObservable = getComments(liveResponseBean.getType(), liveResponseBean.getId());
-        Observable<Boolean> followObservable = mFavouriteModel.checkFollow(liveResponseBean.getType(), liveResponseBean.getId()).doOnNext(new Consumer<Boolean>() {
+        Observable<Boolean> followObservable = mFavouriteModel.checkFollow(liveResponseBean.getAuthorId()).doOnNext(new Consumer<Boolean>() {
             @Override
             public void accept(Boolean isFollow) throws Exception {
                 mView.isFollow(isFollow);
@@ -58,6 +58,6 @@ public class LivePlayerActivityPresenter extends PlayerActivityPresenter<LiveRes
      * 更改喜爱
      */
     public void editFavourite(EditFavouriteReqBean editFavouriteReqBean) {
-        subscribeNetworkTask(mFavouriteModel.editFavourite(editFavouriteReqBean));
+        subscribeNetworkTask(mFavouriteModel.editFavourite(mContext, editFavouriteReqBean));
     }
 }

@@ -1,6 +1,7 @@
 package com.nutizen.nu.bean.response;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContributorContentResult implements Serializable {
@@ -314,5 +315,37 @@ public class ContributorContentResult implements Serializable {
         public void setThumbnail(String thumbnail) {
             this.thumbnail = thumbnail;
         }
+    }
+
+    public ContentResponseBean toContentResponseBean() {
+        ContentResponseBean contentResponseBean = new ContentResponseBean();
+        contentResponseBean.setTotalResults(getTotalResults());
+        contentResponseBean.setTotalCount(getTotalCount());
+        contentResponseBean.setResponse("True");
+        ArrayList<ContentResponseBean.SearchBean> searchBeans = new ArrayList<>();
+        for (ContributorContentResult.SearchBean result : getSearch()) {
+            ContentResponseBean.SearchBean searchBean = new ContentResponseBean.SearchBean();
+            searchBean.setId(result.getMovie_id());
+            searchBean.setTitle(result.getMovie_title());
+            //不设置太多了，影响效率啊。。。。
+//                            searchBean.setChinese_title(result.getMovie_chinese_title());
+//                            searchBean.setOthesr_title(result.getMovie_others_title());
+            searchBean.setTagline(result.getMovie_tagline());
+            searchBean.setDescription(result.getMovie_description());
+            searchBean.setGenres(result.getMovie_genres());
+            searchBean.setDatereleased(result.getMovie_datereleased());
+            searchBean.setThumbnail(result.getMovie_thumbnail());
+            searchBean.setRating(result.getMovie_rating());
+//                            searchBean.setDirectors(result.getMovie_directors());
+//                            searchBean.setWriters(result.getMovie_writers());
+//                            searchBean.setCast(result.getMovie_cast());
+            searchBean.setCountry(result.getMovie_country());
+            searchBean.setLanguage(result.getMovie_language());
+            searchBean.setVideo_id(result.getVideo_id());
+            searchBean.setDuration(result.getMovie_duration());
+            searchBeans.add(searchBean);
+        }
+        contentResponseBean.setSearch(searchBeans);
+        return contentResponseBean;
     }
 }

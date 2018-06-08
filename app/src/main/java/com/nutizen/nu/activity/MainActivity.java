@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.nutizen.nu.R;
 import com.nutizen.nu.adapter.MainViewPagerAdapter;
+import com.nutizen.nu.bean.response.ContentResponseBean;
+import com.nutizen.nu.bean.response.LiveResponseBean;
 import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.common.BaseActivity;
 import com.nutizen.nu.common.BaseMainFragment;
@@ -25,11 +27,13 @@ import com.nutizen.nu.fragment.BaseLiveFragment;
 import com.nutizen.nu.fragment.DownloadFragment;
 import com.nutizen.nu.fragment.HelpFaqFragment;
 import com.nutizen.nu.fragment.LeftFavouriteFragment;
+import com.nutizen.nu.fragment.NotificationFragment;
 import com.nutizen.nu.fragment.ProfilFragment;
 import com.nutizen.nu.fragment.TvFragment;
 import com.nutizen.nu.presenter.LoginPresenter;
 import com.nutizen.nu.utils.AnimUtil;
 import com.nutizen.nu.utils.ScreenUtils;
+import com.nutizen.nu.utils.SubscribeNotificationUtile;
 import com.nutizen.nu.widget.CustomViewPager;
 import com.nutizen.nu.widget.MySwipeRefreshLayout;
 
@@ -156,6 +160,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+        SubscribeNotificationUtile.checkFCMNotification(this, getIntent(), new SubscribeNotificationUtile.CheckFCMNotificationCallback() {
+            @Override
+            public void onFCMNotificationMovie(ContentResponseBean.SearchBean contentBean) {
+                ContentPlayerActivity.startContentPlayActivity(MainActivity.this, contentBean);
+            }
+
+            @Override
+            public void onFCMNotificationLive(LiveResponseBean liveBean) {
+                LivePlayerActivity.startLivePlayActivity(MainActivity.this, liveBean);
+            }
+
+            @Override
+            public void onFCMNotificationFailure() {
+
+            }
+        });
     }
 
     @Override
@@ -181,6 +201,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 HelpFaqFragment.getInstance().show(getSupportFragmentManager(), HelpFaqFragment.TAG);
                 break;
             case R.id.leftitem_notification:
+                NotificationFragment.getInstance().show(getSupportFragmentManager(), NotificationFragment.TAG);
                 break;
             case R.id.iv_log_out:
                 new NormalDialog(this, getString(R.string.yes), getString(R.string.no), getString(R.string.measure_logout), new View.OnClickListener() {

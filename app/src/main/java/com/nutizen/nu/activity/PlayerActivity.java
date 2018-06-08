@@ -10,7 +10,6 @@ import android.view.ViewTreeObserver;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.nutizen.nu.R;
 import com.nutizen.nu.adapter.BasePlayerAdapter;
-import com.nutizen.nu.bean.request.EditFavouriteReqBean;
 import com.nutizen.nu.bean.response.CommentResult;
 import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.common.BaseActivity;
@@ -86,12 +85,7 @@ public abstract class PlayerActivity<D, P extends PlayerActivityPresenter> exten
                 boolean isSelected = mFavouriteBtn != null && mFavouriteBtn.isSelected();
                 if (accountMessage != null && initFavourite != isSelected) {
                     initFavourite = isSelected;
-                    EditFavouriteReqBean editFavouriteReqBean = new EditFavouriteReqBean();
-                    editFavouriteReqBean.setContentid(returnCommentId());
-                    editFavouriteReqBean.setContenttype(returnCommentType());
-                    editFavouriteReqBean.setViewerid(accountMessage.getViewer_id());
-                    editFavouriteReqBean.setOperation(isSelected ? EditFavouriteReqBean.EDIT_MARK : EditFavouriteReqBean.EDIT_UNMARK);
-                    editFavourite(editFavouriteReqBean);
+                    editFavourite(isSelected);
                 }
             }
         };
@@ -273,6 +267,6 @@ public abstract class PlayerActivity<D, P extends PlayerActivityPresenter> exten
 
     protected abstract View setFavouriteBtn();
 
-    protected abstract void editFavourite(EditFavouriteReqBean editFavouriteReqBean);
+    protected abstract void editFavourite(boolean isfavourite);
 
 }

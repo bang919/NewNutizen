@@ -13,7 +13,9 @@ import com.nutizen.nu.bean.request.EditFavouriteReqBean;
 import com.nutizen.nu.bean.request.WatchHistoryCountBody;
 import com.nutizen.nu.bean.response.ContentPlaybackBean;
 import com.nutizen.nu.bean.response.ContentResponseBean;
+import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.presenter.ContentPlayerActivityPresenter;
+import com.nutizen.nu.presenter.LoginPresenter;
 import com.nutizen.nu.utils.DownloadDatabaseUtil;
 import com.nutizen.nu.utils.FileUtils;
 import com.nutizen.nu.view.ContentPlayerActivityView;
@@ -71,7 +73,6 @@ public class ContentPlayerActivity extends PlayerActivity<ContentResponseBean.Se
     @Override
     protected ContentResponseBean.SearchBean setDataBean() {
         ContentResponseBean.SearchBean searchBean = (ContentResponseBean.SearchBean) getIntent().getSerializableExtra(DATA_BEAN);
-        searchBean.setTitle(getString(R.string.playing_download_file).concat(searchBean.getTitle()));
         return searchBean;
     }
 
@@ -97,7 +98,13 @@ public class ContentPlayerActivity extends PlayerActivity<ContentResponseBean.Se
     }
 
     @Override
-    protected void editFavourite(EditFavouriteReqBean editFavouriteReqBean) {
+    protected void editFavourite(boolean isfavourite) {
+        LoginResponseBean accountMessage = LoginPresenter.getAccountMessage();
+        EditFavouriteReqBean editFavouriteReqBean = new EditFavouriteReqBean();
+        editFavouriteReqBean.setContentid(mData.getId());
+        editFavouriteReqBean.setContenttype(mData.getType());
+        editFavouriteReqBean.setViewerid(accountMessage.getViewer_id());
+        editFavouriteReqBean.setOperation(isfavourite ? EditFavouriteReqBean.EDIT_MARK : EditFavouriteReqBean.EDIT_UNMARK);
         mPresenter.editFavourite(editFavouriteReqBean);
     }
 
@@ -117,6 +124,7 @@ public class ContentPlayerActivity extends PlayerActivity<ContentResponseBean.Se
     //从download里面按进来
     @Override
     public void onDownloadPlay(ContentResponseBean.SearchBean contentResponseBean) {
+        contentResponseBean.setTitle(getString(R.string.playing_download_file).concat(contentResponseBean.getTitle()));
         fromDownload = true;
         //隐藏按钮
         mDownloadBtn.setVisibility(View.GONE);

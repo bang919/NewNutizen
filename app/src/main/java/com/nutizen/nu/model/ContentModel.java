@@ -9,6 +9,8 @@ import com.nutizen.nu.bean.response.WatchHistoryCountRes;
 import com.nutizen.nu.http.HttpClient;
 import com.nutizen.nu.presenter.LoginPresenter;
 
+import java.util.ArrayList;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;
@@ -80,9 +82,20 @@ public class ContentModel {
      * @param contentId
      * @return
      */
-    public Observable<ContentResponseBean> getVideoIdByContentId(int contentId) {
+    public Observable<ContentResponseBean.SearchBean> getVideoIdByContentId(final int contentId) {
         return HttpClient.getApiInterface()
                 .getVideoIdByContentId(contentId)
+                .map(new Function<ContentResponseBean, ContentResponseBean.SearchBean>() {
+                    @Override
+                    public ContentResponseBean.SearchBean apply(ContentResponseBean contentResponseBean) throws Exception {
+                        ArrayList<ContentResponseBean.SearchBean> search = contentResponseBean.getSearch();
+                        if (search == null || search.size() == 0 || search.get(0).getVideo_id() == 0) {
+                            throw new Exception("Can't find video for content_id: " + contentId);
+                        }else {
+                            return search.get(0);
+                        }
+                    }
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

@@ -40,16 +40,13 @@ public class ContentPlayerActivityPresenter extends PlayerActivityPresenter<Cont
             return;
         }
         Observable<ContentPlaybackBean> contentPlaybackBeanObservable = mContentModel.getVideoIdByContentId(contentBean.getId())
-                .flatMap(new Function<ContentResponseBean, ObservableSource<ContentPlaybackBean>>() {
+                .flatMap(new Function<ContentResponseBean.SearchBean, ObservableSource<ContentPlaybackBean>>() {
                     @Override
-                    public ObservableSource<ContentPlaybackBean> apply(ContentResponseBean contentResponseBean) throws Exception {
-                        ArrayList<ContentResponseBean.SearchBean> search = contentResponseBean.getSearch();
-                        if (search == null || search.size() == 0 || search.get(0).getVideo_id() == 0) {
-                            throw new Exception("Can't find video for " + contentBean.getTitle() + " (content_id: " + contentBean.getId() + ")");
-                        }
-                        return mContentModel.getPlaybackInfoByVideoId(search.get(0).getVideo_id());
+                    public ObservableSource<ContentPlaybackBean> apply(ContentResponseBean.SearchBean searchBean) throws Exception {
+                        return mContentModel.getPlaybackInfoByVideoId(searchBean.getVideo_id());
                     }
-                }).doOnNext(new Consumer<ContentPlaybackBean>() {
+                })
+                .doOnNext(new Consumer<ContentPlaybackBean>() {
                     @Override
                     public void accept(ContentPlaybackBean contentPlaybackBean) throws Exception {
                         mView.onContentPlaybackResponse(contentBean, contentPlaybackBean);
@@ -105,6 +102,6 @@ public class ContentPlayerActivityPresenter extends PlayerActivityPresenter<Cont
      * 更改喜爱
      */
     public void editFavourite(EditFavouriteReqBean editFavouriteReqBean) {
-        subscribeNetworkTask(mFavouriteModel.editFavourite(editFavouriteReqBean));
+        subscribeNetworkTask(mFavouriteModel.editFavourite(mContext, editFavouriteReqBean));
     }
 }

@@ -278,4 +278,6 @@
     <string name="downloaded">Downloaded</string>
     <string name="waiting">waiting...</string>
     <string name="playing_download_file">(download)</string>
+    <string name="notification_settings">Notification Settings</string>
+    <string name="all">All</string>
 </resources>

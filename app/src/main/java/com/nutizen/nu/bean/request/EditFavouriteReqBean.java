@@ -16,6 +16,7 @@ public class EditFavouriteReqBean {
     private String operation;
     private String contenttype;
     private int contentid;
+    private String tag;//用来传递一些信息的，比如contributor的name，以让SubscribeNotificationUtile.subscribeOneContributorVod(name)
 
     public int getViewerid() {
         return viewerid;
@@ -47,5 +48,13 @@ public class EditFavouriteReqBean {
 
     public void setContentid(int contentid) {
         this.contentid = contentid;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }

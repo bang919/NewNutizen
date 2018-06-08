@@ -1,11 +1,16 @@
 package com.nutizen.nu.model;
 
+import android.content.Context;
+
 import com.nutizen.nu.bean.request.EditFavouriteReqBean;
 import com.nutizen.nu.bean.response.FavouriteRspBean;
 import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.bean.response.NormalResBean;
+import com.nutizen.nu.common.Constants;
 import com.nutizen.nu.http.HttpClient;
 import com.nutizen.nu.presenter.LoginPresenter;
+import com.nutizen.nu.utils.SPUtils;
+import com.nutizen.nu.utils.SubscribeNotificationUtile;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -20,7 +25,21 @@ import io.reactivex.schedulers.Schedulers;
 
 public class FavouriteModel {
 
-    public Observable<NormalResBean> editFavourite(EditFavouriteReqBean editFavouriteReqBean) {
+    public Observable<NormalResBean> editFavourite(Context context, EditFavouriteReqBean editFavouriteReqBean) {
+        //edit notification subscribe
+        if (editFavouriteReqBean.getOperation().contains(EditFavouriteReqBean.EDIT_MARK) && editFavouriteReqBean.getContenttype().contains("contributor")) {
+            boolean subscribeKanal = (boolean) SPUtils.get(context, Constants.NOTIFICATION_KANAL, false);
+            boolean subscribeLive = (boolean) SPUtils.get(context, Constants.NOTIFICATION_LIVE, false);
+            if (subscribeKanal) {
+                SubscribeNotificationUtile.subscribeOneContributorVod(editFavouriteReqBean.getTag());
+            }
+            if (subscribeLive) {
+                SubscribeNotificationUtile.subscribeOneContributorLive(editFavouriteReqBean.getTag());
+            }
+        } else if (editFavouriteReqBean.getOperation().contains(EditFavouriteReqBean.EDIT_UNMARK) && editFavouriteReqBean.getContenttype().contains("contributor")) {
+            SubscribeNotificationUtile.unsubscribeOneContributorVod(editFavouriteReqBean.getTag());
+            SubscribeNotificationUtile.unsubscribeOneContributorLive(context, editFavouriteReqBean.getTag());
+        }
         return HttpClient.getApiInterface()
                 .editFavourite(editFavouriteReqBean)
                 .subscribeOn(Schedulers.io())
@@ -84,7 +103,7 @@ public class FavouriteModel {
         });
     }
 
-    public Observable<Boolean> checkFollow(final String type, final int contributorId) {
+    public Observable<Boolean> checkFollow(final int contributorId) {
         return Observable.create(new ObservableOnSubscribe<Boolean>() {
             @Override
             public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
@@ -100,7 +119,7 @@ public class FavouriteModel {
                 return getFavourites().map(new Function<TreeMap<String, ArrayList<FavouriteRspBean>>, Boolean>() {
                     @Override
                     public Boolean apply(TreeMap<String, ArrayList<FavouriteRspBean>> stringArrayListTreeMap) throws Exception {
-                        ArrayList<FavouriteRspBean> favouriteRspBeans = stringArrayListTreeMap.get(type);
+                        ArrayList<FavouriteRspBean> favouriteRspBeans = stringArrayListTreeMap.get("contributor");
                         boolean isFavourite = false;
                         if (favouriteRspBeans != null) {
                             for (FavouriteRspBean favouriteRspBean : favouriteRspBeans) {

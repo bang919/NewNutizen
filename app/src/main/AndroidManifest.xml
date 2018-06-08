@@ -27,6 +27,19 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="nutizen.com"
+                    android:scheme="https" />
+                <data
+                    android:host="sgoffice.asuscomm.com"
+                    android:scheme="https" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activity.MainActivity"
@@ -70,7 +83,20 @@
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <service android:name=".server.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".server.MyFirebaseMessagingService">
+            <intent-filter>
+                <action
+                    android:name="com.google.firebase.MESSAGING_EVENT"
+                    android:persistent="true" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

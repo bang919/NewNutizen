@@ -1,5 +1,7 @@
 package com.nutizen.nu.utils;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.widget.ImageView;
@@ -8,6 +10,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.nutizen.nu.R;
 
 /**
@@ -48,5 +52,30 @@ public class GlideUtils {
         }
         requestBuilder.apply(requestOptions);
         requestBuilder.into(imageView);
+    }
+
+    /**
+     * MyFirebaseMessagingService用到的用BitmapCallback加载
+     */
+    public static void requestBitmap(Context context, String url, final BitmapCallback bitmapCallback) {
+        if (TextUtils.isEmpty(url)) {
+            bitmapCallback.onBitmapCallback(null);
+            return;
+        }
+        Glide.with(context).load(url).into(new SimpleTarget<Drawable>() {
+            @Override
+            public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
+                if(resource!=null){
+                    bitmapCallback.onBitmapCallback(FileUtils.drawable2Bitmap(resource));
+                }else {
+                    bitmapCallback.onBitmapFailure();
+                }
+            }
+        });
+    }
+
+    public interface BitmapCallback {
+        void onBitmapCallback(Bitmap bitmap);
+        void onBitmapFailure();
     }
 }

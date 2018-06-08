@@ -8,7 +8,9 @@ import com.nutizen.nu.adapter.BasePlayerAdapter;
 import com.nutizen.nu.adapter.LivePlayerAdapter;
 import com.nutizen.nu.bean.request.EditFavouriteReqBean;
 import com.nutizen.nu.bean.response.LiveResponseBean;
+import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.presenter.LivePlayerActivityPresenter;
+import com.nutizen.nu.presenter.LoginPresenter;
 import com.nutizen.nu.view.LivePlayerActivityView;
 
 public class LivePlayerActivity extends PlayerActivity<LiveResponseBean, LivePlayerActivityPresenter> implements LivePlayerActivityView {
@@ -53,7 +55,14 @@ public class LivePlayerActivity extends PlayerActivity<LiveResponseBean, LivePla
     }
 
     @Override
-    protected void editFavourite(EditFavouriteReqBean editFavouriteReqBean) {
+    protected void editFavourite(boolean isfavourite) {
+        LoginResponseBean accountMessage = LoginPresenter.getAccountMessage();
+        EditFavouriteReqBean editFavouriteReqBean = new EditFavouriteReqBean();
+        editFavouriteReqBean.setContentid(mData.getAuthorId());
+        editFavouriteReqBean.setContenttype("contributor");
+        editFavouriteReqBean.setViewerid(accountMessage.getViewer_id());
+        editFavouriteReqBean.setTag(mData.getAuthorName());
+        editFavouriteReqBean.setOperation(isfavourite ? EditFavouriteReqBean.EDIT_MARK : EditFavouriteReqBean.EDIT_UNMARK);
         mPresenter.editFavourite(editFavouriteReqBean);
     }
 

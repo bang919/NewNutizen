@@ -61,4 +61,13 @@
         <item name="android:button">@drawable/checkbox_style</item>
     </style>
 
+    <style name="MySwitchCompat">
+        <!-- Active thumb color & Active track color(30% transparency) switch 打开时的拇指按钮的颜色 轨迹颜色默认为30%这个颜色 -->
+        <item name="colorControlActivated">@color/colorGreen</item>
+        <!-- Inactive thumb color switch关闭时的拇指按钮的颜色 -->
+        <item name="colorSwitchThumbNormal">@color/colorWhite</item>
+        <!-- Inactive track color(30% transparency) switch关闭时的轨迹的颜色  30%这个颜色 -->
+        <item name="android:colorForeground">@color/colorWhite</item>
+    </style>
+
 </resources>

@@ -12,8 +12,10 @@ import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.common.BaseActivity;
 import com.nutizen.nu.common.Constants;
 import com.nutizen.nu.common.MyApplication;
+import com.nutizen.nu.dialog.NormalDialog;
 import com.nutizen.nu.presenter.LoginPresenter;
 import com.nutizen.nu.utils.SPUtils;
+import com.nutizen.nu.utils.SubscribeNotificationUtile;
 import com.nutizen.nu.utils.ToastUtils;
 import com.nutizen.nu.view.LoginView;
 
@@ -60,6 +62,22 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             mEmailEt.setText(username);
             mPasswordEt.requestFocus();
         }
+        showNotificationDialog();
+    }
+
+    private void showNotificationDialog() {
+        boolean firstTime = (boolean) SPUtils.get(this, Constants.FIRST_TIME_LAUNCH, true);
+        if (!firstTime) {
+            return;
+        }
+        SPUtils.put(this, Constants.FIRST_TIME_LAUNCH, false);
+        new NormalDialog(this, getString(R.string.yes), getString(R.string.no), getString(R.string.receive_notification),
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        SubscribeNotificationUtile.subscribeAll(LoginActivity.this);
+                    }
+                }, null).show();
     }
 
     @Override
@@ -119,7 +137,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void facebookSdkCallback(boolean onComplete) {
-        if(!onComplete){
+        if (!onComplete) {
             progressDialog.dismiss();
         }
         progressDialog.setCancelable(true);

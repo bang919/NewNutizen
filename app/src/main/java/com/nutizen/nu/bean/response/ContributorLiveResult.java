@@ -1,5 +1,6 @@
 package com.nutizen.nu.bean.response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -286,5 +287,26 @@ public class ContributorLiveResult {
         public void setHttpUrl(String httpUrl) {
             this.httpUrl = httpUrl;
         }
+    }
+
+    public ArrayList<LiveResponseBean> toLiveResponseBeans() {
+        ArrayList<LiveResponseBean> liveResponseBeans = new ArrayList<>();
+        for (ContributorLiveResult.SearchBean searchBean : getSearch()) {
+            LiveResponseBean liveResponseBean = new LiveResponseBean();
+            liveResponseBean.setId(searchBean.getLive_id());
+            liveResponseBean.setTitle(searchBean.getLive_title());
+//                            liveResponseBean.setRecommend(searchBean.getLive_recommend());
+//                            liveResponseBean.setCategory(searchBean.());
+            liveResponseBean.setSynopsis(searchBean.getLive_description());
+            liveResponseBean.setThumbnail(searchBean.getLive_thumbnail());
+            liveResponseBean.setStatus(searchBean.getLive_status());
+//                            liveResponseBean.setDelay(searchBean.getLive_delay());
+            liveResponseBean.setType("live");
+//                            liveResponseBean.setEpgUrl(searchBean.getLive_epg_url());
+            liveResponseBean.setUrl(searchBean.getHttpUrl());
+            liveResponseBean.setUuid(searchBean.getLive_uuid());
+            liveResponseBeans.add(liveResponseBean);
+        }
+        return liveResponseBeans;
     }
 }

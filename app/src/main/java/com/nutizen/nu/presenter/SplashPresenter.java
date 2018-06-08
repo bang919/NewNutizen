@@ -1,6 +1,8 @@
 package com.nutizen.nu.presenter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.widget.ImageView;
@@ -12,13 +14,19 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.nutizen.nu.R;
 import com.nutizen.nu.bean.response.AdvertisementBean;
+import com.nutizen.nu.bean.response.ContentBean;
+import com.nutizen.nu.bean.response.ContentResponseBean;
+import com.nutizen.nu.bean.response.LiveResponseBean;
+import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.common.BasePresenter;
 import com.nutizen.nu.common.Constants;
 import com.nutizen.nu.common.MyApplication;
 import com.nutizen.nu.model.SplashModel;
+import com.nutizen.nu.utils.DynamicLinkUtil;
 import com.nutizen.nu.utils.FileUtils;
 import com.nutizen.nu.utils.LogUtils;
 import com.nutizen.nu.utils.SPUtils;
+import com.nutizen.nu.utils.SubscribeNotificationUtile;
 import com.nutizen.nu.view.SplashView;
 
 import java.io.File;
@@ -28,10 +36,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Function4;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 
 /**
@@ -105,6 +119,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 if (responseBody != null) {
                     try {
                         FileUtils.saveResponseBody(responseBody, splashImagePath);
+                        mView.getNewPic();
                         LogUtils.d(TAG, "save Splash pic success");
                     } catch (IOException e) {
                         LogUtils.d(TAG, "save Splash pic failure");
@@ -122,5 +137,149 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
             }
         });
+    }
+
+    public void checkDynamicLinkAndNotification(final Activity activity, final Intent intent, final long waitTime) {
+        Observable<ContentBean> notificationOb = Observable.create(new ObservableOnSubscribe<ContentBean>() {
+            @Override
+            public void subscribe(final ObservableEmitter<ContentBean> e) throws Exception {
+                SubscribeNotificationUtile.checkFCMNotification(activity, intent, new SubscribeNotificationUtile.CheckFCMNotificationCallback() {
+                    @Override
+                    public void onFCMNotificationMovie(ContentResponseBean.SearchBean contentBean) {
+                        ContentBean value = new ContentBean();
+                        value.setType(contentBean.getType());
+                        value.setMovieBean(contentBean);
+                        e.onNext(value);
+                    }
+
+                    @Override
+                    public void onFCMNotificationLive(LiveResponseBean liveBean) {
+                        ContentBean value = new ContentBean();
+                        value.setType(liveBean.getType());
+                        value.setLiveBean(liveBean);
+                        e.onNext(value);
+                    }
+
+                    @Override
+                    public void onFCMNotificationFailure() {
+                        e.onNext(new ContentBean());
+                    }
+                });
+            }
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io());
+
+        Observable<ContentBean> dynamicOb = Observable.create(new ObservableOnSubscribe<ContentBean>() {
+            @Override
+            public void subscribe(final ObservableEmitter<ContentBean> e) throws Exception {
+                DynamicLinkUtil.checkDynamicLink(activity, intent, new DynamicLinkUtil.DynamicLinkUtilCallback() {
+                    @Override
+                    public void onDynamicMovie(ContentResponseBean.SearchBean contentBean) {
+                        ContentBean value = new ContentBean();
+                        value.setType(contentBean.getType());
+                        value.setMovieBean(contentBean);
+                        e.onNext(value);
+                    }
+
+                    @Override
+                    public void onDynamicLive(LiveResponseBean liveBean) {
+                        ContentBean value = new ContentBean();
+                        value.setType(liveBean.getType());
+                        value.setLiveBean(liveBean);
+                        e.onNext(value);
+                    }
+
+                    @Override
+                    public void onDynamicFailure() {
+                        e.onNext(new ContentBean());
+                    }
+                });
+            }
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io());
+
+        Observable<Boolean> checkLoginOb = Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
+                e.onNext(checkLogin());
+            }
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io());
+
+        Observable<String> waitOb = Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> e) throws Exception {
+                Thread.sleep(waitTime);
+                e.onNext("wait");
+            }
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io());
+        zipObservables(notificationOb, dynamicOb, checkLoginOb, waitOb);
+    }
+
+    private void zipObservables(Observable<ContentBean> notificationOb, Observable<ContentBean> dynamicOb, Observable<Boolean> checkLoginOb, Observable<String> waitOb) {
+        Observable<SplashContentBean> zip = Observable.zip(notificationOb, dynamicOb, checkLoginOb, waitOb, new Function4<ContentBean, ContentBean, Boolean, String, SplashContentBean>() {
+            @Override
+            public SplashContentBean apply(ContentBean contentBean, ContentBean contentBean2, Boolean aBoolean, String s) throws Exception {
+                SplashContentBean splashContentBean = new SplashContentBean();
+                splashContentBean.setLogin(aBoolean);
+                if (contentBean.getMovieBean() != null || contentBean.getLiveBean() != null) {
+                    splashContentBean.setContentBean(contentBean);
+                } else if (contentBean2.getMovieBean() != null || contentBean2.getLiveBean() != null) {
+                    splashContentBean.setContentBean(contentBean2);
+                }
+                return splashContentBean;
+            }
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+        subscribeNetworkTask(getClass().getName().concat("zipObservables"), zip, new MyObserver<SplashContentBean>() {
+            @Override
+            public void onMyNext(SplashContentBean splashContentBean) {
+                mView.isLogin(splashContentBean.isLogin());
+                if (splashContentBean.getContentBean() != null && splashContentBean.getContentBean().getType().equals("movie")) {
+                    ContentResponseBean.SearchBean movieBean = splashContentBean.getContentBean().getMovieBean();
+                    mView.jumpToContentPlayerActivity(movieBean);
+                } else if (splashContentBean.getContentBean() != null && splashContentBean.getContentBean().getType().equals("live")) {
+                    LiveResponseBean liveBean = splashContentBean.getContentBean().getLiveBean();
+                    mView.jumpToLivePlayerActivity(liveBean);
+                }
+            }
+
+            @Override
+            public void onMyError(String errorMessage) {
+                mView.isLogin(checkLogin());
+            }
+        });
+    }
+
+    private boolean checkLogin() {
+        LoginResponseBean accountMessage = LoginPresenter.getAccountMessage();
+        return accountMessage != null;
+    }
+
+    class SplashContentBean {
+        private boolean isLogin;
+        private ContentBean contentBean;
+
+        public boolean isLogin() {
+            return isLogin;
+        }
+
+        public void setLogin(boolean login) {
+            isLogin = login;
+        }
+
+        public ContentBean getContentBean() {
+            return contentBean;
+        }
+
+        public void setContentBean(ContentBean contentBean) {
+            this.contentBean = contentBean;
+        }
     }
 }

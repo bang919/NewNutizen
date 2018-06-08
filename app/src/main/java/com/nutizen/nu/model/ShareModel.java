@@ -3,8 +3,10 @@ package com.nutizen.nu.model;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
@@ -16,8 +18,11 @@ import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.common.Constants;
 import com.nutizen.nu.common.MyApplication;
 import com.nutizen.nu.presenter.LoginPresenter;
+import com.nutizen.nu.utils.ToastUtils;
 
 public class ShareModel {
+
+    private final String TAG = "ShareModel";
 
     private OnShortDynamicCompleteListener mShortDynamicLinkOnCompleteListener;
 
@@ -90,7 +95,13 @@ public class ShareModel {
                     public void onComplete(@NonNull Task<ShortDynamicLink> task) {
                         mShortDynamicLinkOnCompleteListener.onComplete(platformName, task);
                     }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "onFailure() called with: e = [" + e + "]");
+                ToastUtils.showShort(e.getMessage());
+            }
+        });
     }
 
     public interface OnShortDynamicCompleteListener {

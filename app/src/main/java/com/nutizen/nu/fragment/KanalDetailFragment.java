@@ -112,6 +112,7 @@ public class KanalDetailFragment extends BaseDialogFragment<KanalDetailPresenter
                     editFavouriteReqBean.setContentid(mKanalBean.getViewer_id());
                     editFavouriteReqBean.setContenttype(mKanalBean.getType());
                     editFavouriteReqBean.setViewerid(accountMessage.getViewer_id());
+                    editFavouriteReqBean.setTag(mKanalBean.getUsername());
                     editFavouriteReqBean.setOperation(isSelected ? EditFavouriteReqBean.EDIT_MARK : EditFavouriteReqBean.EDIT_UNMARK);
                     mPresenter.editFavourite(editFavouriteReqBean);
                 }

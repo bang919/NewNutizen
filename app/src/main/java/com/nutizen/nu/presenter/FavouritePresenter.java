@@ -56,7 +56,7 @@ public class FavouritePresenter extends BasePresenter<FavouriteView> {
             editFavouriteReqBean.setContenttype(bean.getViewer_content_type());
             editFavouriteReqBean.setViewerid(accountMessage.getViewer_id());
             editFavouriteReqBean.setOperation(EditFavouriteReqBean.EDIT_UNMARK);
-            editFavouriteReqBeans[i] = mFavouriteModel.editFavourite(editFavouriteReqBean);
+            editFavouriteReqBeans[i] = mFavouriteModel.editFavourite(mContext, editFavouriteReqBean);
         }
 
         Observable<String> zip = Observable.zipArray(new Function<Object[], String>() {
