@@ -14,13 +14,26 @@ import com.nutizen.nu.utils.LogUtils;
 
 public class MyApplication extends Application {
 
+    private final String TAG = "MyApplication";
     private static Context mApplicationContext;
+    private Thread.UncaughtExceptionHandler mDefaultUncaughtExceptionHandler;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        catchException();
         initModules();
         mApplicationContext = getApplicationContext();
+    }
+
+    private void catchException() {//解决ShareSdk拦截Crash的bug
+        mDefaultUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(final Thread t, final Throwable e) {
+                mDefaultUncaughtExceptionHandler.uncaughtException(t, e);
+            }
+        });
     }
 
     private void initModules() {
