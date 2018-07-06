@@ -1,6 +1,7 @@
 package com.nutizen.nu.server;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
@@ -42,6 +44,7 @@ import io.reactivex.disposables.Disposable;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private final String TAG = "FCMService";
+    private static final String NOTIFICATION_CHANNEL_ID = "newnu_notification_channel";
 
 
     @Override
@@ -177,7 +180,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         long[] vibrates = {0, 1000, 1000, 1000};
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "channel_name", NotificationManager.IMPORTANCE_HIGH);
+            channel.enableLights(true);
+            channel.setLightColor(getColor(R.color.colorGreen));
+            channel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
+            channel.enableVibration(true);
+            notificationManager.createNotificationChannel(channel);
+        }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID)
                 //设置通知标题
                 .setContentTitle(title)
                 //设置通知内容

@@ -44,6 +44,14 @@
                 android:layout_marginRight="5dp"
                 android:src="@drawable/search_selector" />
 
+            <ImageView
+                android:id="@+id/iv_create_live"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:background="@drawable/live_selector"
+                android:scaleType="centerInside" />
+
         </android.support.v7.widget.Toolbar>
 
         <View

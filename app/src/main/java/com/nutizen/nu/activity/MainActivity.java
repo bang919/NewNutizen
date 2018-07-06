@@ -47,6 +47,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
     private View mSearchBtn;
+    private View mCreateLiveBtn;
 
     @Override
     protected int getLayout() {
@@ -65,12 +66,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void initView() {
+        mCreateLiveBtn = findViewById(R.id.iv_create_live);
         mViewPager = findViewById(R.id.main_viewpager);
         mTabLayout = findViewById(R.id.main_tablayout);
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh);
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mToolbar = findViewById(R.id.toolbar);
         mSearchBtn = findViewById(R.id.iv_main_search);
+        mCreateLiveBtn.setVisibility(LoginPresenter.getAccountMessage() != null && LoginPresenter.getAccountMessage().isIs_contributor() ?
+                View.VISIBLE : View.GONE);
         new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.open, R.string.close);//Toggle DrawerLayout and Toolbar
 
         mSwipeRefreshLayout.setProgressViewOffset(true, 0, (int) ScreenUtils.dip2px(this, 36f));
@@ -139,6 +143,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void initEvent() {
         mSearchBtn.setOnClickListener(this);
+        mCreateLiveBtn.setOnClickListener(this);
         findViewById(R.id.leftitem_profile).setOnClickListener(this);
         findViewById(R.id.leftitem_favourit).setOnClickListener(this);
         findViewById(R.id.leftitem_download).setOnClickListener(this);
@@ -183,6 +188,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.iv_main_search:
                 jumpToActivity(SearchActivity.class);
+                break;
+            case R.id.iv_create_live:
+                if (checkLogin()) {
+                    jumpToActivity(LiveStreamingActivity.class);
+                }
                 break;
             case R.id.leftitem_profile:
                 if (checkLogin()) {

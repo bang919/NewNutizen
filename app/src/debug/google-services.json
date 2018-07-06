@@ -45,7 +45,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:775462402250:android:9947ebd9c1092f77",
         "android_client_info": {
-          "package_name": "com.nutizen.nu"
+          "package_name": "com.nutizen.nu3"
         }
       },
       "oauth_client": [
@@ -53,7 +53,7 @@
           "client_id": "775462402250-j08f8qjlv7st3075rp2frcjdcah9cgc7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.nutizen.nu",
+            "package_name": "com.nutizen.nu3",
             "certificate_hash": "a5c5bbc0c27f7e5547d1612a1e796f4cc8cba15d"
           }
         },
