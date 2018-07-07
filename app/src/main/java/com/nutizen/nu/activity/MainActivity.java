@@ -48,6 +48,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private Toolbar mToolbar;
     private View mSearchBtn;
     private View mCreateLiveBtn;
+    private boolean isContributor;
 
     @Override
     protected int getLayout() {
@@ -73,8 +74,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mToolbar = findViewById(R.id.toolbar);
         mSearchBtn = findViewById(R.id.iv_main_search);
-        mCreateLiveBtn.setVisibility(LoginPresenter.getAccountMessage() != null && LoginPresenter.getAccountMessage().isIs_contributor() ?
-                View.VISIBLE : View.GONE);
+        isContributor = LoginPresenter.getAccountMessage() != null && LoginPresenter.getAccountMessage().isIs_contributor();
+        mCreateLiveBtn.setVisibility(isContributor ? View.VISIBLE : View.GONE);
         new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.open, R.string.close);//Toggle DrawerLayout and Toolbar
 
         mSwipeRefreshLayout.setProgressViewOffset(true, 0, (int) ScreenUtils.dip2px(this, 36f));
@@ -256,6 +257,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void fragmentStartFromMain() {
         AnimUtil.setViewAlphaAnim(mToolbar.getChildAt(0), false);
         AnimUtil.setViewAlphaAnim(mSearchBtn, false);
+        if (isContributor) {
+            AnimUtil.setViewAlphaAnim(mCreateLiveBtn, false);
+        }
         checkPlayerChangeStatus(false);
     }
 
@@ -265,6 +269,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void fragmentDestroyToMain() {
         AnimUtil.setViewAlphaAnim(mToolbar.getChildAt(0), true);
         AnimUtil.setViewAlphaAnim(mSearchBtn, true);
+        if (isContributor) {
+            AnimUtil.setViewAlphaAnim(mCreateLiveBtn, true);
+        }
         checkPlayerChangeStatus(true);
     }
 

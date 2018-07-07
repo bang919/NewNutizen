@@ -106,17 +106,15 @@ android {
 }
 
 ext {
-    supportVersion = "27.1.0"
+    supportVersion = "27.1.1"
 }
 
-
-
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation "com.android.support:appcompat-v7:${supportVersion}"
     //for TabLayout/RecyclerView
     implementation "com.android.support:design:${supportVersion}"
@@ -146,6 +144,7 @@ dependencies {
     }
     //Download
     implementation 'com.liulishuo.filedownloader:library:1.7.4'
+    implementation project(':rtmppushlib')
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -209,22 +210,17 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io());
 
-        Observable<String> waitOb = Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> e) throws Exception {
-                Thread.sleep(waitTime);
-                e.onNext("wait");
-            }
-        })
+
+        Observable<Long> waitOb = Observable.timer(3000, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io());
         zipObservables(notificationOb, dynamicOb, checkLoginOb, waitOb);
     }
 
-    private void zipObservables(Observable<ContentBean> notificationOb, Observable<ContentBean> dynamicOb, Observable<Boolean> checkLoginOb, Observable<String> waitOb) {
-        Observable<SplashContentBean> zip = Observable.zip(notificationOb, dynamicOb, checkLoginOb, waitOb, new Function4<ContentBean, ContentBean, Boolean, String, SplashContentBean>() {
+    private void zipObservables(Observable<ContentBean> notificationOb, Observable<ContentBean> dynamicOb, Observable<Boolean> checkLoginOb, Observable<Long> waitOb) {
+        Observable<SplashContentBean> zip = Observable.zip(notificationOb, dynamicOb, checkLoginOb, waitOb, new Function4<ContentBean, ContentBean, Boolean, Long, SplashContentBean>() {
             @Override
-            public SplashContentBean apply(ContentBean contentBean, ContentBean contentBean2, Boolean aBoolean, String s) throws Exception {
+            public SplashContentBean apply(ContentBean contentBean, ContentBean contentBean2, Boolean aBoolean, Long l) throws Exception {
                 SplashContentBean splashContentBean = new SplashContentBean();
                 splashContentBean.setLogin(aBoolean);
                 if (contentBean.getMovieBean() != null || contentBean.getLiveBean() != null) {
