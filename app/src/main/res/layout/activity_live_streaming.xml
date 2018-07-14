@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.nutizen.nu.activity.LiveStreamingActivity">
 
+    <!--加一层scrollView，防止ImageView在EditText移出屏幕后消失-->
     <SurfaceView
         android:id="@+id/surfaceview"
         android:layout_width="0dp"
@@ -14,5 +15,256 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/switch_camera_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_streaming_switch"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginRight="10dp"
+                android:scaleType="center"
+                android:src="@drawable/bg_cameraswitch_selector"
+                app:layout_constraintBottom_toBottomOf="@id/back"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/back" />
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/prepare_bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <View
+            android:id="@+id/half_black_bg"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:background="@color/colorHalfBlack"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_streaming_pic"
+            android:layout_width="128dp"
+            android:layout_height="72dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="20dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_addthumbnail"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/half_black_bg" />
+
+        <ImageView
+            android:id="@+id/btn_start_livestreaming"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="2dp"
+            android:scaleType="center"
+            android:src="@mipmap/btn_start_livestreaming"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_archive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="2dp"
+            android:src="@drawable/select_live_archive"
+            app:layout_constraintBottom_toBottomOf="@id/btn_start_livestreaming"
+            app:layout_constraintRight_toLeftOf="@id/btn_start_livestreaming"
+            app:layout_constraintTop_toTopOf="@id/btn_start_livestreaming" />
+
+
+        <ImageView
+            android:id="@+id/iv_audioonly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/select_live_audio_only"
+            app:layout_constraintBottom_toBottomOf="@id/iv_archive"
+            app:layout_constraintRight_toLeftOf="@id/iv_archive"
+            app:layout_constraintTop_toTopOf="@id/iv_archive" />
+
+        <EditText
+            android:id="@+id/et_streaming_title"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@null"
+            android:gravity="left"
+            android:hint="@string/enter_video_title"
+            android:lines="2"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorGray"
+            android:textCursorDrawable="@drawable/edittext_cursor"
+            app:layout_constraintBottom_toTopOf="@id/iv_audioonly"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_streaming_pic" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/waiting_live_layout"
+        android:layout_width="300dp"
+        android:layout_height="120dp"
+        android:background="@color/colorHalfBlack"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/waiting_live_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/waiting_for_a_live"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@id/waiting_live_cancel_button"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/waiting_live_cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_bt_more_kanal"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/waiting_live_tv" />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/living_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <ImageView
+            android:id="@+id/rl_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:src="@mipmap/ic_live_red"
+            app:layout_constraintRight_toLeftOf="@id/tv_count"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_count"
+            android:layout_width="120dp"
+            android:layout_height="0dp"
+            android:background="#B3000000"
+            android:drawableLeft="@mipmap/ic_viewer_count"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:text="0"
+            android:textColor="#FFF"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/rl_image"
+            app:layout_constraintLeft_toRightOf="@id/rl_image"
+            app:layout_constraintTop_toTopOf="@id/rl_image" />
+
+        <Chronometer
+            android:id="@+id/chro_jishi"
+            android:layout_width="130dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/colorHalfBlack"
+            android:gravity="center"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rl_image" />
+
+        <ImageView
+            android:id="@+id/iv_streaming_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="35dp"
+            android:src="@drawable/selector_streaming_stop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/done_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/done_ic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_done"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <TextView
+            android:id="@+id/done_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Done!"
+            android:textColor="@color/colorWhite"
+            android:textSize="22dp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/done_ic" />
+
+        <TextView
+            android:id="@+id/done_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Go Live has sucessfully completed."
+            android:textColor="@color/colorWhite"
+            android:textSize="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/done_title" />
+
+        <Button
+            android:id="@+id/btn_done_close"
+            android:layout_width="102dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/selector_bt_more_kanal"
+            android:text="End"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/done_content" />
+
+
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

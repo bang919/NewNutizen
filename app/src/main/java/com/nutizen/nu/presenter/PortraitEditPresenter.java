@@ -39,6 +39,12 @@ public class PortraitEditPresenter extends PhotoPresenter<PortraitEditView> {
         mView.onLuBanSuccess(file);
     }
 
+    public void deletePhotoFile() {
+        if (portraitFile != null) {
+            deletePhotoFile(portraitFile.getPath());
+        }
+    }
+
     public void savePortrait() {
         if (portraitFile == null) {
             mView.onError(mContext.getString(R.string.please_choose_your_new_portrait));

@@ -229,7 +229,7 @@
     <string name="occupation">Occupation</string>
     <string name="quit">Do you want to quit \n the app?</string>
     <string name="kanal_favourite">Please register or  login to view your favourite content</string>
-    <string name="enter_video_title">Enter video title...</string>
+    <string name="enter_video_title">Enter video title ...</string>
     <string name="next">Next</string>
     <string name="audio_only">Audio Only</string>
     <string name="created">Created by</string>
@@ -252,6 +252,9 @@
     <string name="livenow">Live Now</string>
     <string name="live_archive">The video that you record will be archived on VMSE</string>
     <string name="live_unarchive">The video that you record will NOT be archived on VMSE</string>
+    <string name="open_record_only">Open record audio only</string>
+    <string name="close_record_only">Close record the video</string>
+    <string name="please_hold_to_end_live">Please Hold To End live</string>
     <string name="delete">Delete</string>
     <string name="no_network">No network, please reconnect to the network</string>
     <string name="receive_notification">Do you wish to receive notification from Nutizen?</string>
@@ -280,4 +283,6 @@
     <string name="playing_download_file">(download)</string>
     <string name="notification_settings">Notification Settings</string>
     <string name="all">All</string>
+    <string name="ready_to_start_live">Ready to start?</string>
+    <string name="waiting_for_a_live">Waiting for a live...</string>
 </resources>

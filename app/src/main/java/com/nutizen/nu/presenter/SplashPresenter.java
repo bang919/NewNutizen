@@ -120,7 +120,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 if (responseBody != null) {
                     try {
                         FileUtils.saveResponseBody(responseBody, splashImagePath);
-                        mView.getNewPic();
+                        if (mView != null) {//有可能下载完的时候已经退出SplashActivity了
+                            mView.getNewPic();
+                        }
                         LogUtils.d(TAG, "save Splash pic success");
                     } catch (IOException e) {
                         LogUtils.d(TAG, "save Splash pic failure");

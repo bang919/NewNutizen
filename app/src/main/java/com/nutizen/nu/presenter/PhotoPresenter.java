@@ -36,10 +36,11 @@ import top.zibin.luban.Luban;
 
 public abstract class PhotoPresenter<V> extends BasePresenter<V> {
 
+    private Activity mActivity;
     private Fragment mFragment;
 
-    public static final int REQUEST_PERMISSION_CAMERA = 0x9;
-    public static final int REQUEST_PERMISSION_ALBUM = 0x10;
+    public static final int REQUEST_PERMISSION_CAMERA = 0x59;
+    public static final int REQUEST_PERMISSION_ALBUM = 0x105;
     private final int REQUEST_CAMERA = 0x11;
     private final int REQUEST_ALBUM = 0x12;
 
@@ -51,16 +52,24 @@ public abstract class PhotoPresenter<V> extends BasePresenter<V> {
         mFragment = fragment;
     }
 
+    public PhotoPresenter(Activity activity, V view) {
+        super(activity, view);
+        mActivity = activity;
+    }
 
     /**
      * 启动照相机照相
      */
     public void requestPermissionTodo(int requestPermissionCode) {
         if (Build.VERSION.SDK_INT >= 23) {
-            int checkCallPhonePermission = ContextCompat.checkSelfPermission(mFragment.getContext(), Manifest.permission.CAMERA);
-            int checkCallPhonePermission2 = ContextCompat.checkSelfPermission(mFragment.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            int checkCallPhonePermission = ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA);
+            int checkCallPhonePermission2 = ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE);
             if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED || checkCallPhonePermission2 != PackageManager.PERMISSION_GRANTED) {
-                mFragment.requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, requestPermissionCode);
+                if (mActivity != null) {
+                    mActivity.requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, requestPermissionCode);
+                } else {
+                    mFragment.requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, requestPermissionCode);
+                }
             } else {
                 jumpToPermissionCodeFunction(requestPermissionCode);
             }
@@ -69,7 +78,7 @@ public abstract class PhotoPresenter<V> extends BasePresenter<V> {
         }
     }
 
-    public void jumpToPermissionCodeFunction(int requestPermissionCode) {
+    private void jumpToPermissionCodeFunction(int requestPermissionCode) {
         switch (requestPermissionCode) {
             case REQUEST_PERMISSION_CAMERA:
                 takePhoto();
@@ -86,7 +95,11 @@ public abstract class PhotoPresenter<V> extends BasePresenter<V> {
     public void selectAlbum() {
         Intent getAlbum = new Intent(Intent.ACTION_PICK, null);
         getAlbum.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        mFragment.startActivityForResult(getAlbum, REQUEST_ALBUM);
+        if (mActivity != null) {
+            mActivity.startActivityForResult(getAlbum, REQUEST_ALBUM);
+        } else {
+            mFragment.startActivityForResult(getAlbum, REQUEST_ALBUM);
+        }
     }
 
     private void takePhoto() {
@@ -105,10 +118,14 @@ public abstract class PhotoPresenter<V> extends BasePresenter<V> {
             //  7.0之后直接用file://会出错，需要用content://
             ContentValues contentValues = new ContentValues(1);
             contentValues.put(MediaStore.Images.Media.DATA, path + fileName);
-            mPhotoUri = mFragment.getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+            mPhotoUri = mContext.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
 
             intent.putExtra(MediaStore.EXTRA_OUTPUT, mPhotoUri);//TODO 这里CROP自动旋转了
-            mFragment.startActivityForResult(intent, REQUEST_CAMERA);
+            if (mActivity != null) {
+                mActivity.startActivityForResult(intent, REQUEST_CAMERA);
+            } else {
+                mFragment.startActivityForResult(intent, REQUEST_CAMERA);
+            }
         } else {
             ToastUtils.showShort("No SD card.");
         }
@@ -172,14 +189,21 @@ public abstract class PhotoPresenter<V> extends BasePresenter<V> {
         String realPathFromUri = TakePhotoUtil.getRealPathFromUri(mContext, uri);
         String diskCacheDir = FileUtils.getDiskCacheDir(MyApplication.getMyApplicationContext());
         File uCropFile = new File(diskCacheDir.concat("/ucrop_temp.jpg"));
-        UCrop.of(Uri.fromFile(new File(realPathFromUri)), Uri.fromFile(uCropFile))
-                .withAspectRatio(1, 1)
-                .start(mContext, mFragment, UCrop.REQUEST_CROP);
+        if (mActivity != null) {
+            UCrop.of(Uri.fromFile(new File(realPathFromUri)), Uri.fromFile(uCropFile))
+                    .withAspectRatio(1, 1)
+                    .start(mActivity, UCrop.REQUEST_CROP);
+        } else {
+            UCrop.of(Uri.fromFile(new File(realPathFromUri)), Uri.fromFile(uCropFile))
+                    .withAspectRatio(1, 1)
+                    .start(mContext, mFragment, UCrop.REQUEST_CROP);
+        }
+
     }
 
     //用Luban压缩图片
     private void jumpToLuban(final Uri photoUri, final boolean deleteSource) {
-        String path = TakePhotoUtil.getRealPathFromUri(mFragment.getContext(), photoUri);
+        String path = TakePhotoUtil.getRealPathFromUri(mContext, photoUri);
         Observable.just(path)
                 .map(new Function<String, File>() {
                     @Override
@@ -224,7 +248,7 @@ public abstract class PhotoPresenter<V> extends BasePresenter<V> {
     public void deletePhotoFile(Uri photoFileName) {
         String path = photoFileName.toString();
         if (path.startsWith("content")) {
-            path = TakePhotoUtil.getRealPathFromUri(mFragment.getContext(), photoFileName);
+            path = TakePhotoUtil.getRealPathFromUri(mContext, photoFileName);
         }
         deletePhotoFile(path);
     }
@@ -239,7 +263,7 @@ public abstract class PhotoPresenter<V> extends BasePresenter<V> {
         //发送广播更新相册
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         intent.setData(uri);
-        mFragment.getContext().sendBroadcast(intent);
+        mContext.sendBroadcast(intent);
     }
 
     public abstract void onLuBanError(Throwable e);
@@ -256,7 +280,7 @@ public abstract class PhotoPresenter<V> extends BasePresenter<V> {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     jumpToPermissionCodeFunction(requestCode);
                 } else {
-                    Toast.makeText(mFragment.getContext(), mFragment.getString(R.string.no_permission_for_camera), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, mContext.getString(R.string.no_permission_for_camera), Toast.LENGTH_SHORT).show();
                 }
                 break;
         }

@@ -2,12 +2,15 @@ package com.nutizen.nu.http;
 
 
 import com.nutizen.nu.BuildConfig;
+import com.nutizen.nu.bean.request.ArchiveBody;
 import com.nutizen.nu.bean.request.CommentBean;
 import com.nutizen.nu.bean.request.EditFavouriteReqBean;
+import com.nutizen.nu.bean.request.LiveStreamingBean;
 import com.nutizen.nu.bean.request.LoginRequestBean;
 import com.nutizen.nu.bean.request.ViewDetailReqBean;
 import com.nutizen.nu.bean.request.WatchHistoryCountBody;
 import com.nutizen.nu.bean.response.AdvertisementBean;
+import com.nutizen.nu.bean.response.ArchiveResponse;
 import com.nutizen.nu.bean.response.CommentResult;
 import com.nutizen.nu.bean.response.ContentPlaybackBean;
 import com.nutizen.nu.bean.response.ContentResponseBean;
@@ -17,6 +20,7 @@ import com.nutizen.nu.bean.response.FavouriteRspBean;
 import com.nutizen.nu.bean.response.ForgetPasswordResponse;
 import com.nutizen.nu.bean.response.KanalRspBean;
 import com.nutizen.nu.bean.response.LiveResponseBean;
+import com.nutizen.nu.bean.response.LiveStreamingResult;
 import com.nutizen.nu.bean.response.LoginResponseBean;
 import com.nutizen.nu.bean.response.NormalResBean;
 import com.nutizen.nu.bean.response.RegisterResponse;
@@ -158,4 +162,24 @@ public interface ApiInterface {
      */
     @GET("viewers/favourites")
     Observable<ArrayList<FavouriteRspBean>> getFavourites(@Header("Authorization") String token);
+
+    /**
+     * LiveStreaming
+     */
+    @POST("contributors/live")
+    Observable<LiveStreamingResult> createLiveStreaming(@Body LiveStreamingBean body, @Header("Authorization") String token);
+
+    @PUT("contributors/live/status")
+    Observable<NormalResBean> changeLiveStatus(@Body RequestBody body, @Header("Authorization") String token);
+
+    @Multipart
+    @Headers({"mimetype:image/jpeg"})
+    @PUT("contributors/thumbnail")
+    Observable<NormalResBean> uploadLivePic(@Part("id") RequestBody id, @Part("type") RequestBody type, @Part MultipartBody.Part file, @Header("Authorization") String token);
+
+    @POST("contributors/live/ts")
+    Observable<ArchiveResponse> startArchive(@Header("Authorization") String token, @Body ArchiveBody body);
+
+    @POST("contributors/live/merge")
+    Observable<ArchiveResponse> finishArchive(@Header("Authorization") String token, @Body ArchiveBody body);
 }

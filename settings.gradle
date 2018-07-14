@@ -1,1 +1,1 @@
-include ':app', ':rtmppushlib'
+include ':app'
