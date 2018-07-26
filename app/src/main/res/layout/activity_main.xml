@@ -102,7 +102,7 @@
     <!--菜单区域-->
     <include
         layout="@layout/main_leftmenu"
-        android:layout_width="wrap_content"
+        android:layout_width="310dp"
         android:layout_height="wrap_content"
         android:layout_gravity="start" />
 
