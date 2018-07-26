@@ -2,8 +2,6 @@ package com.nutizen.nu.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.Guideline;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -95,7 +93,7 @@ public abstract class DownloadListAdapter extends RecyclerView.Adapter<DownloadL
             AnimUtil.setEditDownloadButton(holder.mCheckBox, holder.mGuideline, mEditing);
         } else {
             holder.mCheckBox.getLayoutParams().width = mEditing ? mSelectViewWidth : 1;
-            ((ConstraintLayout.LayoutParams) holder.mGuideline.getLayoutParams()).guideEnd = mEditing ? 1 : (int) (mSelectViewWidth * 1.3);
+            holder.mGuideline.getLayoutParams().width = mEditing ? 1 : (int) (mSelectViewWidth * 1.3);
         }
 
         GlideUtils.loadImage(holder.mPicIv, -1, data.getThumbnail(), new CenterCrop());
@@ -112,7 +110,7 @@ public abstract class DownloadListAdapter extends RecyclerView.Adapter<DownloadL
                     }
                     holder.mCheckBox.setChecked(mSelectMap.get(position) != null);
                     holder.mCheckBox.getLayoutParams().width = mEditing ? mSelectViewWidth : 1;
-                    ((ConstraintLayout.LayoutParams) holder.mGuideline.getLayoutParams()).guideEnd = mEditing ? 1 : (int) (mSelectViewWidth * 1.3);
+                    holder.mGuideline.getLayoutParams().width = mEditing ? 1 : (int) (mSelectViewWidth * 1.3);
                 }
             });
         } else {
@@ -140,7 +138,7 @@ public abstract class DownloadListAdapter extends RecyclerView.Adapter<DownloadL
         ProgressBar mProgressBar;
         TextView mStateTv;
         ImageView mPlayBtn;
-        Guideline mGuideline;
+        View mGuideline;
 
         public DownloadViewHolder(View itemView) {
             super(itemView);

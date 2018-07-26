@@ -40,7 +40,7 @@
 
     <com.nutizen.nu.widget.LeftMenuItemView
         android:id="@+id/leftitem_profile"
-        android:layout_width="match_parent"
+        android:layout_width="310dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/bg_leftmenu_green"
         android:layout_marginTop="8dp"
@@ -50,7 +50,7 @@
 
     <com.nutizen.nu.widget.LeftMenuItemView
         android:id="@+id/leftitem_favourit"
-        android:layout_width="match_parent"
+        android:layout_width="310dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/leftitem_profile"
         android:layout_marginTop="3dp"
@@ -60,7 +60,7 @@
 
     <com.nutizen.nu.widget.LeftMenuItemView
         android:id="@+id/leftitem_download"
-        android:layout_width="match_parent"
+        android:layout_width="310dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/leftitem_favourit"
         android:layout_marginTop="3dp"
@@ -70,7 +70,7 @@
 
     <com.nutizen.nu.widget.LeftMenuItemView
         android:id="@+id/leftitem_help_faq"
-        android:layout_width="match_parent"
+        android:layout_width="310dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/leftitem_download"
         android:layout_marginTop="3dp"
@@ -80,7 +80,7 @@
 
     <com.nutizen.nu.widget.LeftMenuItemView
         android:id="@+id/leftitem_notification"
-        android:layout_width="match_parent"
+        android:layout_width="310dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/leftitem_help_faq"
         android:layout_marginTop="3dp"
