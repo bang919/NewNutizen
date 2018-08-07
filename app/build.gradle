@@ -145,6 +145,7 @@ dependencies {
     }
     //Download
     implementation 'com.liulishuo.filedownloader:library:1.7.4'
+    implementation project(':swipebacklibrary')
 }
 
 apply plugin: 'com.google.gms.google-services'

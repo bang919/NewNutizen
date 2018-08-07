@@ -67,6 +67,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void initView() {
+        setSwipeBackEnable(false);
         mCreateLiveBtn = findViewById(R.id.iv_create_live);
         mViewPager = findViewById(R.id.main_viewpager);
         mTabLayout = findViewById(R.id.main_tablayout);

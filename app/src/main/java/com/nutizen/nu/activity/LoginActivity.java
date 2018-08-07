@@ -45,6 +45,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     protected void initView() {
+        setSwipeBackEnable(false);
         mEmailEt = findViewById(R.id.et_email);
         mPasswordEt = findViewById(R.id.et_password);
     }

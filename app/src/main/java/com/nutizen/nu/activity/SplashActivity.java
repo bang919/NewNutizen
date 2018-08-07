@@ -45,7 +45,7 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 
     @Override
     protected void initView() {
-
+        setSwipeBackEnable(false);
     }
 
     @Override

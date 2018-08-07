@@ -1,5 +1,7 @@
 package com.nutizen.nu.activity;
 
+import android.app.Service;
+import android.media.AudioManager;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -223,6 +225,23 @@ public abstract class PlayerActivity<D, P extends PlayerActivityPresenter> exten
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (mPresenter.isFullScreen() && (event.getKeyCode() == KeyEvent.KEYCODE_ESCAPE || event.getKeyCode() == KeyEvent.KEYCODE_BACK)) {
             mPresenter.switchPlayerSize(this, mTopHeadView, !mPresenter.isFullScreen());
+            return true;
+        }
+        //媒体音乐音量
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+            AudioManager am = (AudioManager) getSystemService(Service.AUDIO_SERVICE);
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_VOLUME_UP:
+                    am.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
+                    am.adjustStreamVolume(AudioManager.STREAM_DTMF, AudioManager.ADJUST_RAISE, 0);
+                    break;
+                case KeyEvent.KEYCODE_VOLUME_DOWN:
+                    am.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
+                    am.adjustStreamVolume(AudioManager.STREAM_DTMF, AudioManager.ADJUST_RAISE, 0);
+                    break;
+                default:
+                    break;
+            }
             return true;
         }
         return super.onKeyDown(keyCode, event);
