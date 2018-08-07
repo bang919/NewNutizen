@@ -71,6 +71,7 @@ public class LiveStreamingActivity extends BaseActivity<LiveStreamingActivityPre
 
     @Override
     protected void initView() {
+        setSwipeBackEnable(false);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);// 全屏，去掉信息栏
         mSwitchCameraLayout = findViewById(R.id.switch_camera_layout);
         mInitMeetLayout = findViewById(R.id.prepare_bottom_layout);

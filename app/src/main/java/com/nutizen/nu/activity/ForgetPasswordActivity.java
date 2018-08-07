@@ -54,6 +54,7 @@ public class ForgetPasswordActivity extends BaseActivity<ForgetPasswordPresenter
 
     @Override
     protected void initView() {
+        setSwipeBackEnable(false);
         hint = findViewById(R.id.hint);
         back = findViewById(R.id.back);
         passwordEt = findViewById(R.id.password);

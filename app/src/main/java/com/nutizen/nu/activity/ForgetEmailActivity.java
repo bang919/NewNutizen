@@ -41,6 +41,7 @@ public class ForgetEmailActivity extends BaseActivity<ForgetPasswordPresenter> i
 
     @Override
     protected void initView() {
+        setSwipeBackEnable(false);
         emailEt = findViewById(R.id.reset_email);
         submit = findViewById(R.id.submit);
         back = findViewById(R.id.back);
