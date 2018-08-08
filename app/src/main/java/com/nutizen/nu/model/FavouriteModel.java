@@ -40,8 +40,14 @@ public class FavouriteModel {
             SubscribeNotificationUtile.unsubscribeOneContributorVod(editFavouriteReqBean.getTag());
             SubscribeNotificationUtile.unsubscribeOneContributorLive(context, editFavouriteReqBean.getTag());
         }
+        //API不支持EditFavouriteReqBean多传参数(tag)，修复不能follow Kanal的bug
+        EditFavouriteReqBean editBean = new EditFavouriteReqBean();
+        editBean.setViewerid(editFavouriteReqBean.getViewerid());
+        editBean.setOperation(editFavouriteReqBean.getOperation());
+        editBean.setContenttype(editFavouriteReqBean.getContenttype());
+        editBean.setContentid(editFavouriteReqBean.getContentid());
         return HttpClient.getApiInterface()
-                .editFavourite(editFavouriteReqBean)
+                .editFavourite(editBean)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
