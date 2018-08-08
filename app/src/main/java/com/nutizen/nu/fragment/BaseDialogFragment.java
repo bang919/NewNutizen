@@ -4,7 +4,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,9 @@ import android.view.Window;
 import com.nutizen.nu.R;
 import com.nutizen.nu.common.BasePresenter;
 
-public abstract class BaseDialogFragment<P extends BasePresenter> extends DialogFragment {
+import me.imid.swipebacklayout.lib.app.SwipeBackDialogFragment;
+
+public abstract class BaseDialogFragment<P extends BasePresenter> extends SwipeBackDialogFragment {
 
     protected P mPresenter;
     private boolean hadMeet;//是否已启动过。。用来修复一个bug：DialogFragment打开Activity，再返回DialogFragment会出现Fragment启动动画
@@ -62,7 +63,7 @@ public abstract class BaseDialogFragment<P extends BasePresenter> extends Dialog
 
         View rootView = inflater.inflate(getLayout(), container, false);
         onViewPagerFragmentCreate(rootView);
-        return rootView;
+        return createSwipeBackView(rootView);
     }
 
 

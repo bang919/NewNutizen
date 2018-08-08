@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.imid.swipebacklayout.lib.app.SwipeBackListenerActivityAdapter;
+import me.imid.swipebacklayout.lib.app.SwipeBackListenerDialogFragmentAdapter;
 
 public class SwipeBackLayout extends FrameLayout {
     /**
@@ -84,8 +86,6 @@ public class SwipeBackLayout extends FrameLayout {
      * this value;
      */
     private float mScrollThreshold = DEFAULT_SCROLL_THRESHOLD;
-
-    private Activity mActivity;
 
     private boolean mEnable = true;
 
@@ -456,7 +456,6 @@ public class SwipeBackLayout extends FrameLayout {
     }
 
     public void attachToActivity(Activity activity) {
-        mActivity = activity;
         TypedArray a = activity.getTheme().obtainStyledAttributes(new int[]{
                 android.R.attr.windowBackground
         });
@@ -471,6 +470,13 @@ public class SwipeBackLayout extends FrameLayout {
         setContentView(decorChild);
         addSwipeListener(new SwipeBackListenerActivityAdapter(activity));
         decor.addView(this);
+    }
+
+    public View createDialogFragmentView(DialogFragment dialogFragment, ViewGroup decor) {
+        addView(decor);
+        setContentView(decor);
+        addSwipeListener(new SwipeBackListenerDialogFragmentAdapter(dialogFragment));
+        return this;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.nutizen.nu.presenter;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.view.View;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
@@ -11,6 +12,7 @@ import com.nutizen.nu.bean.request.CommentBean;
 import com.nutizen.nu.bean.response.CommentResult;
 import com.nutizen.nu.bean.response.ContentResponseBean;
 import com.nutizen.nu.bean.response.LiveResponseBean;
+import com.nutizen.nu.common.BaseActivity;
 import com.nutizen.nu.common.Twitter;
 import com.nutizen.nu.model.CommentModel;
 import com.nutizen.nu.model.ShareModel;
@@ -143,6 +145,13 @@ public abstract class PlayerActivityPresenter<D, T extends BasePlayerActivityVie
         } else {
             mView.onFailure(mContext.getString(R.string.dynamic_link_error));
         }
+    }
+
+    @Override
+    public void switchPlayerSize(BaseActivity baseActivity, View topBarView, boolean fullScreen) {
+        super.switchPlayerSize(baseActivity, topBarView, fullScreen);
+        //切换是否能swipeback退出
+        baseActivity.setSwipeBackEnable(!fullScreen);
     }
 
     private void shareToTwitter(Uri shortLink) {
