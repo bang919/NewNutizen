@@ -166,7 +166,9 @@
     <string name="go">*please proceed to Login page to reset password</string>
     <string name="choose">- - Tap to choose - -</string>
     <string name="pick">- - Tap to pick a date - -</string>
+    <string name="edit_portrait">Edit Portrait</string>
     <string name="edit_bio">Edit Bio</string>
+    <string name="edit_gender">Edit Gender</string>
     <string name="edit_hint">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna wirl</string>
     <string name="num">%d/200</string>
     <string name="okay">Okay</string>

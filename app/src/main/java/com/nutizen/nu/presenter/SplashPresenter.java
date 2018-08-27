@@ -213,7 +213,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 .observeOn(Schedulers.io());
 
 
-        Observable<Long> waitOb = Observable.timer(3000, TimeUnit.MILLISECONDS)
+        Observable<Long> waitOb = Observable.timer(waitTime, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io());
         zipObservables(notificationOb, dynamicOb, checkLoginOb, waitOb);

@@ -11,7 +11,7 @@
         android:layout_height="48dp"
         android:background="@color/colorBlack"
         android:gravity="center"
-        android:text="@string/edit_bio"
+        android:text="@string/edit_portrait"
         android:textColor="@color/colorWhite"
         android:textSize="20sp" />
 
