@@ -1,7 +1,11 @@
 package com.nutizen.nu.activity;
 
 import android.app.Service;
+import android.bluetooth.BluetoothHeadset;
+import android.content.Context;
+import android.content.IntentFilter;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +23,7 @@ import com.nutizen.nu.common.Constants;
 import com.nutizen.nu.fragment.ShareFragment;
 import com.nutizen.nu.presenter.LoginPresenter;
 import com.nutizen.nu.presenter.PlayerActivityPresenter;
+import com.nutizen.nu.receiver.HeadsetReceiver;
 import com.nutizen.nu.utils.DialogUtils;
 import com.nutizen.nu.utils.ToastUtils;
 import com.nutizen.nu.view.BasePlayerActivityView;
@@ -42,6 +47,7 @@ public abstract class PlayerActivity<D, P extends PlayerActivityPresenter> exten
     private Runnable favouriteRunnable;
 
     private ShareFragment mShareFragment;
+    private HeadsetReceiver mHeadsetReceiver;//耳机的receiver
 
     @Override
     public int getBarColor() {
@@ -123,11 +129,13 @@ public abstract class PlayerActivity<D, P extends PlayerActivityPresenter> exten
 
         mSimpleExoPlayerView.findViewById(R.id.exo_fullscreen).setOnClickListener(this);
 
+        registerHeadsetReceiver();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        setSpeakerPhoneOn(true);
         if (mPresenter != null) {
             mPresenter.setPlayWhenReady(true);
         }
@@ -135,6 +143,7 @@ public abstract class PlayerActivity<D, P extends PlayerActivityPresenter> exten
 
     @Override
     protected void onPause() {
+        setSpeakerPhoneOn(false);
         if (mPresenter != null) {
             mPresenter.setPlayWhenReady(false);
         }
@@ -143,6 +152,9 @@ public abstract class PlayerActivity<D, P extends PlayerActivityPresenter> exten
 
     @Override
     protected void onDestroy() {
+        if (mHeadsetReceiver != null) {
+            unregisterReceiver(mHeadsetReceiver);
+        }
         mPresenter.releasePlayer();
         checkFavouriteRequest(true);
         super.onDestroy();
@@ -287,5 +299,41 @@ public abstract class PlayerActivity<D, P extends PlayerActivityPresenter> exten
     protected abstract View setFavouriteBtn();
 
     protected abstract void editFavourite(boolean isfavourite);
+
+    private void registerHeadsetReceiver() {
+        mHeadsetReceiver = new HeadsetReceiver();
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.intent.action.HEADSET_PLUG");
+        registerReceiver(mHeadsetReceiver, intentFilter);
+
+        // for bluetooth headset connection receiver
+        IntentFilter bluetoothFilter = new IntentFilter(BluetoothHeadset.ACTION_CONNECTION_STATE_CHANGED);
+        registerReceiver(mHeadsetReceiver, bluetoothFilter);
+    }
+
+    private void setSpeakerPhoneOn(boolean on) {
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        if (on) {
+            audioManager.setMode(AudioManager.MODE_NORMAL);
+            audioManager.setSpeakerphoneOn(true);
+        } else {
+            audioManager.setSpeakerphoneOn(false);
+
+            //5.0以上
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
+                //设置音量，解决有些机型切换后没声音或者声音突然变大的问题
+                audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL,
+                        audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL), AudioManager.FX_KEY_CLICK);
+
+            } else {
+                audioManager.setMode(AudioManager.MODE_IN_CALL);
+                audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL,
+                        audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL), AudioManager.FX_KEY_CLICK);
+            }
+        }
+
+    }
 
 }

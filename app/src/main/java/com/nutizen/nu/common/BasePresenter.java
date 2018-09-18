@@ -55,7 +55,7 @@ public class BasePresenter<V> {
     }
 
     protected <T> void subscribeNetworkTask(String observerTag, Observable<T> observable, MyObserver<T> myObserver) {
-        Observer observer = createObserver(observerTag, myObserver);
+        Observer<T> observer = createObserver(observerTag, myObserver);
         observable.subscribe(observer);
     }
 
